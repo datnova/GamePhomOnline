@@ -11,7 +11,7 @@ namespace Server
         // max 4 players (min 2 players), each player contain array of max 10 cards (min 9 cards)
         public Dictionary<string, string>[][] _playersHand = new Dictionary<string, string>[4][];
 
-        //  _playersInfo: <playerID, roundPoint, gamePoint>
+        //  _playersInfo: <playerID, playerName, roundPoint, gamePoint>
         public Dictionary<string, string>[] _playersInfo = new Dictionary<string, string>[4];
 
         // contain cards deck for draw after run set up game
@@ -34,9 +34,8 @@ namespace Server
         //// Player set up:
 
         // return player id if success or -1 if fail
-        public int AddPlayer()
+        public int AddPlayer(string player_name)
         {
-
             if (_hostID < 0) _hostID = 0;
             _numberPlayer++;
 
@@ -48,6 +47,7 @@ namespace Server
                 {
                     _playersInfo[_tempID] = new Dictionary<string, string>() {
                         { "playerID" , _tempID.ToString() },
+                        { "playerName", player_name },
                         { "roundPoint", "0" },
                         { "gamePoint" , "0" },
                     };
@@ -104,32 +104,33 @@ namespace Server
             _currentID = _hostID;
         }
 
-        // receive data and update game <need play card and take card>
-        public Dictionary<string, string> UpdateGame(Dictionary<string, string> _recvPlayerData)
+        // receive data and update game <need take card>
+        public Dictionary<string, string> HandleGame(Dictionary<string, string> _recvPlayerData)
         {
             // _recvPlayerData contain:
-            //     "stateID":  string (this is number in type string)
-            //     "sendID":   string (this is number in type string)
-            //     "card":     string (if dont send card back set to empty string)
+            //     "stateID":    player current state id
+            //     "playerID":   player id
+            //     "playerName"  player name
+            //     "card":       string (if dont send card back set to null)
 
 
             // return dictionary of error contain:
             //     "status":        fail)
             //     "recceiveID" :  id send to, if empty do broadcast
             //     "messages":      explain error
-            if (int.Parse(_recvPlayerData["stateID"]) != _stateID)
+            if (_recvPlayerData["stateID"] != _stateID.ToString())
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
-                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "recceiveID",  _recvPlayerData["playerID"] },
                     { "messages", "Incorrect game's state" },
                 };
             }
-            else if (int.Parse(_recvPlayerData["sendID"]) != _currentID)
+            else if (_recvPlayerData["playerID"] != _currentID.ToString())
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
-                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "recceiveID",  _recvPlayerData["playerID"] },
                     { "messages", "Incorrect current player" },
                 };
             }
@@ -144,6 +145,7 @@ namespace Server
                 case "1": // Set up game        |   devide cards and send for player
                     return HandleSetUpGame(_recvPlayerData);
                 case "2": // Play card          |   move card to card holder
+                    return HandlePlayCard(_recvPlayerData);
                 case "3": // Take card          |   send card to player hand and remove card from deck or holder
                 case "4": // Reset round        |   reset round, devide cards and send to players
                     return Reset(_recvPlayerData, true);
@@ -152,7 +154,7 @@ namespace Server
                 default:  // Defaul error       |   return error
                     return new Dictionary<string, string>() {
                         { "status", "Fail" },
-                        { "recceiveID",  _recvPlayerData["sendID"] },
+                        { "recceiveID",  _recvPlayerData["playerID"] },
                         { "messages", "Invalid input" },
                     };
             }
@@ -166,27 +168,27 @@ namespace Server
         // wait for player handle
         private Dictionary<string, string> HandleWaitForPlayer(Dictionary<string, string> _recvPlayerData)
         {
-            int _tempID = int.Parse(_recvPlayerData["stateID"]);
+            int _tempID = int.Parse(_recvPlayerData["playerID"]);
             return GetGameInfo(_tempID)["game_status"];
         }
 
-        // sete up game handle <still not finish>
+        // sete up game handle
         private Dictionary<string, string> HandleSetUpGame(Dictionary<string, string> _recvPlayerData)
         {
             if (_numberPlayer < 2)
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
-                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "recceiveID",  _recvPlayerData["playerID"] },
                     { "message", "Not enough player" },
                 };
             }
 
-            if (int.Parse(_recvPlayerData["sendID"]) != _hostID)
+            if (_recvPlayerData["playerID"] != _hostID.ToString())
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
-                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "recceiveID",  _recvPlayerData["playerID"] },
                     { "message", "Invalid host" },
                 };
             }
@@ -196,18 +198,55 @@ namespace Server
             return new Dictionary<string, string>() {
                 { "status", "Success" },
                 { "recceiveID",  "-1" },
-                { "message", "Send cards to player's hands" },
+                { "message", "Sending cards to player's hands" },
+            };
+        }
+
+        // handle play card
+        private Dictionary<string, string> HandlePlayCard(Dictionary<string, string> _recvPlayerData)
+        {
+            if (String.IsNullOrEmpty(_recvPlayerData["card"]))
+            {
+                return new Dictionary<string, string>(){
+                    { "status", "Fail" },
+                    { "recceiveID", _recvPlayerData["playerID"] },
+                    { "message", "Invalid card" },
+                };
+            }
+
+            var _tempCard = StringToCard(_recvPlayerData["card"]);
+            if (_tempCard == null)
+            {
+                return new Dictionary<string, string>(){
+                    { "status", "Fail" },
+                    { "recceiveID", _recvPlayerData["playerID"] },
+                    { "message", "Invalid card" },
+                };
+            }
+
+            // update value
+            _cardHolder = _tempCard;
+            _currentID = (_currentID + 1) % 4;
+            _stateID = 3;
+
+            return new Dictionary<string, string>(){
+                { "status", "Success" },
+                { "stateID", _stateID.ToString() },
+                { "currentID", _currentID.ToString() },
+                { "cardHolder", CardToString(_cardHolder) },
+                { "recceiveID", "-1" },
+                { "message", "update card holder" },
             };
         }
 
         // reset game to new state or new round same at set up game()
         private Dictionary<string, string> Reset(Dictionary<string, string> _recvPlayerData, bool _roundOnly = false)
         {
-            if (int.Parse(_recvPlayerData["sendID"]) != _hostID)
+            if (_recvPlayerData["playerID"] != _hostID.ToString())
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
-                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "recceiveID",  _recvPlayerData["playerID"] },
                     { "message", "Invalid host" },
                 };
             }
@@ -228,7 +267,7 @@ namespace Server
             _cardHolder = null;
 
             // reset game value
-            _stateID = (_roundOnly)? 4 : 5;                // game state id
+            _stateID = (_roundOnly)? 4 : 5;                         // game state id
             _currentID = _hostID;                                   // turn for player's id
             _currentRound = (_roundOnly) ? (_currentRound + 1) : 1; // current number round
             _turnCounter = 1;                                       // count number of turn in one round
@@ -257,7 +296,7 @@ namespace Server
                 { "current_round", _currentRound.ToString() },
                 { "host_id", _hostID.ToString() },
                 { "number_player", _numberPlayer.ToString() },
-                { "recceiveID",  (_recvID == -1) ? String.Empty : _recvID.ToString()}
+                { "recceiveID",  _recvID.ToString() }
             };
 
             return new Dictionary<string, Dictionary<string, string>>()
@@ -282,6 +321,12 @@ namespace Server
         {
             var _tempCard = _cardName.Split('-');
             if (_tempCard.Length != 2) return null;
+
+            if (Array.IndexOf(_CardPip, _tempCard[0]) == -1 ||
+                Array.IndexOf(_CardSuit, _tempCard[1]) == -1)
+            {
+                return null;
+            }
 
             return new Dictionary<string, string>() {
                 { "pip", _tempCard[0] },
@@ -324,7 +369,7 @@ namespace Server
             int i = 0;
             foreach (var _pip in _CardPip.Select((value, index) => new { index, value }))
             {
-                foreach (var _suit in _CardsSuit)
+                foreach (var _suit in _CardSuit)
                 {
                     _cards[i] = new Dictionary<string, string>()
                     {
@@ -355,11 +400,11 @@ namespace Server
 
         // Contain all game state info
         public readonly string[] _gameState = new string[] {
-            "Wait for player",  // Send the return of update                     (player after connected)
-            "Set up game",      // Send cards to player's hands then set id to 3 (only host)
+            "Wait for player",  // Send the return of update                          (player after connected)
+            "Set up game",      // Send cards to player's hands then set stateID to 2 (only host)
             "Play card",        // Send the return of update
             "Take card",        // Send card to current id
-            "Reset round",      // Send cards to player's hands then set id to 3
+            "Reset round",      // Send cards to player's hands then set stateID to 2
         };
 
         // contain cards pip info
@@ -369,7 +414,7 @@ namespace Server
         };
 
         // contain cards suit info
-        private static readonly string[] _CardsSuit = new string[]
+        private static readonly string[] _CardSuit = new string[]
         {
             "Club", "Diamond", "Heard", "Spade"
         };
