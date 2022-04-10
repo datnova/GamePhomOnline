@@ -115,8 +115,8 @@ namespace Server
 
 
             // return dictionary of error contain:
-            //     "status":        fail)
-            //     "recceiveID" :  id send to, if empty do broadcast
+            //     "status":        fail
+            //     "recceiveID" :   id send to, if empty do broadcast
             //     "messages":      explain error
             if (_recvPlayerData["stateID"] != _stateID.ToString())
             {
@@ -168,8 +168,12 @@ namespace Server
         // wait for player handle
         private Dictionary<string, string> HandleWaitForPlayer(Dictionary<string, string> _recvPlayerData)
         {
-            int _tempID = int.Parse(_recvPlayerData["playerID"]);
-            return GetGameInfo(_tempID)["game_status"];
+            if (_recvPlayerData["playerID"] == "-1")
+            {
+                AddPlayer(_recvPlayerData["playerName"]);
+            }
+
+            return GetGameInfo();
         }
 
         // sete up game handle
@@ -197,6 +201,7 @@ namespace Server
             _stateID = 1;
             return new Dictionary<string, string>() {
                 { "status", "Success" },
+                { "stateID", _stateID.ToString() },
                 { "recceiveID",  "-1" },
                 { "message", "Sending cards to player's hands" },
             };
@@ -274,6 +279,7 @@ namespace Server
 
             return new Dictionary<string, string>() {
                 { "status", "Success" },
+                { "stateID", _stateID.ToString() },
                 { "recceiveID",  "-1" },
                 { "message", "Send cards to player's hands" },
             };
@@ -285,28 +291,37 @@ namespace Server
         //// Game function:
 
         // get all game info => dictionay
-        public Dictionary<string, Dictionary<string, string>> GetGameInfo(int _recvID = -1)
+        public Dictionary<string, string> GetGameInfo(int _recvID = -1)
         {
             // recceive ID: -1, mean for broadcast
 
             var _gameStatus = new Dictionary<string, string>()
             {
-                { "status_id", _stateID.ToString() },
-                { "current_id", _currentID.ToString() },
-                { "current_round", _currentRound.ToString() },
-                { "host_id", _hostID.ToString() },
-                { "number_player", _numberPlayer.ToString() },
-                { "recceiveID",  _recvID.ToString() }
+                { "stateID", _stateID.ToString() },
+                { "currentID", _currentID.ToString() },
+                { "currentRound", _currentRound.ToString() },
+                { "hostID", _hostID.ToString() },
+                { "numberPlayer", _numberPlayer.ToString() },
+                { "recceiveID",  _recvID.ToString() },
             };
 
-            return new Dictionary<string, Dictionary<string, string>>()
+            for (int i = 0; i < _playersInfo.Length; i++)
             {
-                { "game_status",     _gameStatus },
-                { "player1",     _playersInfo[0] },
-                { "player2",     _playersInfo[1] },
-                { "player3",     _playersInfo[2] },
-                { "player4",     _playersInfo[3] }
-            };
+                if (_playersInfo[i] is null)
+                {
+                    _gameStatus.Add("player" + i.ToString(), null);
+                }
+                else
+                {
+                    _gameStatus.Add("player" + i.ToString(),
+                        _playersInfo[i]["playerID"] + " " +
+                        _playersInfo[i]["playerName"] + " " +
+                        _playersInfo[i]["roundPoint"] + " " +
+                        _playersInfo[i]["gamePoint"]
+                        );
+                }
+            }
+            return _gameStatus;
         }
 
         // convert card to string
