@@ -11,12 +11,7 @@ namespace Server
         // max 4 players (min 2 players), each player contain array of max 10 cards (min 9 cards)
         public Dictionary<string, string>[][] _playersHand = new Dictionary<string, string>[4][];
 
-        /*
-         _playersInfo:
-            playerID,
-            roundPoint,
-            gamePoint,
-         */
+        //  _playersInfo: <playerID, roundPoint, gamePoint>
         public Dictionary<string, string>[] _playersInfo = new Dictionary<string, string>[4];
 
         // contain cards deck for draw after run set up game
@@ -32,6 +27,11 @@ namespace Server
         public int _hostID = -1;            // current host id
         public int _numberPlayer = 0;       // number of player
         public int _turnCounter = -1;       // count turn in a round, reset round if counter > number player
+
+
+        //
+        //
+        //// Player set up:
 
         // return player id if success or -1 if fail
         public int AddPlayer()
@@ -86,15 +86,14 @@ namespace Server
             return true;
         }
 
-        // after set up game server will send player array of cards (10 or 9 cards)
+
+        //
+        //
+        //// Game run:
+
+        // after set up game server should send player array of cards (10 or 9 cards)
         public void SetUpGame()
         {
-            // raise error
-            if (_numberPlayer < 2)
-            {
-                throw new InvalidOperationException("not enough player to start a game!");
-            }
-
             // devide card
             DevideCard();
 
@@ -105,144 +104,165 @@ namespace Server
             _currentID = _hostID;
         }
 
-        /*fix bug*/
+        // receive data and update game <need play card and take card>
         public Dictionary<string, string> UpdateGame(Dictionary<string, string> _recvPlayerData)
         {
-            
             // _recvPlayerData contain:
-            //     "stateID": string (this is number in type string)
-            //     "currentID": string (this is number in type string)
-            //     "card": string (if dont send card back set to empty string)
+            //     "stateID":  string (this is number in type string)
+            //     "sendID":   string (this is number in type string)
+            //     "card":     string (if dont send card back set to empty string)
 
-            
+
             // return dictionary of error contain:
-            //     "status": string (update game: fail)
-            //     "messages": string (explain error)
+            //     "status":        fail)
+            //     "recceiveID" :  id send to, if empty do broadcast
+            //     "messages":      explain error
             if (int.Parse(_recvPlayerData["stateID"]) != _stateID)
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
+                    { "recceiveID",  _recvPlayerData["sendID"] },
                     { "messages", "Incorrect game's state" },
                 };
             }
-            else if (int.Parse(_recvPlayerData["currentID"]) != _currentID)
+            else if (int.Parse(_recvPlayerData["sendID"]) != _currentID)
             {
                 return new Dictionary<string, string>() {
                     { "status", "Fail" },
+                    { "recceiveID",  _recvPlayerData["sendID"] },
                     { "messages", "Incorrect current player" },
                 };
             }
-
             
             // return dictionary of success contain:
             //    "status": string (update game: success)
             //    "messages": string (explain error)
             switch (_recvPlayerData["stateID"])
             {
-                case "0": // Wait for player
+                case "0": // Wait for player    |   return game ìnfo for player
+                    return HandleWaitForPlayer(_recvPlayerData);
+                case "1": // Set up game        |   devide cards and send for player
+                    return HandleSetUpGame(_recvPlayerData);
+                case "2": // Play card          |   move card to card holder
+                case "3": // Take card          |   send card to player hand and remove card from deck or holder
+                case "4": // Reset round        |   reset round, devide cards and send to players
+                    return Reset(_recvPlayerData, true);
+                case "5": // Reset game         |   set up new game
+                    return Reset(_recvPlayerData);
+                default:  // Defaul error       |   return error
                     return new Dictionary<string, string>() {
-                        { "status", "success" },
-                        { "messages", "" },
+                        { "status", "Fail" },
+                        { "recceiveID",  _recvPlayerData["sendID"] },
+                        { "messages", "Invalid input" },
                     };
-
-                case "1": // Set up game 
-                    return new Dictionary<string, string>() {
-                        { "status", "success" },
-                        { "messages", "" },
-                    };
-                case "2": // Play card
-                case "3": // Take card
-                case "4": // End round
-                case "5": // Reset round
-                case "6": // End game
-                case "7": // Reset game
             }
         }
 
-        // reset game to new state
-        public void ResetGame()
+        
+        //
+        //
+        //// Game handle for update:
+
+        // wait for player handle
+        private Dictionary<string, string> HandleWaitForPlayer(Dictionary<string, string> _recvPlayerData)
         {
-            /*
-            Reset everything to default but not player ID.
-            So dont need to add player again.
-            But still need to run SetUpGame()
-            */
+            int _tempID = int.Parse(_recvPlayerData["stateID"]);
+            return GetGameInfo(_tempID)["game_status"];
+        }
+
+        // sete up game handle <still not finish>
+        private Dictionary<string, string> HandleSetUpGame(Dictionary<string, string> _recvPlayerData)
+        {
+            if (_numberPlayer < 2)
+            {
+                return new Dictionary<string, string>() {
+                    { "status", "Fail" },
+                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "message", "Not enough player" },
+                };
+            }
+
+            if (int.Parse(_recvPlayerData["sendID"]) != _hostID)
+            {
+                return new Dictionary<string, string>() {
+                    { "status", "Fail" },
+                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "message", "Invalid host" },
+                };
+            }
+
+            // this is instruction for server to send cards to player
+            _stateID = 1;
+            return new Dictionary<string, string>() {
+                { "status", "Success" },
+                { "recceiveID",  "-1" },
+                { "message", "Send cards to player's hands" },
+            };
+        }
+
+        // reset game to new state or new round same at set up game()
+        private Dictionary<string, string> Reset(Dictionary<string, string> _recvPlayerData, bool _roundOnly = false)
+        {
+            if (int.Parse(_recvPlayerData["sendID"]) != _hostID)
+            {
+                return new Dictionary<string, string>() {
+                    { "status", "Fail" },
+                    { "recceiveID",  _recvPlayerData["sendID"] },
+                    { "message", "Invalid host" },
+                };
+            }
 
             // reset everyone hand cards
             Array.Clear(_playersHand, 0, _playersHand.Length);
+            DevideCard();
 
             // reset player point info
             foreach (var _player in _playersInfo)
             {
                 if (_player is null) continue;
+                if (!_roundOnly) _player["gamePoint"] = "0";
                 _player["roundPoint"] = "0";
-                _player["gamePoint"]  = "0";
             }
-
-            // reset card deck
-            _drawDeck = null;
 
             // reset card holder
             _cardHolder = null;
 
-            // reset game value to default
-            _stateID = 0;            // game state id
-            _currentID = -1;         // turn for player's id
-            _currentRound = -1;      // current number round
-            _hostID = -1;            // current host id
-            _numberPlayer = 0;       // number of player
-            _turnCounter = -1;       // count number of turn in one round
+            // reset game value
+            _stateID = (_roundOnly)? 4 : 5;                // game state id
+            _currentID = _hostID;                                   // turn for player's id
+            _currentRound = (_roundOnly) ? (_currentRound + 1) : 1; // current number round
+            _turnCounter = 1;                                       // count number of turn in one round
+
+            return new Dictionary<string, string>() {
+                { "status", "Success" },
+                { "recceiveID",  "-1" },
+                { "message", "Send cards to player's hands" },
+            };
         }
 
-        // only reset round
-        public void ResetRound()
-        {
-            // reset everyone hand cards
-            Array.Clear(_playersHand, 0, _playersHand.Length);
 
-            // update player point info
-            foreach (var _player in _playersInfo)
-            {
-                if (_player is null) continue;
-
-                // update game point
-                _player["gamePoint"] = (
-                    int.Parse(_player["gamePoint"]) + 
-                    int.Parse(_player["roundPoint"])
-                ).ToString();
-
-                _player["roundPoint"] = "0";
-            }
-
-            // devide card back to everyone hand
-            DevideCard();
-
-            // reset card deck
-            _drawDeck = null;
-
-            // reset game value for new round
-            _stateID = 1;            // game state id
-            _currentID = _hostID;    // turn for player's id
-            _currentRound++;         // current number round
-            _turnCounter = 1;        // count number of turn in one round
-        }
+        //
+        //
+        //// Game function:
 
         // get all game info => dictionay
         public Dictionary<string, Dictionary<string, string>> GetGameInfo(int _recvID = -1)
         {
+            // recceive ID: -1, mean for broadcast
+
             var _gameStatus = new Dictionary<string, string>()
             {
-                { "status id", _stateID.ToString() },
-                { "current id", _currentID.ToString() },
-                { "current round", _currentRound.ToString() },
-                { "host id", _hostID.ToString() },
-                { "number player", _numberPlayer.ToString() },
-                { "recceive ID",  (_recvID == -1) ? String.Empty : _recvID.ToString()}
+                { "status_id", _stateID.ToString() },
+                { "current_id", _currentID.ToString() },
+                { "current_round", _currentRound.ToString() },
+                { "host_id", _hostID.ToString() },
+                { "number_player", _numberPlayer.ToString() },
+                { "recceiveID",  (_recvID == -1) ? String.Empty : _recvID.ToString()}
             };
 
             return new Dictionary<string, Dictionary<string, string>>()
             {
-                { "game status",     _gameStatus },
+                { "game_status",     _gameStatus },
                 { "player1",     _playersInfo[0] },
                 { "player2",     _playersInfo[1] },
                 { "player3",     _playersInfo[2] },
@@ -335,14 +355,11 @@ namespace Server
 
         // Contain all game state info
         public readonly string[] _gameState = new string[] {
-            "Wait for player",  // all player can send except host
-            "Set up game",      // only host can send this
-            "Play card",
-            "Take card",
-            "End round",
-            "Reset round",
-            "End game",
-            "Reset game"
+            "Wait for player",  // Send the return of update                     (player after connected)
+            "Set up game",      // Send cards to player's hands then set id to 3 (only host)
+            "Play card",        // Send the return of update
+            "Take card",        // Send card to current id
+            "Reset round",      // Send cards to player's hands then set id to 3
         };
 
         // contain cards pip info
