@@ -9,9 +9,9 @@ namespace Server
     internal class GamePhom
     {
         // max 4 players (min 2 players), each player contain array of max 10 cards (min 9 cards)
-        public Dictionary<string, string>[][] _playersHand = new Dictionary<string, string>[4][];
+        private Dictionary<string, string>[][] _playersHand = new Dictionary<string, string>[4][];
 
-        //  _playersInfo: <playerID, playerName, roundPoint, gamePoint>
+        //  _playersInfo: <playerID, playerName, gamePoint>
         public Dictionary<string, string>[] _playersInfo = new Dictionary<string, string>[4];
 
         // contain cards deck for draw after run set up game
@@ -26,8 +26,7 @@ namespace Server
         public int _currentRound = -1;      // current number round
         public int _hostID = -1;            // current host id
         public int _numberPlayer = 0;       // number of player
-        public int _turnCounter = -1;       // count turn in a round, reset round if counter > number player
-
+        public int _turnCounter = -1;       // count turn in a round, add round if counter > number player + 1
 
         //
         //
@@ -48,7 +47,6 @@ namespace Server
                     _playersInfo[_tempID] = new Dictionary<string, string>() {
                         { "playerID" , _tempID.ToString() },
                         { "playerName", player_name },
-                        { "roundPoint", "0" },
                         { "gamePoint" , "0" },
                     };
                     return _tempID; // return add success
@@ -98,10 +96,10 @@ namespace Server
             DevideCard();
 
             // set up value
-            _stateID = 1;
+            _stateID = 0;
             _currentRound = 1;
             _turnCounter = 1;
-            _currentID = _hostID;
+            _currentID = -1;
         }
 
         // receive data and update game <need take card>
@@ -147,10 +145,8 @@ namespace Server
                 case "2": // Play card          |   move card to card holder
                     return HandlePlayCard(_recvPlayerData);
                 case "3": // Take card          |   send card to player hand and remove card from deck or holder
-                case "4": // Reset round        |   reset round, devide cards and send to players
-                    return Reset(_recvPlayerData, true);
-                case "5": // Reset game         |   set up new game
-                    return Reset(_recvPlayerData);
+                case "4": // Reset game         |   reset game, send back point
+                    return ResetRound(_recvPlayerData);
                 default:  // Defaul error       |   return error
                     return new Dictionary<string, string>() {
                         { "status", "Fail" },
@@ -210,6 +206,7 @@ namespace Server
         // handle play card
         private Dictionary<string, string> HandlePlayCard(Dictionary<string, string> _recvPlayerData)
         {
+            // if dont send card
             if (String.IsNullOrEmpty(_recvPlayerData["card"]))
             {
                 return new Dictionary<string, string>(){
@@ -219,20 +216,38 @@ namespace Server
                 };
             }
 
+            // if invalid card
             var _tempCard = StringToCard(_recvPlayerData["card"]);
             if (_tempCard == null)
             {
                 return new Dictionary<string, string>(){
                     { "status", "Fail" },
                     { "recceiveID", _recvPlayerData["playerID"] },
-                    { "message", "Invalid card" },
+                    { "message", "Unrecognized card" },
                 };
+            }
+
+            // if card not in hand
+            int playerID = int.Parse(_recvPlayerData["playerID"]);
+            int indexCard;
+            if ((indexCard = Array.IndexOf(_playersHand[playerID], _tempCard)) == -1)
+            {
+                return new Dictionary<string, string>(){
+                    { "status", "Fail" },
+                    { "recceiveID", _recvPlayerData["playerID"] },
+                    { "message", "Card not in hand" },
+                };
+            }
+            else
+            {
+                _playersHand[playerID][indexCard] = null; 
             }
 
             // update value
             _cardHolder = _tempCard;
             _currentID = (_currentID + 1) % 4;
-            _stateID = 3;
+            _turnCounter++;
+            _stateID = 4;
 
             return new Dictionary<string, string>(){
                 { "status", "Success" },
@@ -244,9 +259,10 @@ namespace Server
             };
         }
 
-        // reset game to new state or new round same at set up game()
-        private Dictionary<string, string> Reset(Dictionary<string, string> _recvPlayerData, bool _roundOnly = false)
+        // reset game to new state or new round
+        private Dictionary<string, string> Reset(Dictionary<string, string> _recvPlayerData)
         {
+            // check is it host
             if (_recvPlayerData["playerID"] != _hostID.ToString())
             {
                 return new Dictionary<string, string>() {
@@ -256,35 +272,48 @@ namespace Server
                 };
             }
 
+            // check is it 5 round
+            if (_currentRound != 5)
+            {
+                return new Dictionary<string, string>() {
+                    { "status", "Fail" },
+                    { "recceiveID",  _recvPlayerData["playerID"] },
+                    { "message", "invalid round to reset" },
+                };
+            }
+
+            var _res = GetGameInfo();
+
             // reset everyone hand cards
             Array.Clear(_playersHand, 0, _playersHand.Length);
-            DevideCard();
 
             // reset player point info
             foreach (var _player in _playersInfo)
             {
                 if (_player is null) continue;
-                if (!_roundOnly) _player["gamePoint"] = "0";
-                _player["roundPoint"] = "0";
+                _player["gamePoint"] = "0";
             }
 
             // reset card holder
             _cardHolder = null;
 
-            // reset game value
-            _stateID = (_roundOnly)? 4 : 5;                         // game state id
-            _currentID = _hostID;                                   // turn for player's id
-            _currentRound = (_roundOnly) ? (_currentRound + 1) : 1; // current number round
-            _turnCounter = 1;                                       // count number of turn in one round
+            // set up game again
+            SetUpGame();
 
-            return new Dictionary<string, string>() {
-                { "status", "Success" },
-                { "stateID", _stateID.ToString() },
-                { "recceiveID",  "-1" },
-                { "message", "Send cards to player's hands" },
-            };
+            // add status
+            _res.Add("status", "Success");
+            _res.Add("message", "Send point to players");
+
+            return _res;
         }
 
+        // get card decks to send
+        public Dictionary<string, string>[][] DecksToSend()
+        {
+            if (_stateID != 1) return null;
+            _stateID = 2;
+            return _playersHand;
+        }
 
         //
         //
@@ -316,7 +345,6 @@ namespace Server
                     _gameStatus.Add("player" + i.ToString(),
                         _playersInfo[i]["playerID"] + " " +
                         _playersInfo[i]["playerName"] + " " +
-                        _playersInfo[i]["roundPoint"] + " " +
                         _playersInfo[i]["gamePoint"]
                         );
                 }
@@ -419,7 +447,7 @@ namespace Server
             "Set up game",      // Send cards to player's hands then set stateID to 2 (only host)
             "Play card",        // Send the return of update
             "Take card",        // Send card to current id
-            "Reset round",      // Send cards to player's hands then set stateID to 2
+            "Reset game",      // Send cards to player's hands then set stateID to 2
         };
 
         // contain cards pip info
