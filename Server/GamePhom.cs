@@ -6,19 +6,48 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+    internal class Card
+    {
+        public Card(string pip, string suit, int value)
+        {
+            this.pip = pip;
+            this.suit= suit;
+            this.value = value;
+        }
+
+        public string pip { get; set; }
+        public string suit { get; set; }
+        public int value { get; set; }
+    }
+
+    internal class PlayerInfo
+    {
+        public PlayerInfo(int id, string name, int point)
+        {
+            this.id = id;              
+            this.name = name;              
+            this.point = point;
+        }
+
+        public int id { get; set; }
+        public string name { get; set; }
+        public int point { get; set; }
+    }
+
+
     internal class GamePhom
     {
         // max 4 players (min 2 players), each player contain array of max 10 cards (min 9 cards)
-        private Dictionary<string, string>[][] _playersHand = new Dictionary<string, string>[4][];
+        private Card[][] _playersHand = new Card[4][];
 
         //  _playersInfo: <playerID, playerName, gamePoint>
-        public Dictionary<string, string>[] _playersInfo = new Dictionary<string, string>[4];
+        public PlayerInfo[] _playersInfo = new PlayerInfo[4];
 
         // contain cards deck for draw after run set up game
-        public Dictionary<string, string>[] _drawDeck = null;
+        public Card[] _drawDeck = null;
 
         // card for pull
-        public Dictionary<string, string> _cardHolder = null;
+        public Card _cardHolder = null;
 
         // current data
         public int _stateID = 0;            // game state id
@@ -43,11 +72,7 @@ namespace Server
             {
                 if (_playersInfo[_tempID] is null)
                 {
-                    _playersInfo[_tempID] = new Dictionary<string, string>() {
-                        { "playerID" , _tempID.ToString() },
-                        { "playerName", player_name },
-                        { "gamePoint" , "0" },
-                    };
+                    _playersInfo[_tempID] = new PlayerInfo(_tempID, player_name, 0);
                     return _tempID; // return add success
                 }
                 _tempID++;
@@ -68,15 +93,13 @@ namespace Server
             // shift current player to next player
             if (_playerID == _hostID || _playerID == _currentID)
             {
-                int i = (_playerID + 1) % 4;
-                while (i != _playerID)
+                for (int i = (_playerID + 1) % 4; i != _playerID; i = (i + 1) % 4)
                 {
                     if (_playersInfo[i] != null)
                     {
                         if (_playerID == _hostID) _hostID = i;
                         if (_playerID == _currentID) _currentID = i;
                     }
-                    i = (i + 1) % 4;
                 }
             }
 
@@ -209,7 +232,7 @@ namespace Server
         // handle play card
         private Dictionary<string, string> HandlePlayCard(Dictionary<string, string> _recvPlayerData)
         {
-            // if dont send card
+            // if player dont send card
             if (String.IsNullOrEmpty(_recvPlayerData["card"]))
             {
                 return new Dictionary<string, string>(){
@@ -386,7 +409,7 @@ namespace Server
             foreach (var _player in _playersInfo)
             {
                 if (_player is null) continue;
-                _player["gamePoint"] = "0";
+                _player.point = 0;
             }
 
             // reset card holder
@@ -403,12 +426,13 @@ namespace Server
         }
 
         // get card decks to send
-        public Dictionary<string, string>[][] DecksToSend()
+        public Card[][] DecksToSend()
         {
             if (_stateID != 1) return null;
             _stateID = 2;
             return _playersHand;
         }
+
 
         //
         //
@@ -438,9 +462,9 @@ namespace Server
                 else
                 {
                     _gameStatus.Add("player" + i.ToString(),
-                        _playersInfo[i]["playerID"] + " " +
-                        _playersInfo[i]["playerName"] + " " +
-                        _playersInfo[i]["gamePoint"]
+                        _playersInfo[i].id.ToString() + " " +
+                        _playersInfo[i].name + " " +
+                        _playersInfo[i].point.ToString()
                         );
                 }
             }
@@ -448,14 +472,14 @@ namespace Server
         }
 
         // convert card to string
-        public static string CardToString(Dictionary<string, string> _card)
+        public static string CardToString(Card _card)
         {
             if (_card is null) return String.Empty;
-            return _card["pip"] + "-" + _card["suit"];
+            return _card.pip + "-" + _card.suit;
         }
 
         // convert string to card
-        public static Dictionary<string, string> StringToCard(string _cardName)
+        public static Card StringToCard(string _cardName)
         {
             var _tempCard = _cardName.Split('-');
             if (_tempCard.Length != 2) return null;
@@ -466,18 +490,158 @@ namespace Server
                 return null;
             }
 
-            return new Dictionary<string, string>() {
-                { "pip", _tempCard[0] },
-                { "suit", _tempCard[1] },
-                { "value", Array.IndexOf(_CardPip, _tempCard[0]).ToString() },
-            };
+            return new Card(_tempCard[0], _tempCard[1], Array.IndexOf(_CardPip, _tempCard[0]));
+        }
+
+        // get trash card
+        // return array
+        public static Card[][] OptimizePhom(Card[] _deck)
+        {
+            // líst contain phom and trash
+            List<List<Card>> _phom = new List<List<Card>>();
+            var _trash = _deck.ToList();
+
+            // create value table
+            Dictionary<int, List<Card>> _valueTable = new Dictionary<int, List<Card>>();
+
+            // add card to value table
+            foreach (var _card in _trash)
+            {
+                if (!_valueTable.TryGetValue(_card.value, out List<Card> _))
+                    _valueTable.Add(_card.value, new List<Card>());
+
+                _valueTable[_card.value].Add(_card);
+            }
+
+            // loop thought value table
+            for (int _value = _CardPip.Length - 1; _value > 2; _value--)
+            {
+                // check is there a card with this pip
+                if (!_valueTable.TryGetValue(_value, out List<Card> _)) continue;
+
+                // get max posible phom ngang by this card
+                int _maxPhomNgang = _valueTable[_value].Count / 3;
+
+                // get max posible phom doc by this card
+                int _maxPhomDoc = 0;
+                if (_valueTable.ContainsKey(_value)     &&
+                    _valueTable.ContainsKey(_value - 1) &&
+                    _valueTable.ContainsKey(_value - 2))
+                {
+                    _maxPhomDoc = Math.Min(
+                        _valueTable[_value].Count,
+                            Math.Min(_valueTable[_value - 1].Count, 
+                                     _valueTable[_value - 2].Count));
+                }
+
+                if (_maxPhomDoc == _maxPhomNgang)
+                {
+                    // get phom ngang
+                    if (_valueTable[_value].Count == 3)
+                    {
+                        _phom.Add(_valueTable[_value]);
+                        foreach (var _card in _valueTable[_value])
+                        { 
+                            _trash.Remove(_card);
+                        }
+                        _valueTable.Remove(_value);
+                    }
+                    // get phom doc => phom ngang
+                    else if (_valueTable[_value].Count == 4)
+                    {
+                        // get phom doc
+                        int _sub = 0;
+                        if (_valueTable[_value - 1].Count == _maxPhomDoc) _sub = 1;
+                        else if (_valueTable[_value - 2].Count == _maxPhomDoc) _sub = 2;
+
+                        string _tempSuit = _valueTable[_value - _sub][0].suit;
+
+                        
+
+                        _phom.Add();
+
+                    }
+                    // because _maxPhomDoc == _maxPhomNgang == 0
+                    else continue;
+
+                }
+                else if (_maxPhomDoc > _maxPhomNgang)
+                {
+                    // get phom doc => phom ngang
+                }
+                else
+                {
+                    // get phom ngang 
+                }
+            }
+        }
+
+        // Get phom doc (assuming that there is phom doc)
+        private void GetPhomDoc(ref Dictionary<int, List<Card>> _valueTable, ref List<List<Card>> _phom, ref List<Card> _trash, int _value)
+        {
+            var _suits = new HashSet<string>(_valueTable[_value].Select(x => x.suit));
+            _suits.IntersectWith(_valueTable[_value - 1].Select(x => x.suit));
+            _suits.IntersectWith(_valueTable[_value - 2].Select(x => x.suit));
+
+            foreach (var _suit in _suits)
+            {
+                // add phom
+                _phom.Add(_trash.Where(x => (x.suit == _suit) && (_value - x.value) <= 2).ToList());
+
+                // remove from value table
+                _valueTable[_value].RemoveAll(x => x.suit == _suit);
+                _valueTable[_value - 1].RemoveAll(x => x.suit == _suit);
+                _valueTable[_value - 2].RemoveAll(x => x.suit == _suit);
+
+                // remove from trash
+                _trash.RemoveAll(x => (x.suit == _suit) && (_value - x.value) <= 2);
+            }
+        }
+
+        // check valid phom doc (maybe)
+        private bool CheckPhomDoc(Card[] _cards)
+        {
+            if (_cards.Length <= 1) return true;
+
+            List<int> _temp = new List<int>();
+            string _tempSuit = null;
+
+            // check same suit and add to temp líst
+            foreach (var _card in _cards)
+            {
+                if (_tempSuit is null)
+                {
+                    _tempSuit = _card.suit;
+                }
+                else if (_tempSuit != _card.suit)
+                {
+                    return false;
+                }
+                _temp.Add(_card.value);
+            }
+
+            _temp.Sort((a, b) => b.CompareTo(a)); // descending sort
+            // check is it follow order
+            for (int i = 0; i < _temp.Count - 1; i++)
+            {
+                if (_temp[i] - _temp[i + 1] != 1)
+                    return false;
+            }
+            return true;
+        }
+
+        // check valid phom ngang (maybe)
+        private bool CheckPhomNgang(Card[] _cards)
+        {
+            if (_cards.Length <= 1) return true;
+            return _cards.All(a => a.pip == _cards[0].pip);
         }
 
         // devide card for all players
         private void DevideCard()
         {
             // create cards deck and shuffle
-            _drawDeck = CreateCardDeck();
+            this._drawDeck = CreateCardDeck();
             ShuffleCarDeck(_drawDeck);
 
             // divide cards for players
@@ -497,33 +661,25 @@ namespace Server
         }
 
         // create array of card
-        private Dictionary<string, string>[] CreateCardDeck()
+        private Card[] CreateCardDeck()
         {
             // for more detail read this url:
             // https://en.wikipedia.org/wiki/Standard_52-card_deck#:~:text=clubs%20(%E2%99%A3).-,Nomenclature,or%20%22Ace%20of%20Spades%22.
 
-            Dictionary<string, string>[] _cards = new Dictionary<string, string>[52];
+            Card[] _cards = new Card[52];
 
             int i = 0;
             foreach (var _pip in _CardPip.Select((value, index) => new { index, value }))
             {
                 foreach (var _suit in _CardSuit)
-                {
-                    _cards[i] = new Dictionary<string, string>()
-                    {
-                        { "pip", _pip.value },
-                        { "suit", _suit },
-                        { "value", (_pip.index + 1).ToString() }
-                    };
-                    i++;
-                }
+                    _cards[i] = new Card(_pip.value, _suit, _pip.index + 1);
             }
 
             return _cards;
         }
 
         // Shuffle cards Deck
-        private void ShuffleCarDeck(Dictionary<string, string>[] _CardDeck)
+        private void ShuffleCarDeck(Card[] _CardDeck)
         {
             Random rng = new Random();
             int n = _CardDeck.Length;
