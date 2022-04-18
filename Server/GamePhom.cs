@@ -292,7 +292,10 @@ namespace Server
         // handle play card
         private ResponseForm HandlePlayCard(RequestForm _playerRequest)
         {
-            var _response = new ResponseForm();
+            // check u trang
+            ResponseForm _response = HandleUTrang(_playerRequest);
+            if (_response is null) _response = new ResponseForm();
+            else return _response;
 
             // if player dont send card
             if (_playerRequest.sendCard is null)
@@ -341,7 +344,10 @@ namespace Server
         // handle take card
         private ResponseForm HandleTakeCard(RequestForm _playerRequest)
         {
-            var _response = new ResponseForm();
+            // check u trang
+            ResponseForm _response = HandleUTrang(_playerRequest);
+            if (_response is null) _response = new ResponseForm();
+            else return _response;
 
             // take card from card deck
             if (_playerRequest.sendCard is null)
@@ -420,28 +426,31 @@ namespace Server
         {
             var _reponse = new ResponseForm();
 
-            // check is it host
-            if (_playerRequest.playerID != _hostID)
+            // check is it end game
+            if (_playerRequest.phom is null && _playerRequest.trash is null)
             {
-                _reponse.status = "fail";
-                _reponse.recceiveID = _playerRequest.playerID;
-                _reponse.messages = "Invalid host";
+                // check is it host
+                if (_playerRequest.playerID != _hostID)
+                {
+                    _reponse.status = "fail";
+                    _reponse.recceiveID = _playerRequest.playerID;
+                    _reponse.messages = "Invalid host";
 
-                return _reponse;
+                    return _reponse;
+                }
+
+                // check is it 5 round
+                if (_currentRound != 5)
+                {
+                    _reponse.status = "fail";
+                    _reponse.recceiveID = _playerRequest.playerID;
+                    _reponse.messages = "Invalid round to reset";
+
+                    return _reponse;
+                }
             }
 
-            // check is it 5 round
-            if (_currentRound != 5)
-            {
-                _reponse.status = "fail";
-                _reponse.recceiveID = _playerRequest.playerID;
-                _reponse.messages = "Invalid round to reset";
-
-                return _reponse;
-            }
-
-
-            // reset everyone hand cards
+            // reset everyone hand's cards
             Array.Clear(_playersHand, 0, _playersHand.Length);
 
             // scoring player point
@@ -475,11 +484,40 @@ namespace Server
             return _playersHand;
         }
 
+        // handle u trang
+        private ResponseForm HandleUTrang(RequestForm _playerRequest)
+        {
+            // check is there u trang
+            if (_playerRequest.phom is null || _playerRequest.trash is null) return null;
+
+            // create temp cards
+            var _tempCards = _playerRequest.phom.ToList();
+            _tempCards.AddRange(_playerRequest.trash.ToList());
+
+            // check every cards are in hand
+            foreach (var _card in _tempCards)
+            {
+                if (_card is null) continue;
+
+                if (!_tempCards.Contains(_card))
+                {
+                    // create repoonse form
+                    var _reponse = new ResponseForm();
+
+                    _reponse.status = "fail";
+                    _reponse.messages = "Invalid card in hand";
+
+                    return _reponse;
+                }
+            }
+
+            return ResetGame(_playerRequest);
+        }
 
         //
         //
         //// Work with phom
-        
+
         // re-range to optimize phom
         public static Card[][] OptimizePhom(Card[] _deck)
         {
