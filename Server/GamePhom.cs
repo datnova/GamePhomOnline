@@ -15,6 +15,11 @@ namespace Server
             this.value = value;
         }
 
+        public override string ToString()
+        {
+            return this.pip + "_" + this.suit;
+        }
+
         public string pip { get; set; }
         public string suit { get; set; }
         public int value { get; set; }
@@ -665,6 +670,7 @@ namespace Server
             }
         }
 
+        // check is it phom
         private static bool CheckPhom(Card[] _cards)
         {
             return (CheckPhomDoc(_cards) || CheckPhomNgang(_cards));
