@@ -13,23 +13,22 @@ namespace Server
         static void Main(string[] args)
         {
             GamePhom _game = new GamePhom();
-
         }
 
         // Deserialize
-        public static Dictionary<string, string> Deserialize(byte[] _buffer)
+        public static object Deserialize(byte[] _buffer)
         {
             using (var _stream = new MemoryStream())
             {
                 _stream.Write(_buffer, 0, _buffer.Length);
                 _stream.Position = 0;
                 BinaryFormatter _formatter = new BinaryFormatter();
-                return _formatter.Deserialize(_stream) as Dictionary<string, string>;
+                return _formatter.Deserialize(_stream);
             }
         }
 
         // Serialize
-        public static byte[] Serialize(Dictionary<string, string> _data)
+        public static byte[] Serialize(object _data)
         {
             using (MemoryStream _stream = new MemoryStream())
             {
