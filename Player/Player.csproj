@@ -77,5 +77,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <Import Project="..\GameExtensions\GameExtensions.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

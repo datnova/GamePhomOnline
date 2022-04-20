@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d889a2a6-a8d0-4681-9183-21893da2acba</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>GameExtensions</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Card.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PhomTool.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlayerInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ResponseForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RequestForm.cs" />
+  </ItemGroup>
+</Project>
