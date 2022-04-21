@@ -14,7 +14,7 @@ namespace GameExtensions
         public int currentRound { get; set; } = -1;
         public int hostID { get; set; } = -1;
         public int numberPlayer { get; set; } = -1;
-        public int recceiveID { get; set; } = -1;
+        public int receiveID { get; set; } = -1;
         public string messages { get; set; } = String.Empty;
         public Card cardHolder { get; set; } = null;
         public Card[] cardPull { get; set; } = null;
@@ -33,7 +33,7 @@ namespace GameExtensions
                     _writer.Write(currentRound);
                     _writer.Write(hostID);
                     _writer.Write(numberPlayer);
-                    _writer.Write(recceiveID);
+                    _writer.Write(receiveID);
                     _writer.Write(messages);
 
                     // add card holder
@@ -67,6 +67,12 @@ namespace GameExtensions
 
                         foreach (var _temp in playerInfo)
                         {
+                            if (_temp is null)
+                            {
+                                _writer.Write(0);
+                                continue;
+                            }
+
                             _tempBuffer = _temp.Serialize();
                             _writer.Write(_tempBuffer.Length);
                             _writer.Write(_tempBuffer);
@@ -92,7 +98,7 @@ namespace GameExtensions
                     _res.currentRound = _reader.ReadInt32();
                     _res.hostID = _reader.ReadInt32();
                     _res.numberPlayer = _reader.ReadInt32();
-                    _res.recceiveID = _reader.ReadInt32();
+                    _res.receiveID = _reader.ReadInt32();
                     _res.messages = _reader.ReadString();
 
                     // read card holder
@@ -119,6 +125,7 @@ namespace GameExtensions
                         for (int i = 0; i < _res.playerInfo.Length; i++)
                         {
                             _tempLength = _reader.ReadInt32();
+                            if (_tempLength == 0) continue;
                             _res.playerInfo[i] = PlayerInfo.Desserialize(_reader.ReadBytes(_tempLength));
                         }
                     }

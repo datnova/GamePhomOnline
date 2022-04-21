@@ -109,7 +109,7 @@ namespace Server
                 var _response = new ResponseForm();
                 _response.status = "fail";
                 _response.messages = "Incorrect game's state";
-                _response.recceiveID = _playerRequest.playerID;
+                _response.receiveID = _playerRequest.playerID;
 
                 return _response;
             }
@@ -118,7 +118,7 @@ namespace Server
                 var _response = new ResponseForm();
                 _response.status = "fail";
                 _response.messages = "Incorrect current player";
-                _response.recceiveID = _playerRequest.playerID;
+                _response.receiveID = _playerRequest.playerID;
 
                 return _response;
             }
@@ -143,7 +143,7 @@ namespace Server
                         var _response = new ResponseForm();
                         _response.status = "fail";
                         _response.messages = "Invalid input";
-                        _response.recceiveID = _playerRequest.playerID;
+                        _response.receiveID = _playerRequest.playerID;
 
                         return _response;
                     }
@@ -151,7 +151,7 @@ namespace Server
         }
 
         // get all game info => dictionay
-        private ResponseForm GetGameInfo(int _recvID = -1)
+        public ResponseForm GetGameInfo(int _recvID = -1)
         {
             // recceive ID: -1, mean for broadcast
 
@@ -162,8 +162,8 @@ namespace Server
             _reponse.currentRound = _currentRound;
             _reponse.hostID = _hostID;
             _reponse.numberPlayer = _numberPlayer;
-            _reponse.recceiveID = _recvID;
-            _reponse.playerInfo = _playersInfo.Where(x => !(x is null)).ToArray();
+            _reponse.receiveID = _recvID;
+            _reponse.playerInfo = _playersInfo;
             _reponse.messages = String.Empty;
             
             return _reponse;
@@ -176,6 +176,11 @@ namespace Server
             var _tempDeck = DevideCard(_hostID, true);
             _playersHand = _tempDeck.Take(4).ToArray();
             _drawDeck = _tempDeck.Last();
+
+            // set up date
+            _stateID = 1;
+            _currentID = _hostID;
+            _currentRound = 1;
         }
 
 
@@ -186,20 +191,29 @@ namespace Server
         // wait for player handle
         private ResponseForm HandleWaitForPlayer(RequestForm _playerRequest)
         {
-            var _response = GetGameInfo();
-
+            ResponseForm _response;
             if (_playerRequest.playerID == -1)
             {
                 if (AddPlayer(_playerRequest.playerName) == -1)
                 {
+                    _response = new ResponseForm();
                     _response.status = "fail";
-                    _response.messages = "full player";
+                    _response.receiveID = _playerRequest.playerID;
+                    _response.messages = "Full player";
                 }
                 else
                 {
+                    _response = GetGameInfo();
                     _response.status = "success";
                     _response.messages = "Waiting for another player";
                 }
+            }
+            else
+            {
+                _response = new ResponseForm();
+                _response.status = "fail";
+                _response.receiveID = _playerRequest.playerID;
+                _response.messages = "Already existed";
             }
 
             return _response;
@@ -214,7 +228,7 @@ namespace Server
             if (_numberPlayer < 2)
             {
                 _reponse.status = "fail";
-                _reponse.recceiveID = _playerRequest.playerID;
+                _reponse.receiveID = _playerRequest.playerID;
                 _reponse.messages = "Not enough player";
 
                 return _reponse;
@@ -224,18 +238,13 @@ namespace Server
             if (_playerRequest.playerID != _hostID)
             {
                 _reponse.status = "fail";
-                _reponse.recceiveID = _playerRequest.playerID;
+                _reponse.receiveID = _playerRequest.playerID;
                 _reponse.messages = "Invalid host";
 
                 return _reponse;
             }
 
             SetUpGame();
-
-            // this is instruction for server to send cards to player
-            _stateID = 1;
-            _currentID = _hostID;
-            _currentRound = 1;
 
             _reponse = GetGameInfo();
             _reponse.status = "success";
@@ -256,7 +265,7 @@ namespace Server
             if (_playerRequest.sendCard is null)
             {
                 _response.status = "fail";
-                _response.recceiveID = _playerRequest.playerID;
+                _response.receiveID = _playerRequest.playerID;
                 _response.messages = "Invalid card";
 
                 return _response;
@@ -271,7 +280,7 @@ namespace Server
             if (indexCard == -1)
             {
                 _response.status = "fail";
-                _response.recceiveID = _playerRequest.playerID;
+                _response.receiveID = _playerRequest.playerID;
                 _response.messages = "Card not in hand";
 
                 return _response;
@@ -315,7 +324,7 @@ namespace Server
                 {
                     _response.status = "fail";
                     _response.messages = "Draw deck has no card left";
-                    _response.recceiveID = _playerRequest.playerID;
+                    _response.receiveID = _playerRequest.playerID;
 
                     return _response;
                 }
@@ -346,7 +355,7 @@ namespace Server
             if (_playerRequest.sendCard != _cardHolder)
             {
                 _response.status = "fail";
-                _response.recceiveID = _playerRequest.playerID;
+                _response.receiveID = _playerRequest.playerID;
                 _response.messages = "Invalid card from card holder";
 
                 return _response;
@@ -381,7 +390,7 @@ namespace Server
         // reset game to new state or new round
         private ResponseForm ResetGame(RequestForm _playerRequest, bool utrang = false)
         {
-            var _reponse = new ResponseForm();
+            var _response = new ResponseForm();
 
             // check is it end game
             if (!utrang)
@@ -389,21 +398,21 @@ namespace Server
                 // check is it host
                 if (_playerRequest.playerID != _hostID)
                 {
-                    _reponse.status = "fail";
-                    _reponse.recceiveID = _playerRequest.playerID;
-                    _reponse.messages = "Invalid host";
+                    _response.status = "fail";
+                    _response.receiveID = _playerRequest.playerID;
+                    _response.messages = "Invalid host";
 
-                    return _reponse;
+                    return _response;
                 }
 
                 // check is it 5 round
                 if (_currentRound != 5)
                 {
-                    _reponse.status = "fail";
-                    _reponse.recceiveID = _playerRequest.playerID;
-                    _reponse.messages = "Invalid round to reset";
+                    _response.status = "fail";
+                    _response.receiveID = _playerRequest.playerID;
+                    _response.messages = "Invalid round to reset";
 
-                    return _reponse;
+                    return _response;
                 }
             }
 
@@ -432,16 +441,16 @@ namespace Server
             // reset card holder
             _cardHolder = null;
 
+            _response = GetGameInfo();
+
             // set up game again
             SetUpGame();
 
-            var _response = GetGameInfo();
-
             // add status
-            _reponse.status = "success";
-            _reponse.messages = "Send point to players";
+            _response.status = "success";
+            _response.messages = "Send point to players";
 
-            return _reponse;
+            return _response;
         }
 
         // get card decks to send
@@ -472,7 +481,7 @@ namespace Server
                 var _reponse = new ResponseForm();
 
                 _reponse.status = "fail";
-                _reponse.recceiveID = _playerRequest.playerID;
+                _reponse.receiveID = _playerRequest.playerID;
                 _reponse.messages = "Invalid u trang";
 
                 return _reponse;
@@ -493,7 +502,7 @@ namespace Server
                 var _reponse = new ResponseForm();
 
                 _reponse.status = "fail";
-                _reponse.recceiveID = _playerRequest.playerID;
+                _reponse.receiveID = _playerRequest.playerID;
                 _reponse.messages = "Invalid cards in hand";
 
                 return _reponse;
