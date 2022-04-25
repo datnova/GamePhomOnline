@@ -64,5 +64,32 @@ namespace Player
                 _numberPlayer = _response.numberPlayer;
             }
         }
+
+        public RequestForm RequestAddPlayer()
+        {
+            var _request = new RequestForm();
+            _request.stateID = _stateID;
+            _request.playerName = _playersInfo.name;
+            _request.playerID = -1;
+            return _request;
+        }
+
+        public RequestForm RequestPlayCard(Card _card)
+        {
+            var _request = new RequestForm();
+            _request.playerName = _playersInfo.name;
+            _request.playerID = _playersInfo.id;
+            _request.sendCard = _card;
+            return _request;
+        }
+
+        public RequestForm RequestTakeCard(bool _fromCardHolder)
+        {
+            var _request = new RequestForm();
+            _request.playerName = _playersInfo.name;
+            _request.playerID = _playersInfo.id;
+            _request.sendCard = (_fromCardHolder) ? _cardHolder[_playersInfo.id] : null;
+            return _request;
+        }
     }
 }
