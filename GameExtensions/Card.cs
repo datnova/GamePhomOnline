@@ -26,31 +26,33 @@ namespace GameExtensions
 
         public byte[] Serialize()
         {
-            using (MemoryStream m = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
-                using (BinaryWriter writer = new BinaryWriter(m))
+                using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     writer.Write(pip);
                     writer.Write(suit);
                     writer.Write(value);
                 }
-                return m.ToArray();
+                return stream.ToArray();
             }
         }
 
-        public static Card Desserialize(byte[] data)
+        public static Card Desserialize(byte[] buffer)
         {
-            Card result = new Card(String.Empty, String.Empty, 0);
-            using (MemoryStream m = new MemoryStream(data))
+            if (buffer.Length == 0) return null;
+
+            Card card = new Card(String.Empty, String.Empty, 0);
+            using (MemoryStream m = new MemoryStream(buffer))
             {
                 using (BinaryReader reader = new BinaryReader(m))
                 {
-                    result.pip = reader.ReadString();
-                    result.suit = reader.ReadString();
-                    result.value = reader.ReadInt32();
+                    card.pip = reader.ReadString();
+                    card.suit = reader.ReadString();
+                    card.value = reader.ReadInt32();
                 }
             }
-            return result;
+            return card;
         }
     }
 }

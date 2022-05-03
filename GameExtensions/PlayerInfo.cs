@@ -21,31 +21,33 @@ namespace GameExtensions
 
         public byte[] Serialize()
         {
-            using (MemoryStream m = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
-                using (BinaryWriter writer = new BinaryWriter(m))
+                using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     writer.Write(id);
                     writer.Write(name);
                     writer.Write(point);
                 }
-                return m.ToArray();
+                return stream.ToArray();
             }
         }
 
-        public static PlayerInfo Desserialize(byte[] data)
+        public static PlayerInfo Desserialize(byte[] buffer)
         {
-            PlayerInfo result = new PlayerInfo(-1, String.Empty, 0);
-            using (MemoryStream m = new MemoryStream(data))
+            if (buffer.Length == 0) return null;
+
+            PlayerInfo playerInfo = new PlayerInfo(-1, String.Empty, 0);
+            using (MemoryStream stream = new MemoryStream(buffer))
             {
-                using (BinaryReader reader = new BinaryReader(m))
+                using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    result.id = reader.ReadInt32();
-                    result.name = reader.ReadString();
-                    result.point = reader.ReadInt32();
+                    playerInfo.id = reader.ReadInt32();
+                    playerInfo.name = reader.ReadString();
+                    playerInfo.point = reader.ReadInt32();
                 }
             }
-            return result;
+            return playerInfo;
         }
     }
 }

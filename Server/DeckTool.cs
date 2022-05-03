@@ -11,40 +11,40 @@ namespace Server
     internal static class DeckTool
     {
         // devide card for all players last array is a remain cards
-        public static Card[][] DevideCard(int _hostID, bool _shuffle = false)
+        public static Card[][] DevideCard(int hostID, bool shuffle = false)
         {
             // create cards deck and shuffle
-            var _deck = CreateCardDeck();
-            ShuffleCarDeck(_deck);
+            var deck = CreateCardDeck();
+            ShuffleCarDeck(deck);
 
-            var _res = new Card[5][];
+            var result = new Card[5][];
 
             // divide cards
             for (int i = 0; i < 4; i++)
             {
-                if (i == _hostID)
+                if (i == hostID)
                 {
-                    _res[i] = _deck.Take(10).ToArray();
-                    _deck = _deck.Skip(10).Take(_deck.Length - 10).ToArray();
+                    result[i] = deck.Take(10).ToArray();
+                    deck = deck.Skip(10).Take(deck.Length - 10).ToArray();
                 }
                 else
                 {
-                    _res[i] = _deck.Take(9).ToArray();
-                    _deck = _deck.Skip(9).Take(_deck.Length - 9).ToArray();
+                    result[i] = deck.Take(9).ToArray();
+                    deck = deck.Skip(9).Take(deck.Length - 9).ToArray();
                 }
             }
 
             // add remain
-            _res[4] = _deck;
+            result[4] = deck;
 
-            return _res;
+            return result;
         }
 
         // scoring cards
-        public static int Scoring(Card[] _cards)
+        public static int Scoring(Card[] cards)
         {
-            Card[] _trash = PhomTool.OptimizePhom(_cards).Last();
-            return _trash.Select(x => x.value).ToArray().Sum();
+            Card[] tempCards = PhomTool.OptimizePhom(cards).Last();
+            return tempCards.Select(x => x.value).ToArray().Sum();
         }
 
         // create array of card
@@ -53,32 +53,34 @@ namespace Server
             // for more detail read this url:
             // https://en.wikipedia.org/wiki/Standard_52-card_deck#:~:text=clubs%20(%E2%99%A3).-,Nomenclature,or%20%22Ace%20of%20Spades%22.
 
-            Card[] _cards = new Card[52];
+            Card[] cards = new Card[52];
 
             int i = 0;
-            foreach (var _pip in _CardPip.Select((value, index) => new { index, value }))
+            foreach (var pip in cardPip.Select((value, index) => new { index, value }))
             {
-                foreach (var _suit in _CardSuit)
+                foreach (var suit in cardSuit)
                 {
-                    _cards[i] = new Card(_pip.value, _suit, _pip.index + 1);
+                    cards[i] = new Card(pip.value, suit, pip.index + 1);
                     i++;
                 }
             }
 
-            return _cards;
+            return cards;
         }
 
         // Shuffle cards Deck
-        private static void ShuffleCarDeck(Card[] _CardDeck)
+        public static void ShuffleCarDeck(Card[] cards)
         {
             Random rng = new Random();
-            int n = _CardDeck.Length;
+            int n = cards.Length;
             while (n > 1)
             {
                 int k = rng.Next(n--);
-                var value = _CardDeck[k];
-                _CardDeck[k] = _CardDeck[n];
-                _CardDeck[n] = value;
+
+                // swap
+                var value = cards[k];
+                cards[k] = cards[n];
+                cards[n] = value;
             }
         }
     }

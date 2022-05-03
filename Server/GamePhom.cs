@@ -17,23 +17,23 @@ namespace Server
         /// game value
 
         // max 4 players (min 2 players), each player contain array of max 10 cards (min 9 cards)
-        public Card[][] _playersHand = new Card[4][];
+        private Card[][] _playersHand = new Card[4][];
 
         //  _playersInfo: <playerID, playerName, gamePoint>
-        public PlayerInfo[] _playersInfo = new PlayerInfo[4];
+        private PlayerInfo[] _playersInfo = new PlayerInfo[4];
 
         // contain cards deck for draw after run set up game
-        public Card[] _drawDeck = null;
+        private Card[] _drawDeck = null;
 
         // card for pull
-        public Card _cardHolder = null;
+        private Card _cardHolder = null;
 
         // current data
-        public int _stateID = 0;            // game state id
-        public int _currentID = -1;         // turn for player's id
-        public int _currentRound = -1;      // current number round
-        public int _hostID = -1;            // current host id
-        public int _numberPlayer = 0;       // number of player
+        private int _stateID = 0;            // game state id
+        private int _currentID = -1;         // turn for player's id
+        private int _currentRound = -1;      // current number round
+        private int _hostID = -1;            // current host id
+        private int _numberPlayer = 0;       // number of player
 
 
         //
@@ -41,43 +41,43 @@ namespace Server
         //// Player set up:
 
         // return player id if success or -1 if fail
-        public int AddPlayer(string player_name)
+        public int AddPlayer(string playerName)
         {
             if (_hostID < 0) _hostID = 0;
             _numberPlayer++;
 
             // assign player to empty locate
-            int _tempID = 0;
-            while (_tempID < 4)
+            int tempID = 0;
+            while (tempID < 4)
             {
-                if (_playersInfo[_tempID] is null)
+                if (_playersInfo[tempID] is null)
                 {
-                    _playersInfo[_tempID] = new PlayerInfo(_tempID, player_name, 0);
-                    return _tempID; // return add success
+                    _playersInfo[tempID] = new PlayerInfo(tempID, playerName, 0);
+                    return tempID; // return add success
                 }
-                _tempID++;
+                tempID++;
             }
             return -1; // return add fail
         }
 
         // return bool success or not
-        public bool RemovePlayer(int _playerID)
+        public bool RemovePlayer(int playerID)
         {
-            if (_playersInfo[_playerID] is null) return false;
+            if (_playersInfo[playerID] is null) return false;
 
-            _playersInfo[_playerID] = null;
+            _playersInfo[playerID] = null;
             _numberPlayer--;
 
             // shift host id to next player
             // shift current player to next player
-            if (_playerID == _hostID || _playerID == _currentID)
+            if (playerID == _hostID || playerID == _currentID)
             {
-                for (int i = (_playerID + 1) % 4; i != _playerID; i = (i + 1) % 4)
+                for (int i = (playerID + 1) % 4; i != playerID; i = (i + 1) % 4)
                 {
                     if (_playersInfo[i] != null)
                     {
-                        if (_playerID == _hostID) _hostID = i;
-                        if (_playerID == _currentID) _currentID = i;
+                        if (playerID == _hostID) _hostID = i;
+                        if (playerID == _currentID) _currentID = i;
                     }
                 }
             }
@@ -91,82 +91,76 @@ namespace Server
         //// Game run:
         
         // receive data and update game <need take card>
-        public ResponseForm HandleGame(RequestForm _playerRequest)
+        public ResponseForm HandleGame(RequestForm playerRequest)
         {
-            // _recvPlayerData contain:
-            //     "stateID":    player current state id
-            //     "playerID":   player id
-            //     "playerName"  player name
-            //     "card":       string (if dont send card back set to null)
-
-
             // return dictionary of error contain:
             //     "status":        fail
             //     "recceiveID" :   id send to, if empty do broadcast
             //     "messages":      explain error
-            if (_playerRequest.stateID != _stateID)
+            if (playerRequest.stateID != _stateID)
             {
-                var _response = new ResponseForm();
-                _response.status = "fail";
-                _response.messages = "Incorrect game's state";
-                _response.receiveID = _playerRequest.playerID;
+                var res = new ResponseForm();
+                res.status = "fail";
+                res.messages = "Incorrect game's state";
+                res.receiveID = playerRequest.playerID;
 
-                return _response;
+                return res;
             }
-            else if (_playerRequest.playerID != _currentID)
+            else if (playerRequest.playerID != _currentID)
             {
-                var _response = new ResponseForm();
-                _response.status = "fail";
-                _response.messages = "Incorrect current player";
-                _response.receiveID = _playerRequest.playerID;
+                var res = new ResponseForm();
+                res.status = "fail";
+                res.messages = "Incorrect current player";
+                res.receiveID = playerRequest.playerID;
 
-                return _response;
+                return res;
             }
             
             // return dictionary of success contain:
             //    "status": string (update game: success)
             //    "messages": string (explain error)
-            switch (_playerRequest.stateID)
+            //    game info ...
+            switch (playerRequest.stateID)
             {
                 case 0: // Wait for player    |   return game ìnfo for player
-                    return HandleWaitForPlayer(_playerRequest);
+                    return HandleWaitForPlayer(playerRequest);
                 case 1: // Set up game        |   devide cards and send for player
-                    return HandleSetUpGame(_playerRequest);
+                    return HandleSetUpGame(playerRequest);
                 case 2: // Play card          |   move card to card holder
-                    return HandlePlayCard(_playerRequest);
+                    return HandlePlayCard(playerRequest);
                 case 3: // Take card          |   send card to player hand and remove card from deck or holder
-                    return HandleTakeCard(_playerRequest);
+                    return HandleTakeCard(playerRequest);
                 case 4: // Reset game         |   reset game, send back point
-                    return ResetGame(_playerRequest);
+                    return ResetGame(playerRequest);
                 default:  // Defaul error     |   return error
                     {
-                        var _response = new ResponseForm();
-                        _response.status = "fail";
-                        _response.messages = "Invalid input";
-                        _response.receiveID = _playerRequest.playerID;
+                        var res = new ResponseForm();
+                        res.status = "fail";
+                        res.messages = "Invalid input";
+                        res.receiveID = playerRequest.playerID;
 
-                        return _response;
+                        return res;
                     }
             }
         }
 
         // get all game info => dictionay
-        public ResponseForm GetGameInfo(int _recvID = -1)
+        public ResponseForm GetGameInfo(int recvID = -1)
         {
-            // recceive ID: -1, mean for broadcast
+            // recceive ID: -1, for broadcast
 
-            var _reponse = new ResponseForm();
-            _reponse.status = "success";
-            _reponse.stateID = _stateID;
-            _reponse.currentID = _currentID;
-            _reponse.currentRound = _currentRound;
-            _reponse.hostID = _hostID;
-            _reponse.numberPlayer = _numberPlayer;
-            _reponse.receiveID = _recvID;
-            _reponse.playerInfo = _playersInfo;
-            _reponse.messages = String.Empty;
+            var res = new ResponseForm();
+            res.status = "success";
+            res.stateID = _stateID;
+            res.currentID = _currentID;
+            res.currentRound = _currentRound;
+            res.hostID = _hostID;
+            res.numberPlayer = _numberPlayer;
+            res.receiveID = recvID;
+            res.playerInfo = _playersInfo;
+            res.messages = String.Empty;
             
-            return _reponse;
+            return res;
         }
 
         // after set up game server should send player array of cards (10 or 9 cards)
@@ -189,106 +183,106 @@ namespace Server
         //// Game handle for update:
 
         // wait for player handle
-        private ResponseForm HandleWaitForPlayer(RequestForm _playerRequest)
+        private ResponseForm HandleWaitForPlayer(RequestForm playerRequest)
         {
-            ResponseForm _response;
-            if (_playerRequest.playerID == -1)
+            ResponseForm res;
+            if (playerRequest.playerID == -1)
             {
-                if (AddPlayer(_playerRequest.playerName) == -1)
+                if (AddPlayer(playerRequest.playerName) == -1)
                 {
-                    _response = new ResponseForm();
-                    _response.status = "fail";
-                    _response.receiveID = _playerRequest.playerID;
-                    _response.messages = "Full player";
+                    res = new ResponseForm();
+                    res.status = "fail";
+                    res.receiveID = playerRequest.playerID;
+                    res.messages = "Full player";
                 }
                 else
                 {
-                    _response = GetGameInfo();
-                    _response.status = "success";
-                    _response.messages = "Waiting for another player";
+                    res = GetGameInfo();
+                    res.status = "success";
+                    res.messages = "Waiting for another player";
                 }
             }
             else
             {
-                _response = new ResponseForm();
-                _response.status = "fail";
-                _response.receiveID = _playerRequest.playerID;
-                _response.messages = "Already existed";
+                res = new ResponseForm();
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Already existed";
             }
 
-            return _response;
+            return res;
         }
 
         // sete up game handle
-        private ResponseForm HandleSetUpGame(RequestForm _playerRequest)
+        private ResponseForm HandleSetUpGame(RequestForm playerRequest)
         {
-            var _reponse = new ResponseForm();
+            var res = new ResponseForm();
 
             // check number of player
             if (_numberPlayer < 2)
             {
-                _reponse.status = "fail";
-                _reponse.receiveID = _playerRequest.playerID;
-                _reponse.messages = "Not enough player";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Not enough player";
 
-                return _reponse;
+                return res;
             }
 
             // only host can start the game
-            if (_playerRequest.playerID != _hostID)
+            if (playerRequest.playerID != _hostID)
             {
-                _reponse.status = "fail";
-                _reponse.receiveID = _playerRequest.playerID;
-                _reponse.messages = "Invalid host";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Invalid host";
 
-                return _reponse;
+                return res;
             }
 
             SetUpGame();
 
-            _reponse = GetGameInfo();
-            _reponse.status = "success";
-            _reponse.messages = "Sending cards to player's hands";
+            res = GetGameInfo();
+            res.status = "success";
+            res.messages = "Sending cards to player's hands";
 
-            return _reponse;
+            return res;
         }
 
         // handle play card
-        private ResponseForm HandlePlayCard(RequestForm _playerRequest)
+        private ResponseForm HandlePlayCard(RequestForm playerRequest)
         {
             // check u trang
-            ResponseForm _response = HandleUTrang(_playerRequest);
-            if (_response is null) _response = new ResponseForm();
-            else return _response;
+            var res = HandleUTrang(playerRequest);
+            if (res is null) res = new ResponseForm();
+            else return res;
 
             // if player dont send card
-            if (_playerRequest.sendCard is null)
+            if (playerRequest.sendCard is null)
             {
-                _response.status = "fail";
-                _response.receiveID = _playerRequest.playerID;
-                _response.messages = "Invalid card";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Invalid card";
 
-                return _response;
+                return res;
             }
 
             // if card not in hand
             int indexCard = Array.IndexOf(
-                _playersHand[_playerRequest.playerID], 
-                _playerRequest.sendCard
+                _playersHand[playerRequest.playerID],
+                playerRequest.sendCard
                 );
 
             if (indexCard == -1)
             {
-                _response.status = "fail";
-                _response.receiveID = _playerRequest.playerID;
-                _response.messages = "Card not in hand";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Card not in hand";
 
-                return _response;
+                return res;
             }
 
             // update value
-            _playersHand[_playerRequest.playerID][indexCard] = null; 
-            _cardHolder = _playerRequest.sendCard;
+            _playersHand[playerRequest.playerID][indexCard] = null; 
+            _cardHolder = playerRequest.sendCard;
 
             while (true)
             {
@@ -298,23 +292,23 @@ namespace Server
 
             _stateID = 3;
 
-            _response = GetGameInfo();
-            _response.cardHolder = _cardHolder;
-            _response.messages = "update card holder";
+            res = GetGameInfo();
+            res.cardHolder = _cardHolder;
+            res.messages = "update card holder";
 
-            return _response;
+            return res;
         }
 
         // handle take card
-        private ResponseForm HandleTakeCard(RequestForm _playerRequest)
+        private ResponseForm HandleTakeCard(RequestForm playerRequest)
         {
             // check u trang
-            ResponseForm _response = HandleUTrang(_playerRequest);
-            if (_response is null) _response = new ResponseForm();
-            else return _response;
+            var res = HandleUTrang(playerRequest);
+            if (res is null) res = new ResponseForm();
+            else return res;
 
             // take card from card deck
-            if (_playerRequest.sendCard is null)
+            if (playerRequest.sendCard is null)
             {
                 // take card from draw deck
                 var _card = _drawDeck.FirstOrDefault(s => !(s is null));
@@ -322,11 +316,11 @@ namespace Server
                 // return error if no card left from draw deck
                 if (_card is null)
                 {
-                    _response.status = "fail";
-                    _response.messages = "Draw deck has no card left";
-                    _response.receiveID = _playerRequest.playerID;
+                    res.status = "fail";
+                    res.messages = "Draw deck has no card left";
+                    res.receiveID = playerRequest.playerID;
 
-                    return _response;
+                    return res;
                 }
 
                 // update value
@@ -343,22 +337,22 @@ namespace Server
 
                 _drawDeck[Array.IndexOf(_drawDeck, _card)] = null;
 
-                _response = GetGameInfo();
-                _response.cardPull = new Card[] { _card };
-                _response.messages = "Sending card from deck";
+                res = GetGameInfo();
+                res.cardPull = new Card[] { _card };
+                res.messages = "Sending card from deck";
 
-                return _response;
+                return res;
             }
 
             // take card from card holder
             // if card not in card holder
-            if (_playerRequest.sendCard != _cardHolder)
+            if (playerRequest.sendCard != _cardHolder)
             {
-                _response.status = "fail";
-                _response.receiveID = _playerRequest.playerID;
-                _response.messages = "Invalid card from card holder";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Invalid card from card holder";
 
-                return _response;
+                return res;
             }
             // if card in card holder
             else 
@@ -379,40 +373,40 @@ namespace Server
                 var _card = _cardHolder;
                 _cardHolder = null;
 
-                _response = GetGameInfo();
-                _response.cardPull = new Card[] { _card };
-                _response.messages = "Sending card from card holder";
+                res = GetGameInfo();
+                res.cardPull = new Card[] { _card };
+                res.messages = "Sending card from card holder";
 
-                return _response;
+                return res;
             }
         }
 
         // reset game to new state or new round
-        private ResponseForm ResetGame(RequestForm _playerRequest, bool utrang = false)
+        private ResponseForm ResetGame(RequestForm playerRequest, bool utrang = false)
         {
-            var _response = new ResponseForm();
+            var res = new ResponseForm();
 
             // check is it end game
             if (!utrang)
             {
                 // check is it host
-                if (_playerRequest.playerID != _hostID)
+                if (playerRequest.playerID != _hostID)
                 {
-                    _response.status = "fail";
-                    _response.receiveID = _playerRequest.playerID;
-                    _response.messages = "Invalid host";
+                    res.status = "fail";
+                    res.receiveID = playerRequest.playerID;
+                    res.messages = "Invalid host";
 
-                    return _response;
+                    return res;
                 }
 
                 // check is it 5 round
                 if (_currentRound != 5)
                 {
-                    _response.status = "fail";
-                    _response.receiveID = _playerRequest.playerID;
-                    _response.messages = "Invalid round to reset";
+                    res.status = "fail";
+                    res.receiveID = playerRequest.playerID;
+                    res.messages = "Invalid round to reset";
 
-                    return _response;
+                    return res;
                 }
             }
 
@@ -433,7 +427,7 @@ namespace Server
                 for (int i = 0; i < _playersHand.Length; i++)
                 {
                     if (_playersInfo[i] is null) continue;
-                    if (_playerRequest.playerID == i) continue;
+                    if (playerRequest.playerID == i) continue;
                     _playersInfo[i].point = 9999;
                 }
             }
@@ -441,16 +435,16 @@ namespace Server
             // reset card holder
             _cardHolder = null;
 
-            _response = GetGameInfo();
+            res = GetGameInfo();
 
             // set up game again
             SetUpGame();
 
             // add status
-            _response.status = "success";
-            _response.messages = "Send point to players";
+            res.status = "success";
+            res.messages = "Send point to players";
 
-            return _response;
+            return res;
         }
 
         // get card decks to send
@@ -459,56 +453,56 @@ namespace Server
             if (_stateID != 1) return null;
             _stateID = 2;
 
-            var _reponses = new ResponseForm[4];
+            var res = new ResponseForm[4];
             for (int i = 0; i < 4; i++)
             {
                 if (_playersInfo[i] is null) continue;
-                _reponses[i] = GetGameInfo(i);
-                _reponses[i].cardPull = _playersHand[i];
+                res[i] = GetGameInfo(i);
+                res[i].cardPull = _playersHand[i];
             }
 
-            return _reponses;
+            return res;
         }
 
         // handle u trang
-        private ResponseForm HandleUTrang(RequestForm _playerRequest)
+        private ResponseForm HandleUTrang(RequestForm playerRequest)
         {
             // check is there u trang
-            if (_playerRequest.phom is null || 
-                _playerRequest.phom.Length < 3)
+            if (playerRequest.phom is null ||
+                playerRequest.phom.Length < 3)
             {
                 // create repoonse form
-                var _reponse = new ResponseForm();
+                var res = new ResponseForm();
 
-                _reponse.status = "fail";
-                _reponse.receiveID = _playerRequest.playerID;
-                _reponse.messages = "Invalid u trang";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Invalid u trang";
 
-                return _reponse;
+                return res;
             }
 
             // create temp cards
             List<Card> _tempCards = new List<Card>();
-            foreach (var _temp in _playerRequest.phom)
+            foreach (var _temp in playerRequest.phom)
             {
                 _tempCards.AddRange(_temp);
             }
-            if (_playerRequest.trash != null) _tempCards.AddRange(_playerRequest.trash);
+            if (playerRequest.trash != null) _tempCards.AddRange(playerRequest.trash);
 
             // check every cards are in hand
-            if (!_tempCards.SequenceEqual(_playersHand[_playerRequest.playerID]))
+            if (!_tempCards.SequenceEqual(_playersHand[playerRequest.playerID]))
             {
                 // create repoonse form
-                var _reponse = new ResponseForm();
+                var res = new ResponseForm();
 
-                _reponse.status = "fail";
-                _reponse.receiveID = _playerRequest.playerID;
-                _reponse.messages = "Invalid cards in hand";
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Invalid cards in hand";
 
-                return _reponse;
+                return res;
             }
 
-            return ResetGame(_playerRequest, true);
+            return ResetGame(playerRequest, true);
         }
     }
 }

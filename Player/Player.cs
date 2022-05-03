@@ -20,76 +20,76 @@ namespace Player
         /// player value
 
         // contain card on hand
-        public Card[] _playerHand = null;
+        private Card[] _playerHand = null;
 
         //  _playersInfo: <playerID, playerName, gamePoint>
-        public PlayerInfo _playersInfo;
+        private PlayerInfo _playersInfo;
 
         // card for pull
-        public Card[] _cardHolder = new Card[4];
+        private Card[] _cardHolder = new Card[4];
 
         // current data
-        public int _stateID = 0;            // game state id
-        public int _currentID = -1;         // turn for player's id
-        public int _currentRound = -1;      // current number round
-        public int _hostID = -1;            // current host id
-        public int _numberPlayer = 0;       // number of player
+        private int _stateID = 0;            // game state id
+        private int _currentID = -1;         // turn for player's id
+        private int _currentRound = -1;      // current number round
+        private int _hostID = -1;            // current host id
+        private int _numberPlayer = 0;       // number of player
 
-        public void HanldeResponse(ResponseForm _response)
+        public void HanldeResponse(ResponseForm res)
         {
-            if (_response.status == "success")
+            if (res.status == "success")
             {
                 // get player hand or pull card
-                if (_response.cardPull != null && _response.cardPull.Length != 0)
-                    if (_response.cardPull.Length == 1)
-                        _cardHolder[_currentID] = _response.cardPull[0];
+                if (res.cardPull != null && res.cardPull.Length != 0)
+                    if (res.cardPull.Length == 1)
+                        _cardHolder[_currentID] = res.cardPull[0];
                     else
-                        _playerHand = _response.cardPull;
+                        _playerHand = res.cardPull;
 
                 // add id
-                foreach (var _temp in _response.playerInfo)
+                foreach (var playerInfo in res.playerInfo)
                 {
-                    if (_temp is null) continue;
-                    if (_temp.name == _playersInfo.name)
+                    if (playerInfo is null) continue;
+                    if (playerInfo.name == _playersInfo.name)
                     {
-                        _playersInfo = _temp;
+                        _playersInfo = playerInfo;
                         break;
                     }
                 }
 
-                _stateID = _response.stateID;
-                _currentID = _response.currentID;
-                _currentRound = _response.currentRound;
-                _hostID = _response.hostID;
-                _numberPlayer = _response.numberPlayer;
+                _stateID = res.stateID;
+                _currentID = res.currentID;
+                _currentRound = res.currentRound;
+                _hostID = res.hostID;
+                _numberPlayer = res.numberPlayer;
             }
         }
 
         public RequestForm RequestAddPlayer()
         {
-            var _request = new RequestForm();
-            _request.stateID = _stateID;
-            _request.playerName = _playersInfo.name;
-            _request.playerID = -1;
-            return _request;
+            var req = new RequestForm();
+            req.stateID = _stateID;
+            req.playerName = _playersInfo.name;
+            req.playerID = -1;
+            return req;
         }
 
-        public RequestForm RequestPlayCard(Card _card)
+        public RequestForm RequestPlayCard(Card card)
         {
-            var _request = new RequestForm();
-            _request.playerName = _playersInfo.name;
-            _request.playerID = _playersInfo.id;
-            _request.sendCard = _card;
-            return _request;
+            var res = new RequestForm();
+            res.playerName = _playersInfo.name;
+            res.playerID = _playersInfo.id;
+            res.sendCard = card;
+            return res;
         }
 
-        public RequestForm RequestTakeCard(bool _fromCardHolder)
+        public RequestForm RequestTakeCard(bool takeFromCardHolder)
         {
-            var _request = new RequestForm();
-            _request.playerName = _playersInfo.name;
-            _request.playerID = _playersInfo.id;
-            _request.sendCard = (_fromCardHolder) ? _cardHolder[_playersInfo.id] : null;
-            return _request;
+            var res = new RequestForm();
+            res.playerName = _playersInfo.name;
+            res.playerID = _playersInfo.id;
+            res.sendCard = (takeFromCardHolder) ? _cardHolder[_playersInfo.id] : null;
+            return res;
         }
     }
 }

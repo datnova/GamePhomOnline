@@ -22,115 +22,110 @@ namespace GameExtensions
 
         public byte[] Serialize()
         {
-            byte[] _tempBuffer;
-            using (MemoryStream _stream = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
-                using (BinaryWriter _writer = new BinaryWriter(_stream))
+                using (BinaryWriter writer = new BinaryWriter(stream))
                 {
-                    _writer.Write(status);
-                    _writer.Write(stateID);
-                    _writer.Write(currentID);
-                    _writer.Write(currentRound);
-                    _writer.Write(hostID);
-                    _writer.Write(numberPlayer);
-                    _writer.Write(receiveID);
-                    _writer.Write(messages);
+                    writer.Write(status);
+                    writer.Write(stateID);
+                    writer.Write(currentID);
+                    writer.Write(currentRound);
+                    writer.Write(hostID);
+                    writer.Write(numberPlayer);
+                    writer.Write(receiveID);
+                    writer.Write(messages);
 
                     // add card holder
-                    if (cardHolder is null) _writer.Write(0);
+                    if (cardHolder is null) writer.Write(0);
                     else
                     {
-                        _tempBuffer = cardHolder.Serialize();
-                        _writer.Write(_tempBuffer.Length);
-                        _writer.Write(_tempBuffer, 0, _tempBuffer.Length);
+                        var buffer = cardHolder.Serialize();
+                        writer.Write(buffer.Length);
+                        writer.Write(buffer, 0, buffer.Length);
                     }
 
                     // add card pull
-                    if (cardPull is null) _writer.Write(0);
+                    if (cardPull is null) writer.Write(0);
                     else
                     {
-                        _writer.Write(cardPull.Length);
+                        writer.Write(cardPull.Length);
 
-                        foreach (var _temp in cardPull)
+                        foreach (var card in cardPull)
                         {
-                            _tempBuffer = _temp.Serialize();
-                            _writer.Write(_tempBuffer.Length);
-                            _writer.Write(_tempBuffer, 0, _tempBuffer.Length);
+                            var buffer = card.Serialize();
+                            writer.Write(buffer.Length);
+                            writer.Write(buffer, 0, buffer.Length);
                         }
                     }
 
                     // add player info
-                    if (playerInfo is null) _writer.Write(0);
+                    if (playerInfo is null) writer.Write(0);
                     else
                     {
-                        _writer.Write(playerInfo.Length);
+                        writer.Write(playerInfo.Length);
 
-                        foreach (var _temp in playerInfo)
+                        foreach (var player in playerInfo)
                         {
-                            if (_temp is null)
+                            if (player is null)
                             {
-                                _writer.Write(0);
+                                writer.Write(0);
                                 continue;
                             }
 
-                            _tempBuffer = _temp.Serialize();
-                            _writer.Write(_tempBuffer.Length);
-                            _writer.Write(_tempBuffer);
+                            var buffer = player.Serialize();
+                            writer.Write(buffer.Length);
+                            writer.Write(buffer, 0, buffer.Length);
                         }
                     }
 
                 }
-                return _stream.ToArray();
+                return stream.ToArray();
             }
         }
 
-        public static ResponseForm Desserialize(byte[] data)
+        public static ResponseForm Desserialize(byte[] buffer)
         {
-            var _res = new ResponseForm();
-            int _tempLength;
-            using (MemoryStream _stream = new MemoryStream(data))
+            using (MemoryStream stream = new MemoryStream(buffer))
             {
-                using (BinaryReader _reader = new BinaryReader(_stream))
+                using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    _res.status = _reader.ReadString();
-                    _res.stateID = _reader.ReadInt32();
-                    _res.currentID = _reader.ReadInt32();
-                    _res.currentRound = _reader.ReadInt32();
-                    _res.hostID = _reader.ReadInt32();
-                    _res.numberPlayer = _reader.ReadInt32();
-                    _res.receiveID = _reader.ReadInt32();
-                    _res.messages = _reader.ReadString();
+                    var res = new ResponseForm();
+
+                    res.status       = reader.ReadString();
+                    res.stateID      = reader.ReadInt32();
+                    res.currentID    = reader.ReadInt32();
+                    res.currentRound = reader.ReadInt32();
+                    res.hostID       = reader.ReadInt32();
+                    res.numberPlayer = reader.ReadInt32();
+                    res.receiveID    = reader.ReadInt32();
+                    res.messages     = reader.ReadString();
 
                     // read card holder
-                    if ((_tempLength = _reader.ReadInt32()) != 0)
-                    {
-                        _res.cardHolder = Card.Desserialize(_reader.ReadBytes(_tempLength));
-                    }
+                    res.cardHolder = Card.Desserialize(reader.ReadBytes(reader.ReadInt32()));
 
                     // read card pull
-                    if ((_tempLength = _reader.ReadInt32()) != 0)
+                    res.cardPull = new Card[reader.ReadInt32()];
+                    if (res.cardPull.Length == 0) res.cardPull = null;
+                    else
                     {
-                        _res.cardPull = new Card[_tempLength];
-                        for (int i = 0; i < _res.cardPull.Length; i++)
+                        for (int i = 0; i < res.cardPull.Length; i++)
                         {
-                            _tempLength = _reader.ReadInt32();
-                            _res.cardPull[i] = Card.Desserialize(_reader.ReadBytes(_tempLength));
+                            res.cardPull[i] = Card.Desserialize(reader.ReadBytes(reader.ReadInt32()));
                         }
                     }
 
                     // read player info
-                    if ((_tempLength = _reader.ReadInt32()) != 0)
+                    res.playerInfo = new PlayerInfo[reader.ReadInt32()];
+                    if (res.playerInfo.Length == 0) res.playerInfo = null;
+                    else
                     {
-                        _res.playerInfo = new PlayerInfo[_tempLength];
-                        for (int i = 0; i < _res.playerInfo.Length; i++)
+                        for (int i = 0; i < res.playerInfo.Length; i++)
                         {
-                            _tempLength = _reader.ReadInt32();
-                            if (_tempLength == 0) continue;
-                            _res.playerInfo[i] = PlayerInfo.Desserialize(_reader.ReadBytes(_tempLength));
+                            res.playerInfo[i] = PlayerInfo.Desserialize(reader.ReadBytes(reader.ReadInt32()));
                         }
                     }
 
-                    return _res;
+                    return res;
                 }
             }
         }
