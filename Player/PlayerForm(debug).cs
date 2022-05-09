@@ -18,5 +18,12 @@ namespace Player
         {
             InitializeComponent();
         }
+
+        private void PlayerForm_Load(object sender, EventArgs e)
+        {
+            var player = new Player("debug user");
+
+
+        }
     }
 }

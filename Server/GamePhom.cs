@@ -93,6 +93,10 @@ namespace Server
         // receive data and update game <need take card>
         public ResponseForm HandleGame(RequestForm playerRequest)
         {
+            // assign player 
+            if (playerRequest.playerID == -1)
+                return HandleWaitForPlayer(playerRequest);
+
             // return dictionary of error contain:
             //     "status":        fail
             //     "recceiveID" :   id send to, if empty do broadcast
@@ -122,8 +126,6 @@ namespace Server
             //    game info ...
             switch (playerRequest.stateID)
             {
-                case 0: // Wait for player    |   return game ìnfo for player
-                    return HandleWaitForPlayer(playerRequest);
                 case 1: // Set up game        |   devide cards and send for player
                     return HandleSetUpGame(playerRequest);
                 case 2: // Play card          |   move card to card holder
@@ -163,18 +165,26 @@ namespace Server
             return res;
         }
 
-        // after set up game server should send player array of cards (10 or 9 cards)
-        private void SetUpGame()
+        // get card decks to send
+        public ResponseForm[] GetCardsToSend()
         {
-            // devide card
-            var _tempDeck = DevideCard(_hostID, true);
-            _playersHand = _tempDeck.Take(4).ToArray();
-            _drawDeck = _tempDeck.Last();
+            if (_stateID != 1) return null;
 
-            // set up date
-            _stateID = 1;
-            _currentID = _hostID;
-            _currentRound = 1;
+            var res = new ResponseForm[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (_playersInfo[i] is null) continue;
+                res[i] = GetGameInfo(i);
+                res[i].cardPull = _playersHand[i];
+            }
+
+            return res;
+        }
+
+        //  check game start
+        public bool IsGameStart()
+        {
+            return (_stateID == 2 || _stateID == 3) ? true : false;
         }
 
 
@@ -186,6 +196,14 @@ namespace Server
         private ResponseForm HandleWaitForPlayer(RequestForm playerRequest)
         {
             ResponseForm res;
+            if (_playersInfo.FirstOrDefault(a => a.name == playerRequest.playerName) is null)
+            {
+                res = new ResponseForm();
+                res.status = "fail";
+                res.receiveID = playerRequest.playerID;
+                res.messages = "Player name existed";
+            }
+
             if (playerRequest.playerID == -1)
             {
                 if (AddPlayer(playerRequest.playerName) == -1)
@@ -198,6 +216,7 @@ namespace Server
                 else
                 {
                     res = GetGameInfo();
+                    res.senderID = playerRequest.playerID;
                     res.status = "success";
                     res.messages = "Waiting for another player";
                 }
@@ -210,6 +229,7 @@ namespace Server
                 res.messages = "Already existed";
             }
 
+            if (_numberPlayer >= 2) _stateID = 1;
             return res;
         }
 
@@ -217,16 +237,6 @@ namespace Server
         private ResponseForm HandleSetUpGame(RequestForm playerRequest)
         {
             var res = new ResponseForm();
-
-            // check number of player
-            if (_numberPlayer < 2)
-            {
-                res.status = "fail";
-                res.receiveID = playerRequest.playerID;
-                res.messages = "Not enough player";
-
-                return res;
-            }
 
             // only host can start the game
             if (playerRequest.playerID != _hostID)
@@ -241,6 +251,7 @@ namespace Server
             SetUpGame();
 
             res = GetGameInfo();
+            res.senderID = playerRequest.playerID;
             res.status = "success";
             res.messages = "Sending cards to player's hands";
 
@@ -293,6 +304,7 @@ namespace Server
             _stateID = 3;
 
             res = GetGameInfo();
+            res.senderID = playerRequest.playerID;
             res.cardHolder = _cardHolder;
             res.messages = "update card holder";
 
@@ -311,10 +323,10 @@ namespace Server
             if (playerRequest.sendCard is null)
             {
                 // take card from draw deck
-                var _card = _drawDeck.FirstOrDefault(s => !(s is null));
+                var card = _drawDeck.FirstOrDefault(s => !(s is null));
 
                 // return error if no card left from draw deck
-                if (_card is null)
+                if (card is null)
                 {
                     res.status = "fail";
                     res.messages = "Draw deck has no card left";
@@ -328,17 +340,19 @@ namespace Server
                 if (_currentID == _hostID)
                 {
                     _currentRound++;
+                    if (_currentRound == 5) _stateID = 4;
                 }
-                while (true)
+                while (_currentRound != 5)
                 {
                     _currentID = (_currentID + 1) % 4;
                     if (!(_playersInfo[_currentID] is null)) break;
                 }
 
-                _drawDeck[Array.IndexOf(_drawDeck, _card)] = null;
+                _drawDeck[Array.IndexOf(_drawDeck, card)] = null;
 
                 res = GetGameInfo();
-                res.cardPull = new Card[] { _card };
+                res.senderID = playerRequest.playerID;
+                res.cardPull = new Card[] { card };
                 res.messages = "Sending card from deck";
 
                 return res;
@@ -362,19 +376,21 @@ namespace Server
                 if (_currentID == _hostID)
                 {
                     _currentRound++;
+                    if (_currentRound == 5) _stateID = 4;
                 }
-                while (true)
+                while (_currentRound != 5)
                 {
                     _currentID = (_currentID + 1) % 4;
                     if (!(_playersInfo[_currentID] is null)) break;
                 }
 
                 // take card from card holder
-                var _card = _cardHolder;
+                var card = _cardHolder;
                 _cardHolder = null;
 
                 res = GetGameInfo();
-                res.cardPull = new Card[] { _card };
+                res.senderID = playerRequest.playerID;
+                res.cardPull = new Card[] { card };
                 res.messages = "Sending card from card holder";
 
                 return res;
@@ -447,23 +463,6 @@ namespace Server
             return res;
         }
 
-        // get card decks to send
-        public ResponseForm[] GetCardsToSend()
-        {
-            if (_stateID != 1) return null;
-            _stateID = 2;
-
-            var res = new ResponseForm[4];
-            for (int i = 0; i < 4; i++)
-            {
-                if (_playersInfo[i] is null) continue;
-                res[i] = GetGameInfo(i);
-                res[i].cardPull = _playersHand[i];
-            }
-
-            return res;
-        }
-
         // handle u trang
         private ResponseForm HandleUTrang(RequestForm playerRequest)
         {
@@ -482,15 +481,15 @@ namespace Server
             }
 
             // create temp cards
-            List<Card> _tempCards = new List<Card>();
+            List<Card> tempCards = new List<Card>();
             foreach (var _temp in playerRequest.phom)
             {
-                _tempCards.AddRange(_temp);
+                tempCards.AddRange(_temp);
             }
-            if (playerRequest.trash != null) _tempCards.AddRange(playerRequest.trash);
+            if (playerRequest.trash != null) tempCards.AddRange(playerRequest.trash);
 
             // check every cards are in hand
-            if (!_tempCards.SequenceEqual(_playersHand[playerRequest.playerID]))
+            if (!tempCards.SequenceEqual(_playersHand[playerRequest.playerID]))
             {
                 // create repoonse form
                 var res = new ResponseForm();
@@ -503,6 +502,20 @@ namespace Server
             }
 
             return ResetGame(playerRequest, true);
+        }
+
+        // after set up game server should send player array of cards (10 or 9 cards)
+        private void SetUpGame()
+        {
+            // devide card
+            var tempDeck = DevideCard(_hostID, true);
+            _playersHand = tempDeck.Take(4).ToArray();
+            _drawDeck = tempDeck.Last();
+
+            // set up date
+            _stateID = 2;
+            _currentID = _hostID;
+            _currentRound = 1;
         }
     }
 }

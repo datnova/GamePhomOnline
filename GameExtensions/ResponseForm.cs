@@ -10,6 +10,7 @@ namespace GameExtensions
     {
         public string status { get; set; } = "success";
         public int stateID { get; set; } = -1;
+        public int senderID { get; set; } = -1;
         public int currentID { get; set; } = -1;
         public int currentRound { get; set; } = -1;
         public int hostID { get; set; } = -1;
@@ -28,6 +29,7 @@ namespace GameExtensions
                 {
                     writer.Write(status);
                     writer.Write(stateID);
+                    writer.Write(senderID);
                     writer.Write(currentID);
                     writer.Write(currentRound);
                     writer.Write(hostID);
@@ -93,6 +95,7 @@ namespace GameExtensions
 
                     res.status       = reader.ReadString();
                     res.stateID      = reader.ReadInt32();
+                    res.senderID     = reader.ReadInt32();
                     res.currentID    = reader.ReadInt32();
                     res.currentRound = reader.ReadInt32();
                     res.hostID       = reader.ReadInt32();
