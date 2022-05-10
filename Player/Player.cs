@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using GameExtensions;
 
 namespace Player
@@ -63,6 +64,10 @@ namespace Player
                 _hostID = res.hostID;
                 _numberPlayer = res.numberPlayer;
             }
+            else
+            {
+                MessageBox.Show(res.messages);
+            }
         }
 
         public RequestForm RequestAddPlayer()
@@ -89,6 +94,15 @@ namespace Player
             res.playerName = _playersInfo.name;
             res.playerID = _playersInfo.id;
             res.sendCard = (takeFromCardHolder) ? _cardHolder[_playersInfo.id] : null;
+            return res;
+        }
+    
+        public RequestForm RequestStartGame()
+        {
+            var res = new RequestForm();
+            res.playerName = _playersInfo.name;
+            res.stateID = _stateID;
+            res.playerID = _playersInfo.id;
             return res;
         }
     }

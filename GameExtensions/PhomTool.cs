@@ -32,7 +32,7 @@ namespace GameExtensions
             }
 
             // loop thought value table
-            for (int value = CardPip.Length - 1; value >= 0; value--)
+            for (int value = cardPip.Length - 1; value >= 0; value--)
             {
                 GetPhomNgang(valueTable, phom, trash, value);
                 if (value > 1)

@@ -16,7 +16,7 @@ namespace Player
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PlayerForm());
+            Application.Run(new FormGiaoDien());
         }
     }
 }

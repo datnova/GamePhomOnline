@@ -170,6 +170,7 @@ namespace Server
         {
             if (_stateID != 1) return null;
 
+            _stateID = 2;
             var res = new ResponseForm[4];
             for (int i = 0; i < 4; i++)
             {
@@ -216,7 +217,7 @@ namespace Server
                 else
                 {
                     res = GetGameInfo();
-                    res.senderID = playerRequest.playerID;
+                    res.senderID = -1;
                     res.status = "success";
                     res.messages = "Waiting for another player";
                 }
@@ -513,7 +514,7 @@ namespace Server
             _drawDeck = tempDeck.Last();
 
             // set up date
-            _stateID = 2;
+            _stateID = 1;
             _currentID = _hostID;
             _currentRound = 1;
         }

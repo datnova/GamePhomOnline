@@ -24,8 +24,9 @@ namespace Server
             Console.WriteLine("Starting server...");
             _server.Start();
 
-            // thread get connection
-            Thread listenThread = new Thread(() => {
+            try
+            {
+                // thread get connection
                 Console.WriteLine("Waiting for a connection...");
                 while (true)
                 {
@@ -38,14 +39,15 @@ namespace Server
                     handleThread.IsBackground = true;
                     handleThread.Start();
                 }
-
-            });
-            listenThread.IsBackground = true;
-            listenThread.Start();
-
-            // stop server
-            Console.WriteLine("Stoping server...");
-            _server.Stop();
+            }
+            catch(Exception ex)
+            {
+                // stop server
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Stoping server...");
+                _server.Stop();
+                Console.ReadLine();
+            }
         }
 
         private static void HandleResponse(TcpClient clientSocket)
@@ -70,8 +72,7 @@ namespace Server
                 var res = _gamePhom.HandleGame(req);
 
                 // Add socket if assign success
-                if (res.stateID == 0 && res.senderID != -1) 
-                    _clientSockets[res.senderID] = clientSocket;
+                if (!AddSocket(res, clientSocket)) break;
 
                 // send back response
                 SendBackResponse(res);
@@ -80,25 +81,31 @@ namespace Server
 
         private static void SendBackResponse(ResponseForm res)
         {
-            // check send to whom
+            // check send response
             if (res.receiveID != -1)
                 ServerSend(_clientSockets[res.receiveID], res);
             else
                 // if -1 mean broadcast
                 for (int i = 0; i < 4; i++)
                     ServerSend(_clientSockets[i], res);
+
+            // check send cards
+            if (res.stateID == 1)
+            {
+                var reses = _gamePhom.GetCardsToSend();
+                for (int i = 0; i < 4; i++)
+                    ServerSend(_clientSockets[i], reses[i]);
+            }
         }
 
-        private static bool ServerSend(TcpClient client, ResponseForm res)
+        private static void ServerSend(TcpClient client, ResponseForm res)
         {
             if (CheckConnection(client))
             {
                 var stream = client.GetStream();
                 var sendBuffer = res.Serialize();
                 stream.Write(sendBuffer, 0, sendBuffer.Length);
-                return true;
             }
-            return false;
         }
 
         private static bool CheckConnection(TcpClient client)
@@ -112,6 +119,20 @@ namespace Server
             }
 
             return true;
+        }
+
+        private static bool AddSocket(ResponseForm res, TcpClient clientSocket)
+        {
+            if (res.status == "success" && res.senderID == -1)
+            {
+                _clientSockets[res.senderID] = clientSocket;
+                return true;
+            }
+            else if (Array.IndexOf(_clientSockets, clientSocket) != -1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
