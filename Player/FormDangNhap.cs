@@ -12,8 +12,11 @@ namespace Player
 {
     public partial class FormDangNhap : Form
     {
-        public FormDangNhap()
+        public FormGiaoDien _formGiaoDien = null;
+
+        public FormDangNhap(Form form)
         {
+            _formGiaoDien = form as FormGiaoDien;
             InitializeComponent();
         }
 
@@ -26,7 +29,8 @@ namespace Player
         {
             if (tbName.Text != String.Empty)
             {
-                var player = new Player(tbName.Text);
+                _formGiaoDien.playerName = tbName.Text;
+                this.Close();
             }
         }
     }

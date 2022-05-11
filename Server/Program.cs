@@ -55,29 +55,45 @@ namespace Server
             // get stream from socket
             var stream =  (clientSocket.Connected) ? clientSocket.GetStream() : null;
 
-            // loop to check is connected
-            while (clientSocket.Connected || stream != null)
+            try
             {
-                // if no data in stream to read check back connnection
-                if (!stream.DataAvailable) continue;
+                // loop to check is connected
+                while (CheckConnection(clientSocket))
+                {
+                    // if no data in stream to read check back connnection
+                    if (!stream.DataAvailable) continue;
 
-                // read data from stream
-                var receivebuffer = new byte[1024];
-                stream.Read(receivebuffer, 0, receivebuffer.Length);
+                    // read data from stream
+                    var receivebuffer = new byte[1024];
+                    stream.Read(receivebuffer, 0, receivebuffer.Length);
 
-                // deserialize to get request
-                var req = RequestForm.Desserialize(receivebuffer);
+                    // deserialize to get request
+                    var req = RequestForm.Desserialize(receivebuffer);
 
-                // handle request and return reponse
-                var res = _gamePhom.HandleGame(req);
+                    // handle request and return reponse
+                    var res = _gamePhom.HandleGame(req);
 
-                // Add socket if assign success
-                if (!AddSocket(res, clientSocket)) break;
+                    // Add socket if assign success
+                    if (!HandleAddSocket(res, clientSocket)) break;
 
-                // send back response
-                SendBackResponse(res);
+                    // send back response
+                    SendBackResponse(res);
+                }
+
+                Console.WriteLine("Player disconnected");
+                HandleDisconnectSocket(clientSocket);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                HandleDisconnectSocket(clientSocket);
             }
         }
+
+
+        //
+        //
+        /// send response
 
         private static void SendBackResponse(ResponseForm res)
         {
@@ -90,7 +106,7 @@ namespace Server
                     ServerSend(_clientSockets[i], res);
 
             // check send cards
-            if (res.stateID == 1)
+            if (res.stateID == 1 && res.senderID == _gamePhom.GetGameInfo().currentID)
             {
                 var reses = _gamePhom.GetCardsToSend();
                 for (int i = 0; i < 4; i++)
@@ -100,30 +116,63 @@ namespace Server
 
         private static void ServerSend(TcpClient client, ResponseForm res)
         {
+            if (client is null) return;
+
             if (CheckConnection(client))
             {
-                var stream = client.GetStream();
-                var sendBuffer = res.Serialize();
-                stream.Write(sendBuffer, 0, sendBuffer.Length);
+                try
+                {
+                    var stream = client.GetStream();
+                    var sendBuffer = res.Serialize();
+                    stream.Write(sendBuffer, 0, sendBuffer.Length);
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    HandleDisconnectSocket(client);
+                }
             }
         }
+
+
+        //
+        //
+        /// handle socket connection
 
         private static bool CheckConnection(TcpClient client)
         {
+            // check client close connect
             if (!client.Connected)
             {
-                var tempID = Array.IndexOf(_clientSockets, client);
-                _clientSockets[tempID].Close();
-                _clientSockets[tempID] = null;
+                HandleDisconnectSocket(client);
                 return false;
             }
 
+            // send empty buffer to check is there connection
+            try
+            {
+                var stream = client.GetStream();
+                stream.Write(new byte[0], 0, 0);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                HandleDisconnectSocket(client);
+                return false;
+            }
+
+            // check crash close connect
             return true;
         }
 
-        private static bool AddSocket(ResponseForm res, TcpClient clientSocket)
+
+        //
+        //
+        /// add and remove socket
+
+        private static bool HandleAddSocket(ResponseForm res, TcpClient clientSocket)
         {
-            if (res.status == "success" && res.senderID == -1)
+            if (res.status == "success" && res.senderID != -1)
             {
                 _clientSockets[res.senderID] = clientSocket;
                 return true;
@@ -133,6 +182,23 @@ namespace Server
                 return true;
             }
             return false;
+        }
+
+        private static void HandleDisconnectSocket(TcpClient client)
+        {
+            // is socket already remove
+            var tempID = Array.IndexOf(_clientSockets, client);
+            if (tempID == -1) return;
+
+            // remove socket
+            _clientSockets[tempID].Close();
+            _clientSockets[tempID] = null;
+
+            // remove player and send response to nother players
+            if (_gamePhom.RemovePlayer(tempID))
+            {
+                SendBackResponse(_gamePhom.GetGameInfo());
+            }
         }
     }
 }

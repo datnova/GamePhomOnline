@@ -37,7 +37,7 @@
             // buttonExit
             // 
             this.buttonExit.Location = new System.Drawing.Point(51, 77);
-            this.buttonExit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonExit.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(88, 30);
             this.buttonExit.TabIndex = 9;
@@ -48,7 +48,7 @@
             // buttonLogIn
             // 
             this.buttonLogIn.Location = new System.Drawing.Point(206, 77);
-            this.buttonLogIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonLogIn.Margin = new System.Windows.Forms.Padding(4);
             this.buttonLogIn.Name = "buttonLogIn";
             this.buttonLogIn.Size = new System.Drawing.Size(88, 30);
             this.buttonLogIn.TabIndex = 8;
@@ -59,7 +59,8 @@
             // tbName
             // 
             this.tbName.Location = new System.Drawing.Point(108, 29);
-            this.tbName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbName.Margin = new System.Windows.Forms.Padding(4);
+            this.tbName.MaxLength = 5;
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(226, 25);
             this.tbName.TabIndex = 7;
@@ -85,7 +86,7 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "FormDangNhap";
             this.Text = "FormDangNhap";

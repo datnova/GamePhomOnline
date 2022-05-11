@@ -196,42 +196,57 @@ namespace Server
         // wait for player handle
         private ResponseForm HandleWaitForPlayer(RequestForm playerRequest)
         {
-            ResponseForm res;
-            if (_playersInfo.FirstOrDefault(a => a.name == playerRequest.playerName) is null)
+            // check is name existing
+            foreach (var playerInfo in _playersInfo)
             {
-                res = new ResponseForm();
-                res.status = "fail";
-                res.receiveID = playerRequest.playerID;
-                res.messages = "Player name existed";
+                if (playerInfo is null) continue;
+                if (playerInfo.name == playerRequest.playerName)
+                {
+                    var res = new ResponseForm();
+                    res.status = "fail";
+                    res.receiveID = playerRequest.playerID;
+                    res.messages = "Player name existed";
+                    return res;
+                }
             }
 
+            // check is player already assign
             if (playerRequest.playerID == -1)
             {
-                if (AddPlayer(playerRequest.playerName) == -1)
+                // if add player unsuccess
+                int newID = AddPlayer(playerRequest.playerName);
+                if (newID == -1)
                 {
-                    res = new ResponseForm();
+                    var res = new ResponseForm();
                     res.status = "fail";
                     res.receiveID = playerRequest.playerID;
                     res.messages = "Full player";
+                    return res;
                 }
+                // else assign success
                 else
                 {
-                    res = GetGameInfo();
-                    res.senderID = -1;
+                    var res = GetGameInfo();
+                    res.senderID = newID;
                     res.status = "success";
                     res.messages = "Waiting for another player";
+
+                    // update state to set up if over 1 player
+                    if (_numberPlayer >= 2) _stateID = 1;
+                    else _stateID = 0;
+
+                    return res;
                 }
             }
+            // return already assign
             else
             {
-                res = new ResponseForm();
+                var res = new ResponseForm();
                 res.status = "fail";
                 res.receiveID = playerRequest.playerID;
                 res.messages = "Already existed";
+                return res;
             }
-
-            if (_numberPlayer >= 2) _stateID = 1;
-            return res;
         }
 
         // sete up game handle

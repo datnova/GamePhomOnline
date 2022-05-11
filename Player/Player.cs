@@ -36,7 +36,11 @@ namespace Player
         private int _hostID = -1;            // current host id
         private int _numberPlayer = 0;       // number of player
 
-        public void HanldeResponse(ResponseForm res)
+
+        //
+        //
+        // Handle and update game from response 
+        public void HandleResponse(ResponseForm res)
         {
             if (res.status == "success")
             {
@@ -70,8 +74,19 @@ namespace Player
             }
         }
 
+        public PlayerInfo GetPlayerInfo()
+        {
+            return _playersInfo;
+        }
+
+
+        //
+        //
+        // create request
         public RequestForm RequestAddPlayer()
         {
+            if (_playersInfo.id != -1) return null;
+
             var req = new RequestForm();
             req.stateID = _stateID;
             req.playerName = _playersInfo.name;
@@ -81,6 +96,8 @@ namespace Player
 
         public RequestForm RequestPlayCard(Card card)
         {
+            if (_stateID != 2 || _currentID != _playersInfo.id) return null;
+
             var res = new RequestForm();
             res.playerName = _playersInfo.name;
             res.playerID = _playersInfo.id;
@@ -90,6 +107,8 @@ namespace Player
 
         public RequestForm RequestTakeCard(bool takeFromCardHolder)
         {
+            if (_stateID != 3 || _currentID != _playersInfo.id) return null;
+
             var res = new RequestForm();
             res.playerName = _playersInfo.name;
             res.playerID = _playersInfo.id;
@@ -99,6 +118,19 @@ namespace Player
     
         public RequestForm RequestStartGame()
         {
+            if (_stateID != 1 || _hostID != _playersInfo.id) return null;
+
+            var res = new RequestForm();
+            res.playerName = _playersInfo.name;
+            res.stateID = _stateID;
+            res.playerID = _playersInfo.id;
+            return res;
+        }
+
+        public RequestForm RequestRestartGame()
+        {
+            if (_stateID != 4) return null;
+
             var res = new RequestForm();
             res.playerName = _playersInfo.name;
             res.stateID = _stateID;
