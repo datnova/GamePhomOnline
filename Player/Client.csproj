@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -91,7 +92,74 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\turnbackcard.jpg" />
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CardsImg\10_of_clubs.png" />
+    <Content Include="CardsImg\10_of_diamonds.png" />
+    <Content Include="CardsImg\10_of_hearts.png" />
+    <Content Include="CardsImg\10_of_spades.png" />
+    <Content Include="CardsImg\2_of_clubs.png" />
+    <Content Include="CardsImg\2_of_diamonds.png" />
+    <Content Include="CardsImg\2_of_hearts.png" />
+    <Content Include="CardsImg\2_of_spades.png" />
+    <Content Include="CardsImg\3_of_clubs.png" />
+    <Content Include="CardsImg\3_of_diamonds.png" />
+    <Content Include="CardsImg\3_of_hearts.png" />
+    <Content Include="CardsImg\3_of_spades.png" />
+    <Content Include="CardsImg\4_of_clubs.png" />
+    <Content Include="CardsImg\4_of_diamonds.png" />
+    <Content Include="CardsImg\4_of_hearts.png" />
+    <Content Include="CardsImg\4_of_spades.png" />
+    <Content Include="CardsImg\5_of_clubs.png" />
+    <Content Include="CardsImg\5_of_diamonds.png" />
+    <Content Include="CardsImg\5_of_hearts.png" />
+    <Content Include="CardsImg\5_of_spades.png" />
+    <Content Include="CardsImg\6_of_clubs.png" />
+    <Content Include="CardsImg\6_of_diamonds.png" />
+    <Content Include="CardsImg\6_of_hearts.png" />
+    <Content Include="CardsImg\6_of_spades.png" />
+    <Content Include="CardsImg\7_of_clubs.png" />
+    <Content Include="CardsImg\7_of_diamonds.png" />
+    <Content Include="CardsImg\7_of_hearts.png" />
+    <Content Include="CardsImg\7_of_spades.png" />
+    <Content Include="CardsImg\8_of_clubs.png" />
+    <Content Include="CardsImg\8_of_diamonds.png" />
+    <Content Include="CardsImg\8_of_hearts.png" />
+    <Content Include="CardsImg\8_of_spades.png" />
+    <Content Include="CardsImg\9_of_clubs.png" />
+    <Content Include="CardsImg\9_of_diamonds.png" />
+    <Content Include="CardsImg\9_of_hearts.png" />
+    <Content Include="CardsImg\9_of_spades.png" />
+    <Content Include="CardsImg\ace_of_clubs.png" />
+    <Content Include="CardsImg\ace_of_diamonds.png" />
+    <Content Include="CardsImg\ace_of_hearts.png" />
+    <Content Include="CardsImg\ace_of_spades.png" />
+    <Content Include="CardsImg\ace_of_spades2.png" />
+    <Content Include="CardsImg\jack_of_clubs.png" />
+    <Content Include="CardsImg\jack_of_clubs2.png" />
+    <Content Include="CardsImg\jack_of_diamonds.png" />
+    <Content Include="CardsImg\jack_of_diamonds2.png" />
+    <Content Include="CardsImg\jack_of_hearts.png" />
+    <Content Include="CardsImg\jack_of_hearts2.png" />
+    <Content Include="CardsImg\jack_of_spades.png" />
+    <Content Include="CardsImg\jack_of_spades2.png" />
+    <Content Include="CardsImg\king_of_clubs.png" />
+    <Content Include="CardsImg\king_of_clubs2.png" />
+    <Content Include="CardsImg\king_of_diamonds.png" />
+    <Content Include="CardsImg\king_of_diamonds2.png" />
+    <Content Include="CardsImg\king_of_hearts.png" />
+    <Content Include="CardsImg\king_of_hearts2.png" />
+    <Content Include="CardsImg\king_of_spades.png" />
+    <Content Include="CardsImg\king_of_spades2.png" />
+    <Content Include="CardsImg\queen_of_clubs.png" />
+    <Content Include="CardsImg\queen_of_clubs2.png" />
+    <Content Include="CardsImg\queen_of_diamonds.png" />
+    <Content Include="CardsImg\queen_of_diamonds2.png" />
+    <Content Include="CardsImg\queen_of_hearts.png" />
+    <Content Include="CardsImg\queen_of_hearts2.png" />
+    <Content Include="CardsImg\queen_of_spades.png" />
+    <Content Include="CardsImg\queen_of_spades2.png" />
   </ItemGroup>
   <Import Project="..\GameExtensions\GameExtensions.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

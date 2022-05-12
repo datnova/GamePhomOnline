@@ -106,7 +106,7 @@ namespace Server
                     ServerSend(_clientSockets[i], res);
 
             // check send cards
-            if (res.stateID == 1 && res.senderID == _gamePhom.GetGameInfo().currentID)
+            if (res.stateID == 1 && res.senderID == _gamePhom.GetGameInfo().hostID)
             {
                 var reses = _gamePhom.GetCardsToSend();
                 for (int i = 0; i < 4; i++)

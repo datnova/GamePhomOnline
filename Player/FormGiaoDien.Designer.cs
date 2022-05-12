@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGiaoDien));
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.rut_btn = new System.Windows.Forms.Button();
-            this.danh_btn = new System.Windows.Forms.Button();
-            this.xep_btn = new System.Windows.Forms.Button();
+            this.take_btn = new System.Windows.Forms.Button();
+            this.play_btn = new System.Windows.Forms.Button();
+            this.rerange_btn = new System.Windows.Forms.Button();
             this.main_name = new System.Windows.Forms.TextBox();
             this.big_deck = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -50,10 +50,10 @@
             this.pictureBox13 = new System.Windows.Forms.PictureBox();
             this.pictureBox14 = new System.Windows.Forms.PictureBox();
             this.pictureBox15 = new System.Windows.Forms.PictureBox();
-            this.pictureBox11 = new System.Windows.Forms.PictureBox();
-            this.main_holder = new System.Windows.Forms.PictureBox();
-            this.pictureBox17 = new System.Windows.Forms.PictureBox();
-            this.pictureBox18 = new System.Windows.Forms.PictureBox();
+            this.cardholder2 = new System.Windows.Forms.PictureBox();
+            this.mainholder = new System.Windows.Forms.PictureBox();
+            this.cardholder1 = new System.Windows.Forms.PictureBox();
+            this.cardholder3 = new System.Windows.Forms.PictureBox();
             this.main_card9 = new System.Windows.Forms.PictureBox();
             this.main_card8 = new System.Windows.Forms.PictureBox();
             this.main_card7 = new System.Windows.Forms.PictureBox();
@@ -63,7 +63,7 @@
             this.main_card3 = new System.Windows.Forms.PictureBox();
             this.main_card2 = new System.Windows.Forms.PictureBox();
             this.main_card1 = new System.Windows.Forms.PictureBox();
-            this.extra_card = new System.Windows.Forms.PictureBox();
+            this.main_card10 = new System.Windows.Forms.PictureBox();
             this.start_btn = new System.Windows.Forms.Button();
             this.pictureBox28 = new System.Windows.Forms.PictureBox();
             this.pictureBox29 = new System.Windows.Forms.PictureBox();
@@ -96,10 +96,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.main_holder)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardholder2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mainholder)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardholder1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardholder3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card7)).BeginInit();
@@ -109,7 +109,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.main_card3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.extra_card)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.main_card10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox28)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox29)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox30)).BeginInit();
@@ -140,35 +140,35 @@
             this.pictureBox4.TabIndex = 12;
             this.pictureBox4.TabStop = false;
             // 
-            // rut_btn
+            // take_btn
             // 
-            this.rut_btn.Enabled = false;
-            this.rut_btn.Location = new System.Drawing.Point(615, 350);
-            this.rut_btn.Name = "rut_btn";
-            this.rut_btn.Size = new System.Drawing.Size(84, 50);
-            this.rut_btn.TabIndex = 8;
-            this.rut_btn.Text = "Rút bài";
-            this.rut_btn.UseVisualStyleBackColor = true;
+            this.take_btn.Enabled = false;
+            this.take_btn.Location = new System.Drawing.Point(615, 350);
+            this.take_btn.Name = "take_btn";
+            this.take_btn.Size = new System.Drawing.Size(84, 50);
+            this.take_btn.TabIndex = 8;
+            this.take_btn.Text = "Rút bài";
+            this.take_btn.UseVisualStyleBackColor = true;
             // 
-            // danh_btn
+            // play_btn
             // 
-            this.danh_btn.Enabled = false;
-            this.danh_btn.Location = new System.Drawing.Point(705, 350);
-            this.danh_btn.Name = "danh_btn";
-            this.danh_btn.Size = new System.Drawing.Size(82, 50);
-            this.danh_btn.TabIndex = 7;
-            this.danh_btn.Text = "Đánh bài";
-            this.danh_btn.UseVisualStyleBackColor = true;
+            this.play_btn.Enabled = false;
+            this.play_btn.Location = new System.Drawing.Point(705, 350);
+            this.play_btn.Name = "play_btn";
+            this.play_btn.Size = new System.Drawing.Size(82, 50);
+            this.play_btn.TabIndex = 7;
+            this.play_btn.Text = "Đánh bài";
+            this.play_btn.UseVisualStyleBackColor = true;
             // 
-            // xep_btn
+            // rerange_btn
             // 
-            this.xep_btn.Enabled = false;
-            this.xep_btn.Location = new System.Drawing.Point(520, 350);
-            this.xep_btn.Name = "xep_btn";
-            this.xep_btn.Size = new System.Drawing.Size(89, 50);
-            this.xep_btn.TabIndex = 6;
-            this.xep_btn.Text = "Xếp bài";
-            this.xep_btn.UseVisualStyleBackColor = true;
+            this.rerange_btn.Enabled = false;
+            this.rerange_btn.Location = new System.Drawing.Point(520, 350);
+            this.rerange_btn.Name = "rerange_btn";
+            this.rerange_btn.Size = new System.Drawing.Size(89, 50);
+            this.rerange_btn.TabIndex = 6;
+            this.rerange_btn.Text = "Xếp bài";
+            this.rerange_btn.UseVisualStyleBackColor = true;
             // 
             // main_name
             // 
@@ -183,6 +183,7 @@
             // big_deck
             // 
             this.big_deck.Image = ((System.Drawing.Image)(resources.GetObject("big_deck.Image")));
+            this.big_deck.InitialImage = ((System.Drawing.Image)(resources.GetObject("big_deck.InitialImage")));
             this.big_deck.Location = new System.Drawing.Point(351, 170);
             this.big_deck.Name = "big_deck";
             this.big_deck.Size = new System.Drawing.Size(100, 71);
@@ -348,41 +349,41 @@
             this.pictureBox15.TabIndex = 20;
             this.pictureBox15.TabStop = false;
             // 
-            // pictureBox11
+            // cardholder2
             // 
-            this.pictureBox11.Location = new System.Drawing.Point(154, 0);
-            this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(50, 70);
-            this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox11.TabIndex = 24;
-            this.pictureBox11.TabStop = false;
+            this.cardholder2.Location = new System.Drawing.Point(154, 0);
+            this.cardholder2.Name = "cardholder2";
+            this.cardholder2.Size = new System.Drawing.Size(50, 70);
+            this.cardholder2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.cardholder2.TabIndex = 24;
+            this.cardholder2.TabStop = false;
             // 
-            // main_holder
+            // mainholder
             // 
-            this.main_holder.Location = new System.Drawing.Point(464, 329);
-            this.main_holder.Name = "main_holder";
-            this.main_holder.Size = new System.Drawing.Size(50, 70);
-            this.main_holder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.main_holder.TabIndex = 25;
-            this.main_holder.TabStop = false;
+            this.mainholder.Location = new System.Drawing.Point(464, 329);
+            this.mainholder.Name = "mainholder";
+            this.mainholder.Size = new System.Drawing.Size(50, 70);
+            this.mainholder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mainholder.TabIndex = 25;
+            this.mainholder.TabStop = false;
             // 
-            // pictureBox17
+            // cardholder1
             // 
-            this.pictureBox17.Location = new System.Drawing.Point(97, 0);
-            this.pictureBox17.Name = "pictureBox17";
-            this.pictureBox17.Size = new System.Drawing.Size(50, 70);
-            this.pictureBox17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox17.TabIndex = 26;
-            this.pictureBox17.TabStop = false;
+            this.cardholder1.Location = new System.Drawing.Point(97, 0);
+            this.cardholder1.Name = "cardholder1";
+            this.cardholder1.Size = new System.Drawing.Size(50, 70);
+            this.cardholder1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.cardholder1.TabIndex = 26;
+            this.cardholder1.TabStop = false;
             // 
-            // pictureBox18
+            // cardholder3
             // 
-            this.pictureBox18.Location = new System.Drawing.Point(0, 144);
-            this.pictureBox18.Name = "pictureBox18";
-            this.pictureBox18.Size = new System.Drawing.Size(50, 70);
-            this.pictureBox18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox18.TabIndex = 27;
-            this.pictureBox18.TabStop = false;
+            this.cardholder3.Location = new System.Drawing.Point(0, 144);
+            this.cardholder3.Name = "cardholder3";
+            this.cardholder3.Size = new System.Drawing.Size(50, 70);
+            this.cardholder3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.cardholder3.TabIndex = 27;
+            this.cardholder3.TabStop = false;
             // 
             // main_card9
             // 
@@ -465,14 +466,14 @@
             this.main_card1.TabIndex = 28;
             this.main_card1.TabStop = false;
             // 
-            // extra_card
+            // main_card10
             // 
-            this.extra_card.Location = new System.Drawing.Point(489, 253);
-            this.extra_card.Name = "extra_card";
-            this.extra_card.Size = new System.Drawing.Size(50, 70);
-            this.extra_card.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.extra_card.TabIndex = 37;
-            this.extra_card.TabStop = false;
+            this.main_card10.Location = new System.Drawing.Point(489, 253);
+            this.main_card10.Name = "main_card10";
+            this.main_card10.Size = new System.Drawing.Size(50, 70);
+            this.main_card10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.main_card10.TabIndex = 37;
+            this.main_card10.TabStop = false;
             // 
             // start_btn
             // 
@@ -570,7 +571,7 @@
             this.panel3.Controls.Add(this.pictureBox32);
             this.panel3.Controls.Add(this.pictureBox33);
             this.panel3.Controls.Add(this.pictureBox34);
-            this.panel3.Controls.Add(this.pictureBox18);
+            this.panel3.Controls.Add(this.cardholder3);
             this.panel3.Controls.Add(this.pictureBox5);
             this.panel3.Controls.Add(this.name3);
             this.panel3.Location = new System.Drawing.Point(12, 88);
@@ -587,7 +588,7 @@
             this.panel1.Controls.Add(this.pictureBox37);
             this.panel1.Controls.Add(this.pictureBox36);
             this.panel1.Controls.Add(this.pictureBox35);
-            this.panel1.Controls.Add(this.pictureBox17);
+            this.panel1.Controls.Add(this.cardholder1);
             this.panel1.Controls.Add(this.name1);
             this.panel1.Controls.Add(this.pictureBox3);
             this.panel1.Location = new System.Drawing.Point(643, 88);
@@ -685,7 +686,7 @@
             this.panel2.Controls.Add(this.pictureBox12);
             this.panel2.Controls.Add(this.name2);
             this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.pictureBox11);
+            this.panel2.Controls.Add(this.cardholder2);
             this.panel2.Location = new System.Drawing.Point(276, 12);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(250, 146);
@@ -700,7 +701,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.start_btn);
-            this.Controls.Add(this.extra_card);
+            this.Controls.Add(this.main_card10);
             this.Controls.Add(this.main_card9);
             this.Controls.Add(this.main_card8);
             this.Controls.Add(this.main_card7);
@@ -710,11 +711,11 @@
             this.Controls.Add(this.main_card3);
             this.Controls.Add(this.main_card2);
             this.Controls.Add(this.main_card1);
-            this.Controls.Add(this.main_holder);
-            this.Controls.Add(this.rut_btn);
-            this.Controls.Add(this.danh_btn);
+            this.Controls.Add(this.mainholder);
+            this.Controls.Add(this.take_btn);
+            this.Controls.Add(this.play_btn);
             this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.xep_btn);
+            this.Controls.Add(this.rerange_btn);
             this.Controls.Add(this.main_name);
             this.Controls.Add(this.big_deck);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -736,10 +737,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.main_holder)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardholder2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mainholder)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardholder1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardholder3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card7)).EndInit();
@@ -749,7 +750,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.main_card3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.main_card1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.extra_card)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.main_card10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox28)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox29)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox30)).EndInit();
@@ -777,9 +778,9 @@
 
         #endregion
         private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.Button rut_btn;
-        private System.Windows.Forms.Button danh_btn;
-        private System.Windows.Forms.Button xep_btn;
+        private System.Windows.Forms.Button take_btn;
+        private System.Windows.Forms.Button play_btn;
+        private System.Windows.Forms.Button rerange_btn;
         private System.Windows.Forms.TextBox main_name;
         private System.Windows.Forms.PictureBox big_deck;
         private System.Windows.Forms.PictureBox pictureBox2;
@@ -797,10 +798,10 @@
         private System.Windows.Forms.PictureBox pictureBox13;
         private System.Windows.Forms.PictureBox pictureBox14;
         private System.Windows.Forms.PictureBox pictureBox15;
-        private System.Windows.Forms.PictureBox pictureBox11;
-        private System.Windows.Forms.PictureBox main_holder;
-        private System.Windows.Forms.PictureBox pictureBox17;
-        private System.Windows.Forms.PictureBox pictureBox18;
+        private System.Windows.Forms.PictureBox cardholder2;
+        private System.Windows.Forms.PictureBox mainholder;
+        private System.Windows.Forms.PictureBox cardholder1;
+        private System.Windows.Forms.PictureBox cardholder3;
         private System.Windows.Forms.PictureBox main_card9;
         private System.Windows.Forms.PictureBox main_card8;
         private System.Windows.Forms.PictureBox main_card7;
@@ -810,7 +811,7 @@
         private System.Windows.Forms.PictureBox main_card3;
         private System.Windows.Forms.PictureBox main_card2;
         private System.Windows.Forms.PictureBox main_card1;
-        private System.Windows.Forms.PictureBox extra_card;
+        private System.Windows.Forms.PictureBox main_card10;
         private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.PictureBox pictureBox28;
         private System.Windows.Forms.PictureBox pictureBox29;

@@ -10,11 +10,14 @@ namespace Player
 {
     internal class Player
     {
-        // init
+        //
+        //
+        /// init
         public Player(string name)
         {
             _playersInfo = new PlayerInfo(-1, name, 0);
         }
+
 
         //
         //
@@ -39,29 +42,34 @@ namespace Player
 
         //
         //
-        // Handle and update game from response 
+        /// Handle and update game from response 
         public void HandleResponse(ResponseForm res)
         {
             if (res.status == "success")
             {
                 // get player hand or pull card
                 if (res.cardPull != null && res.cardPull.Length != 0)
+                {
                     if (res.cardPull.Length == 1)
                         _cardHolder[_currentID] = res.cardPull[0];
                     else
                         _playerHand = res.cardPull;
-
-                // add id
-                foreach (var playerInfo in res.playerInfo)
+                }
+                // check id already assign
+                else if (_playersInfo.id == -1)
                 {
-                    if (playerInfo is null) continue;
-                    if (playerInfo.name == _playersInfo.name)
+                    foreach (var playerInfo in res.playerInfo)
                     {
-                        _playersInfo = playerInfo;
-                        break;
+                        if (playerInfo is null) continue;
+                        if (playerInfo.name == _playersInfo.name)
+                        {
+                            _playersInfo = playerInfo;
+                            break;
+                        }
                     }
                 }
 
+                // update game info
                 _stateID = res.stateID;
                 _currentID = res.currentID;
                 _currentRound = res.currentRound;
@@ -74,15 +82,34 @@ namespace Player
             }
         }
 
+
+        //
+        //
+        /// Get data method
         public PlayerInfo GetPlayerInfo()
         {
             return _playersInfo;
         }
 
+        public (int stateID, int currentID, int currentRound, int hostID, int numberPlayer) GetGameInfo()
+        {
+            return (_stateID, _currentID, _currentRound, _hostID, _numberPlayer);
+        }
+
+        public Card[] GetPlayerHand()
+        {
+            return _playerHand;
+        }
+
+        public Card[] GetCardHolder()
+        {
+            return _cardHolder;
+        }
+
 
         //
         //
-        // create request
+        /// create request
         public RequestForm RequestAddPlayer()
         {
             if (_playersInfo.id != -1) return null;
@@ -97,6 +124,10 @@ namespace Player
         public RequestForm RequestPlayCard(Card card)
         {
             if (_stateID != 2 || _currentID != _playersInfo.id) return null;
+
+            int cardIndex = Array.IndexOf(_playerHand, card);
+            if (cardIndex == -1) return null;
+            else _playerHand[cardIndex] = null;
 
             var res = new RequestForm();
             res.playerName = _playersInfo.name;

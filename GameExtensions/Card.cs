@@ -17,7 +17,9 @@ namespace GameExtensions
 
         public override string ToString()
         {
-            return this.pip + "_" + this.suit;
+            string str = (value <= 10 && value >= 2) ? "_" : "";
+            str += this.pip + "_of_" + this.suit;
+            return str;
         }
 
         public string pip { get; set; }

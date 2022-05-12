@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,14 +38,23 @@ namespace Player
             // create thread to run game
             Thread runGame = new Thread(() =>
             {
-                // create socket
-                _client = new TcpClient(_ipAdd, _port);
+                try
+                {
+                    // create socket
+                    _client = new TcpClient(_ipAdd, _port);
 
-                // assign player to server
-                AssignPlayer();
+                    // assign player to server
+                    AssignPlayer();
 
-                // run game
-                RunGame();
+                    // run game
+                    RunGame();
+                }
+                catch (SocketException)
+                {
+                    Invoke(new Action(this.Hide));
+                    MessageBox.Show("No server run");
+                    Invoke(new Action(this.Close));
+                }
             });
             runGame.IsBackground = true;
             runGame.Start();
@@ -55,6 +67,9 @@ namespace Player
 
         private void UpdateDisplay(ResponseForm res, int thisPlayerID)
         {
+            // if not assign success quit program
+            if (_player.GetPlayerInfo().id == -1) Invoke(new Action(this.Close));
+
             // update other players
             int panelNumber = 1;
             int nextPlayerID = (thisPlayerID + 1) % 4;
@@ -74,93 +89,131 @@ namespace Player
 
         private void UpdatePanelPlayers(ResponseForm res, int otherPlayerID, int panelNumber)
         {
-            switch (panelNumber)
+            // identifile panel
+            var tempPanel = (Panel)Controls["panel" + panelNumber];
+
+            // check if player dont exist
+            if (res.playerInfo[otherPlayerID] is null)
             {
-                case 1:
-                    if (res.playerInfo[otherPlayerID] is null)
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            panel1.Hide();
-                        }));
-                    }
-                    else
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            panel1.Show();
-                            name1.Text = res.playerInfo[otherPlayerID].name;
-                            name1.Text += (res.hostID == otherPlayerID) ? " (host)" : String.Empty;
-                            name1.BackColor = (res.currentID == otherPlayerID) ? Color.Green : Color.Red;
-                        }));
-                    }
-                    break;
-
-                case 2:
-                    if (res.playerInfo[otherPlayerID] is null)
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            panel2.Hide();
-                        }));
-                    }
-                    else
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            panel2.Show();
-                            name2.Text = res.playerInfo[otherPlayerID].name;
-                            name2.Text += (res.hostID == otherPlayerID) ? " (host)" : String.Empty;
-                            name2.BackColor = (res.currentID == otherPlayerID) ? Color.Green : Color.Red;
-                        }));
-                    }
-                    break;
-
-                case 3:
-                    if (res.playerInfo[otherPlayerID] is null)
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            panel3.Hide();
-                        }));
-                    }
-                    else
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            panel3.Show();
-                            name3.Text = res.playerInfo[otherPlayerID].name;
-                            name3.Text += (res.hostID == otherPlayerID) ? " (host)" : String.Empty;
-                            name3.BackColor = (res.currentID == otherPlayerID) ? Color.Green : Color.Red;
-                        }));
-                    }
-                    break;
+                Invoke(new Action(tempPanel.Hide));
+                return;
             }
+
+            // if exist display name, specified host or not, on turn, card holder
+            Invoke(new Action(() =>
+            {
+                // show panel
+                tempPanel.Show();
+
+                // set name + is host + color turn
+                var tempName = (TextBox)Controls["name" + panelNumber];
+                name1.Text = res.playerInfo[otherPlayerID].name;
+                name1.Text += (res.hostID == otherPlayerID) ? " (host)" : String.Empty;
+                name1.BackColor = (res.currentID == otherPlayerID) ? Color.Green : Color.Orange;
+
+                // set card holder
+                var tempCardHolder = (PictureBox)Controls["cardholder" + panelNumber];
+                if (_player.GetCardHolder()[otherPlayerID] is null) tempCardHolder.Image = null;
+                else
+                {
+                    string nameCard = _player.GetCardHolder()[otherPlayerID].ToString();
+                    tempCardHolder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
+                }
+            }));
         }
 
         private void UpdateMainPlayer(ResponseForm res)
         {
-            // display name and specified host or not
+            // display name, specified host or not, on turn, card holder and cards on hand
             Invoke(new Action(() =>
             {
+                // set name + is host + color turn
                 main_name.Text = playerName;
                 main_name.Text += (res.hostID == _player.GetPlayerInfo().id) ? " (host)" : String.Empty;
                 main_name.BackColor = 
                     (res.currentID == res.playerInfo.First(a => a.name == playerName).id) ? 
-                    Color.Green : Color.Red;
+                    Color.Green : Color.Orange;
+
+                // set card holder
+                if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) cardholder3.Image = null;
+                else
+                {
+                    string nameCard = _player.GetCardHolder()[_player.GetPlayerInfo().id].ToString();
+                    cardholder3.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
+                }
             }));
 
             // update display button
             UpdateButton();
 
             // update display card on hand
-            UpdateDisplayCard();
+            UpdateHandCards();
         }
 
-        // not finish
         private void UpdateButton()
         {
-            throw new NotImplementedException();
+            // get game info
+            var gameState = _player.GetGameInfo();
+
+            Invoke(new Action(() =>
+            {
+                // check rerange button
+                if (_player.GetPlayerHand() != null) rerange_btn.Enabled = true;
+                else rerange_btn.Enabled = false;
+
+                // check is my turn
+                if (gameState.currentID != _player.GetPlayerInfo().id)
+                {
+                    start_btn.Enabled = false;
+                    take_btn.Enabled = false;
+                    big_deck.Enabled = false;
+                    return;
+                }
+
+                // check start button
+                if (gameState.stateID == 1) start_btn.Enabled = true;
+                else start_btn.Enabled = false;
+
+                // check play button
+                if (gameState.stateID == 2) play_btn.Enabled = true;
+                else start_btn.Enabled = false;
+
+                // check draw button
+                if (gameState.stateID == 3)
+                {
+                    take_btn.Enabled = true;
+                    big_deck.Enabled = true;
+                } 
+                else
+                {
+                    take_btn.Enabled = false;
+                    big_deck.Enabled = false;
+                }
+            }));
+        }
+
+        private void UpdateHandCards()
+        {
+            // chekc are there cards in hand
+            if (_player.GetPlayerHand() is null) return;
+
+            // get every picture box to display if not then hide
+            // get cards on hand
+            var playerHand = _player.GetPlayerHand().Where(a => a != null).ToArray();
+            for (int i = 0; i < 10; i++)
+            {
+                // get picture box element
+                var tempPictureBox = (PictureBox)Controls["main_card" + (i + 1)];
+                
+                // check if cards out of range then hide picture box
+                if (i >= playerHand.Length) tempPictureBox.Hide();
+                else
+                {
+                    // display card
+                    string nameCard = playerHand[i].ToString();
+                    tempPictureBox.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
+                }
+            }
         }
 
 
@@ -244,14 +297,6 @@ namespace Player
                 _player = new Player(playerName);
                 this.Show();
             }
-        }
-
-        //
-        //
-        // Handle display cards (not finish)
-        private void UpdateDisplayCard()
-        {
-            throw new NotImplementedException();
         }
     }
 }

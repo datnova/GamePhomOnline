@@ -18,13 +18,13 @@ namespace GameExtensions
         // contain cards pip info
         public static readonly string[] cardPip = new string[]
         {
-            "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"
+            "ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"
         };
 
         // contain cards suit info
         public static readonly string[] cardSuit = new string[]
         {
-            "Club", "Diamond", "Heard", "Spade"
+            "clubs", "diamonds", "heards", "spades"
         };
 
     }

@@ -60,7 +60,7 @@
             // 
             this.tbName.Location = new System.Drawing.Point(108, 29);
             this.tbName.Margin = new System.Windows.Forms.Padding(4);
-            this.tbName.MaxLength = 5;
+            this.tbName.MaxLength = 6;
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(226, 25);
             this.tbName.TabIndex = 7;
