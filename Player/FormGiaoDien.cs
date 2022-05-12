@@ -106,13 +106,13 @@ namespace Player
                 tempPanel.Show();
 
                 // set name + is host + color turn
-                var tempName = (TextBox)Controls["name" + panelNumber];
-                name1.Text = res.playerInfo[otherPlayerID].name;
-                name1.Text += (res.hostID == otherPlayerID) ? " (host)" : String.Empty;
-                name1.BackColor = (res.currentID == otherPlayerID) ? Color.Green : Color.Orange;
+                var tempName = (TextBox)tempPanel.Controls["name" + panelNumber];
+                tempName.Text = res.playerInfo[otherPlayerID].name;
+                tempName.Text += (res.hostID == otherPlayerID) ? " (host)" : String.Empty;
+                tempName.BackColor = (res.currentID == otherPlayerID) ? Color.Green : Color.Orange;
 
                 // set card holder
-                var tempCardHolder = (PictureBox)Controls["cardholder" + panelNumber];
+                var tempCardHolder = (PictureBox)tempPanel.Controls["cardholder" + panelNumber];
                 if (_player.GetCardHolder()[otherPlayerID] is null) tempCardHolder.Image = null;
                 else
                 {
