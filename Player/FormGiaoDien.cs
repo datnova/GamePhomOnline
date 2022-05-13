@@ -152,7 +152,7 @@ namespace Player
                     cardholder3.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
                 }
 
-                // set big deck
+                // set display big deck
                 var tempStateID = _player.GetGameInfo().stateID;
                 if (tempStateID == 2 || tempStateID == 3) big_deck.Show();
                 else big_deck.Hide();
@@ -173,39 +173,30 @@ namespace Player
             Invoke(new Action(() =>
             {
                 // check rerange button
-                if (_player.GetPlayerHand() != null) rerange_btn.Enabled = true;
-                else rerange_btn.Enabled = false;
-
-                // check is my turn
-                if (gameState.currentID != _player.GetPlayerInfo().id)
-                {
-                    start_btn.Enabled = false;
-                    take_btn.Enabled = false;
-                    big_deck.Enabled = false;
-                    return;
-                }
+                if (_player.GetPlayerHand() != null) rerange_btn.Show();
+                else rerange_btn.Hide();
 
                 // check start button
                 if (gameState.numberPlayer >= 2 &&
                     gameState.hostID == _player.GetPlayerInfo().id &&
-                    gameState.stateID == 0) play_btn.Hide();
-                else play_btn.Show();
+                    gameState.stateID == 0) start_btn.Show();
+                else start_btn.Hide();
 
                 // check play button
                 if (gameState.stateID == 2 &&
-                    gameState.currentID == _player.GetPlayerInfo().id) play_btn.Enabled = true;
-                else start_btn.Enabled = false;
+                    gameState.currentID == _player.GetPlayerInfo().id) play_btn.Show();
+                else play_btn.Hide();
 
                 // check draw button
                 if (gameState.stateID == 3 &&
                     gameState.currentID == _player.GetPlayerInfo().id)
                 {
-                    take_btn.Enabled = true;
+                    take_btn.Show();
                     big_deck.Enabled = true;
                 } 
                 else
                 {
-                    take_btn.Enabled = false;
+                    take_btn.Hide();
                     big_deck.Enabled = false;
                 }
             }));

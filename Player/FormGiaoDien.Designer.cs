@@ -150,7 +150,6 @@
             // 
             // take_btn
             // 
-            this.take_btn.Enabled = false;
             this.take_btn.Location = new System.Drawing.Point(615, 350);
             this.take_btn.Name = "take_btn";
             this.take_btn.Size = new System.Drawing.Size(84, 50);
@@ -160,7 +159,6 @@
             // 
             // play_btn
             // 
-            this.play_btn.Enabled = false;
             this.play_btn.Location = new System.Drawing.Point(705, 350);
             this.play_btn.Name = "play_btn";
             this.play_btn.Size = new System.Drawing.Size(82, 50);
@@ -170,7 +168,6 @@
             // 
             // rerange_btn
             // 
-            this.rerange_btn.Enabled = false;
             this.rerange_btn.Location = new System.Drawing.Point(520, 350);
             this.rerange_btn.Name = "rerange_btn";
             this.rerange_btn.Size = new System.Drawing.Size(89, 50);
@@ -485,7 +482,6 @@
             // 
             // start_btn
             // 
-            this.start_btn.Enabled = false;
             this.start_btn.Location = new System.Drawing.Point(12, 12);
             this.start_btn.Name = "start_btn";
             this.start_btn.Size = new System.Drawing.Size(89, 50);
