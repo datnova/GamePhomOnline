@@ -73,11 +73,18 @@ namespace Server
                     // handle request and return reponse
                     var res = _gamePhom.HandleGame(req);
 
-                    // Add socket if assign success
-                    if (!HandleAddSocket(res, clientSocket)) break;
+                    // handle fail response
+                    if (res.status == "fail") ServerSend(clientSocket, res);
 
-                    // send back response
-                    SendBackResponse(res);
+                    // Add socket if assign success
+                    if (!HandleAddSocket(res, clientSocket))
+                    {
+                        clientSocket.Close();
+                        break;
+                    }
+
+                    // handle success response
+                    if (res.status == "success") SendBackResponse(res);
                 }
 
                 Console.WriteLine("Player disconnected");

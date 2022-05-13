@@ -68,16 +68,25 @@ namespace Server
             _playersInfo[playerID] = null;
             _numberPlayer--;
 
+            // if no player left
+            if (_playersInfo.All(a => a is null))
+            {
+                _hostID = -1;
+                _currentID = -1;
+            }
             // shift host id to next player
             // shift current player to next player
-            if (playerID == _hostID || playerID == _currentID)
+            else
             {
-                for (int i = (playerID + 1) % 4; i != playerID; i = (i + 1) % 4)
+                if (playerID == _hostID || playerID == _currentID)
                 {
-                    if (_playersInfo[i] != null)
+                    for (int i = (playerID + 1) % 4; i != playerID; i = (i + 1) % 4)
                     {
-                        if (playerID == _hostID) _hostID = i;
-                        if (playerID == _currentID) _currentID = i;
+                        if (_playersInfo[i] != null)
+                        {
+                            if (playerID == _hostID) _hostID = i;
+                            if (playerID == _currentID) _currentID = i;
+                        }
                     }
                 }
             }
@@ -421,7 +430,7 @@ namespace Server
             // check is it end game
             if (!utrang)
             {
-                // check is it host
+                // check is it host send reset
                 if (playerRequest.playerID != _hostID)
                 {
                     res.status = "fail";
@@ -441,9 +450,18 @@ namespace Server
                     return res;
                 }
             }
+            else
+            {
+                if (_currentRound == 2 || _currentRound == 3)
+                {
+                    res.status = "fail";
+                    res.receiveID = playerRequest.playerID;
+                    res.messages = "Invalid round to reset";
 
-            // reset everyone hand's cards
-            Array.Clear(_playersHand, 0, _playersHand.Length);
+                    return res;
+                }
+            }
+
 
             // scoring player point
             if (!utrang)
@@ -451,28 +469,33 @@ namespace Server
                 for (int i = 0; i < _playersHand.Length; i++)
                 {
                     if (_playersInfo[i] is null) continue;
-                    _playersInfo[i].point = Scoring(_playersHand[i]);
+                    _playersInfo[i].point += Scoring(_playersHand[i]);
                 }
             }
             else
             {
                 for (int i = 0; i < _playersHand.Length; i++)
                 {
+                    // if there is no player or player u trang then skip
                     if (_playersInfo[i] is null) continue;
                     if (playerRequest.playerID == i) continue;
-                    _playersInfo[i].point = 9999;
+
+                    // add point to all player
+                    _playersInfo[i].point += 12;
                 }
             }
 
-            // reset card holder
+            // reset game data
+            _playersHand = new Card[4][];
             _cardHolder = null;
+            _drawDeck = null;
 
+            _stateID = 0;
+            _currentID = -1;
+            _currentRound = -1;
+
+            // add status and return
             res = GetGameInfo();
-
-            // set up game again
-            SetUpGame();
-
-            // add status
             res.status = "success";
             res.messages = "Send point to players";
 

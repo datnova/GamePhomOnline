@@ -43,7 +43,7 @@ namespace Player
         //
         //
         /// Handle and update game from response 
-        public void HandleResponse(ResponseForm res)
+        public bool HandleResponse(ResponseForm res)
         {
             if (res.status == "success")
             {
@@ -75,11 +75,10 @@ namespace Player
                 _currentRound = res.currentRound;
                 _hostID = res.hostID;
                 _numberPlayer = res.numberPlayer;
+
+                return true;
             }
-            else
-            {
-                MessageBox.Show(res.messages);
-            }
+            else return false;
         }
 
 

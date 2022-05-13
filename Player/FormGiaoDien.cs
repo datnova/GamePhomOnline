@@ -119,6 +119,16 @@ namespace Player
                     string nameCard = _player.GetCardHolder()[otherPlayerID].ToString();
                     tempCardHolder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
                 }
+
+                // set card on hand
+                // if no card on hand
+                var IsCardOnHand = _player.GetPlayerHand() != null;
+                for (int i = 1; i < 10; i++)
+                {
+                    var tempPanelCard = (PictureBox)tempPanel.Controls["panelcard" + panelNumber + i];
+                    if (!IsCardOnHand) tempPanelCard.Hide();
+                    else tempPanelCard.Show();
+                }
             }));
         }
 
@@ -131,7 +141,7 @@ namespace Player
                 main_name.Text = playerName;
                 main_name.Text += (res.hostID == _player.GetPlayerInfo().id) ? " (host)" : String.Empty;
                 main_name.BackColor = 
-                    (res.currentID == res.playerInfo.First(a => a.name == playerName).id) ? 
+                    (res.currentID == _player.GetPlayerInfo().id) ? 
                     Color.Green : Color.Orange;
 
                 // set card holder
@@ -141,6 +151,11 @@ namespace Player
                     string nameCard = _player.GetCardHolder()[_player.GetPlayerInfo().id].ToString();
                     cardholder3.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
                 }
+
+                // set big deck
+                var tempStateID = _player.GetGameInfo().stateID;
+                if (tempStateID == 2 || tempStateID == 3) big_deck.Show();
+                else big_deck.Hide();
             }));
 
             // update display button
@@ -171,15 +186,19 @@ namespace Player
                 }
 
                 // check start button
-                if (gameState.stateID == 1) start_btn.Enabled = true;
-                else start_btn.Enabled = false;
+                if (gameState.numberPlayer >= 2 &&
+                    gameState.hostID == _player.GetPlayerInfo().id &&
+                    gameState.stateID == 0) play_btn.Hide();
+                else play_btn.Show();
 
                 // check play button
-                if (gameState.stateID == 2) play_btn.Enabled = true;
+                if (gameState.stateID == 2 &&
+                    gameState.currentID == _player.GetPlayerInfo().id) play_btn.Enabled = true;
                 else start_btn.Enabled = false;
 
                 // check draw button
-                if (gameState.stateID == 3)
+                if (gameState.stateID == 3 &&
+                    gameState.currentID == _player.GetPlayerInfo().id)
                 {
                     take_btn.Enabled = true;
                     big_deck.Enabled = true;
@@ -194,8 +213,18 @@ namespace Player
 
         private void UpdateHandCards()
         {
-            // chekc are there cards in hand
-            if (_player.GetPlayerHand() is null) return;
+            // check are there cards in hand if not then hide
+            if (_player.GetPlayerHand() is null)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    // get picture box element
+                    var tempPictureBox = (PictureBox)Controls["main_card" + (i + 1)];
+                    tempPictureBox.Image = null;
+                }
+
+                return;
+            }
 
             // get every picture box to display if not then hide
             // get cards on hand
@@ -269,7 +298,11 @@ namespace Player
                 Array.Clear(_buffer, 0, _buffer.Length);
 
                 // update game data form response
-                _player.HandleResponse(res);
+                if (!_player.HandleResponse(res))
+                {
+                    MessageBox.Show(res.messages);
+                    continue;
+                }
 
                 // update display
                 UpdateDisplay(res, _player.GetPlayerInfo().id);
