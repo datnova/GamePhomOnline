@@ -81,7 +81,7 @@ namespace Player
                 // update other player panel
                 Invoke(new Action(() =>
                 {
-                    UpdatePanelPlayers(res, nextPlayerID, panelNumber);
+                    DisplayPanelPlayers(res, nextPlayerID, panelNumber);
                 }));
 
                 // update next value
@@ -92,11 +92,12 @@ namespace Player
             // udpate main player
             Invoke(new Action(() =>
             {
-               UpdateMainPlayer(res);
+                DisplayMainPlayer(res);
             }));
         }
 
-        private void UpdatePanelPlayers(ResponseForm res, int otherPlayerID, int panelNumber)
+        // display panel other player
+        private void DisplayPanelPlayers(ResponseForm res, int otherPlayerID, int panelNumber)
         {
             // identifile panel
             var tempPanel = (Panel)Controls["panel" + panelNumber];
@@ -142,78 +143,87 @@ namespace Player
             }));
         }
 
-        private void UpdateMainPlayer(ResponseForm res)
+        // display main player
+        private void DisplayMainPlayer(ResponseForm res)
         {
             // display name, specified host or not, on turn, card holder and cards on hand
             Invoke(new Action(() =>
             {
-                // set name + is host + color turn
+                // display name + is host + color turn
                 main_name.Text = playerName;
                 main_name.Text += (res.hostID == _player.GetPlayerInfo().id) ? " (host)" : String.Empty;
-                main_name.BackColor = 
-                    (res.currentID == _player.GetPlayerInfo().id) ? 
+                main_name.BackColor =
+                    (res.currentID == _player.GetPlayerInfo().id) ?
                     Color.Green : Color.Orange;
 
-                // set card holder
-                if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) mainholder.Image = null;
-                else
-                {
-                    string nameCard = _player.GetCardHolder()[_player.GetPlayerInfo().id].ToString();
-                    mainholder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
-                }
+                // display big deck
+                DisplayBigDeck();
 
-                // set display big deck
-                var tempStateID = _player.GetGameInfo().stateID;
-                if (tempStateID == 2 || tempStateID == 3) big_deck.Show();
-                else big_deck.Hide();
+                // display main card holder
+                DisplayMainCardHolder();
+
+                // display display button
+                DisplayButton();
+
+                // display display card on hand
+                DisplayHandCards();
             }));
-
-
-            // update display button
-            UpdateButton();
-
-            // update display card on hand
-            UpdateHandCards();
         }
 
-        private void UpdateButton()
+        private void DisplayBigDeck()
+        {
+            // set display big deck
+            var tempStateID = _player.GetGameInfo().stateID;
+            if (tempStateID == 2 || tempStateID == 3) big_deck.Show();
+            else big_deck.Hide();
+        }
+
+        private void DisplayMainCardHolder()
+        {
+            // set card holder
+            if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) mainholder.Image = null;
+            else
+            {
+                string nameCard = _player.GetCardHolder()[_player.GetPlayerInfo().id].ToString();
+                mainholder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
+            }
+        }
+
+        private void DisplayButton()
         {
             // get game info
             var gameState = _player.GetGameInfo();
 
-            Invoke(new Action(() =>
+            // check rerange button
+            if (_player.GetPlayerHand() != null) rerange_btn.Show();
+            else rerange_btn.Hide();
+
+            // check start button
+            if (gameState.numberPlayer >= 2 &&
+                gameState.hostID == _player.GetPlayerInfo().id &&
+                gameState.stateID == 0) start_btn.Show();
+            else start_btn.Hide();
+
+            // check play button
+            if (gameState.stateID == 2 &&
+                gameState.currentID == _player.GetPlayerInfo().id) play_btn.Show();
+            else play_btn.Hide();
+
+            // check draw button
+            if (gameState.stateID == 3 &&
+                gameState.currentID == _player.GetPlayerInfo().id)
             {
-                // check rerange button
-                if (_player.GetPlayerHand() != null) rerange_btn.Show();
-                else rerange_btn.Hide();
-
-                // check start button
-                if (gameState.numberPlayer >= 2 &&
-                    gameState.hostID == _player.GetPlayerInfo().id &&
-                    gameState.stateID == 0) start_btn.Show();
-                else start_btn.Hide();
-
-                // check play button
-                if (gameState.stateID == 2 &&
-                    gameState.currentID == _player.GetPlayerInfo().id) play_btn.Show();
-                else play_btn.Hide();
-
-                // check draw button
-                if (gameState.stateID == 3 &&
-                    gameState.currentID == _player.GetPlayerInfo().id)
-                {
-                    take_btn.Show();
-                    big_deck.Enabled = true;
-                } 
-                else
-                {
-                    take_btn.Hide();
-                    big_deck.Enabled = false;
-                }
-            }));
+                take_btn.Show();
+                big_deck.Enabled = true;
+            } 
+            else
+            {
+                take_btn.Hide();
+                big_deck.Enabled = false;
+            }
         }
 
-        private void UpdateHandCards()
+        private void DisplayHandCards()
         {
             // check are there cards in hand if not then hide
             if (_player.GetPlayerHand() is null)
@@ -357,8 +367,8 @@ namespace Player
             // set up cards on hand
             _player.SetPlayerHand(tempHand.ToArray());
 
-            // update display
-            UpdateHandCards();
+            // display hand cards
+            Invoke(new Action(DisplayHandCards));
         }
 
 
