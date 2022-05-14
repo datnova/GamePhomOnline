@@ -366,7 +366,19 @@ namespace Server
                     if (_currentRound == 5) _stateID = 4;
                 }
 
+                // update card deck and cards on hand
                 _drawDeck[Array.IndexOf(_drawDeck, card)] = null;
+                if (_playersHand[_currentID].All(a => a != null))
+                    _playersHand[_currentID] = _playersHand[_currentID].ToList().Append(card).ToArray();
+                else
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (_playersHand[_currentID][i] != null) continue;
+                        _playersHand[_currentID][i] = card;
+                        break;
+                    }
+                }
 
                 res = GetGameInfo();
                 res.senderID = playerRequest.playerID;
@@ -398,9 +410,21 @@ namespace Server
                     if (_currentRound == 5) _stateID = 4;
                 }
 
-                // take card from card holder
+                // take card from card holder and update card deck
                 var card = _cardHolder;
                 _cardHolder = null;
+
+                if (_playersHand[_currentID].All(a => a != null))
+                    _playersHand[_currentID] = _playersHand[_currentID].ToList().Append(card).ToArray();
+                else
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (_playersHand[_currentID][i] != null) continue;
+                        _playersHand[_currentID][i] = card;
+                        break;
+                    }
+                }
 
                 res = GetGameInfo();
                 res.senderID = playerRequest.playerID;

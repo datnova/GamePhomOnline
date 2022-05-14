@@ -156,7 +156,8 @@ namespace Player
 
         public RequestForm RequestPlayCard(Card card)
         {
-            if (_stateID != 2 || _currentID != _playersInfo.id) return null;
+            // check value
+            if (card is null || _stateID != 2 || _currentID != _playersInfo.id) return null;
 
             int cardIndex = Array.FindIndex(_playerHand, a => 
                 a != null && a.pip == card.pip && a.suit == card.suit);

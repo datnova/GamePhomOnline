@@ -315,7 +315,7 @@ namespace Player
         // req assign new player
         private void AssignPlayer()
         {
-            if (_player.GetPlayerInfo().id == -1)
+            if (_player.GetPlayerInfo() is null || _player.GetPlayerInfo().id == -1)
             {
                 var req = _player.RequestAddPlayer();
                 SendRequest(req);
