@@ -76,17 +76,14 @@ namespace Server
             }
             // shift host id to next player
             // shift current player to next player
-            else
+            else if (playerID == _hostID || playerID == _currentID)
             {
-                if (playerID == _hostID || playerID == _currentID)
+                for (int i = (playerID + 1) % 4; i != playerID; i = (i + 1) % 4)
                 {
-                    for (int i = (playerID + 1) % 4; i != playerID; i = (i + 1) % 4)
+                    if (_playersInfo[i] != null)
                     {
-                        if (_playersInfo[i] != null)
-                        {
-                            if (playerID == _hostID) _hostID = i;
-                            if (playerID == _currentID) _currentID = i;
-                        }
+                        if (playerID == _hostID) _hostID = i;
+                        if (playerID == _currentID) _currentID = i;
                     }
                 }
             }
@@ -106,11 +103,8 @@ namespace Server
             if (playerRequest.playerID == -1)
                 return HandleWaitForPlayer(playerRequest);
 
-            // return dictionary of error contain:
-            //     "status":        fail
-            //     "recceiveID" :   id send to, if empty do broadcast
-            //     "messages":      explain error
-            if (playerRequest.stateID != _stateID)
+            // check correct request
+            if (!(playerRequest.stateID == _stateID))
             {
                 var res = new ResponseForm();
                 res.status = "fail";
@@ -119,7 +113,7 @@ namespace Server
 
                 return res;
             }
-            else if (playerRequest.playerID != _currentID)
+            else if (playerRequest.playerID != _currentID && _currentID != -1)
             {
                 var res = new ResponseForm();
                 res.status = "fail";
@@ -129,13 +123,18 @@ namespace Server
                 return res;
             }
             
+            // return dictionary of error contain:
+            //     "status":        fail
+            //     "recceiveID" :   id send to, if empty do broadcast
+            //     "messages":      explain error
+
             // return dictionary of success contain:
-            //    "status": string (update game: success)
+            //    "status": success
             //    "messages": string (explain error)
             //    game info ...
             switch (playerRequest.stateID)
             {
-                case 1: // Set up game        |   devide cards and send for player
+                case 0: // Set up game        |   devide cards and send for player
                     return HandleSetUpGame(playerRequest);
                 case 2: // Play card          |   move card to card holder
                     return HandlePlayCard(playerRequest);
@@ -239,10 +238,6 @@ namespace Server
                     res.senderID = newID;
                     res.status = "success";
                     res.messages = "Waiting for another player";
-
-                    // update state to set up if over 1 player
-                    if (_numberPlayer >= 2) _stateID = 1;
-                    else _stateID = 0;
 
                     return res;
                 }

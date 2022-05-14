@@ -108,6 +108,21 @@ namespace Player
 
         //
         //
+        /// Set cards on hand
+        public void SetPlayerHand(Card[] cards)
+        {
+            // set cards to length 10
+            var tempCards = new Card[10];
+            for (int i = 0; i < cards.Length; i++)
+                tempCards[i] = cards[i];
+
+            // set player hand
+            _playerHand = tempCards;
+        }
+
+
+        //
+        //
         /// create request
         public RequestForm RequestAddPlayer()
         {
@@ -148,7 +163,7 @@ namespace Player
     
         public RequestForm RequestStartGame()
         {
-            if (_stateID != 1 || _hostID != _playersInfo.id) return null;
+            if (_stateID != 0 || _hostID != _playersInfo.id) return null;
 
             var res = new RequestForm();
             res.playerName = _playersInfo.name;

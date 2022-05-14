@@ -73,8 +73,11 @@
             this.panelcard32 = new System.Windows.Forms.PictureBox();
             this.panelcard31 = new System.Windows.Forms.PictureBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.panelcard39 = new System.Windows.Forms.PictureBox();
+            this.panelcard38 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelcard19 = new System.Windows.Forms.PictureBox();
+            this.panelcard18 = new System.Windows.Forms.PictureBox();
             this.panelcard17 = new System.Windows.Forms.PictureBox();
             this.panelcard16 = new System.Windows.Forms.PictureBox();
             this.panelcard15 = new System.Windows.Forms.PictureBox();
@@ -82,10 +85,7 @@
             this.panelcard13 = new System.Windows.Forms.PictureBox();
             this.panelcard12 = new System.Windows.Forms.PictureBox();
             this.panelcard11 = new System.Windows.Forms.PictureBox();
-            this.panelcard38 = new System.Windows.Forms.PictureBox();
-            this.panelcard18 = new System.Windows.Forms.PictureBox();
-            this.panelcard39 = new System.Windows.Forms.PictureBox();
-            this.panelcard19 = new System.Windows.Forms.PictureBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.big_deck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -122,8 +122,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelcard32)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard31)).BeginInit();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard39)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard38)).BeginInit();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard19)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard18)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard17)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard15)).BeginInit();
@@ -131,10 +134,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelcard13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard38)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard18)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard39)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard19)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox4
@@ -174,6 +174,7 @@
             this.rerange_btn.TabIndex = 6;
             this.rerange_btn.Text = "Xếp bài";
             this.rerange_btn.UseVisualStyleBackColor = true;
+            this.rerange_btn.Click += new System.EventHandler(this.rerange_btn_Click);
             // 
             // main_name
             // 
@@ -488,12 +489,13 @@
             this.start_btn.TabIndex = 38;
             this.start_btn.Text = "Start";
             this.start_btn.UseVisualStyleBackColor = true;
+            this.start_btn.Click += new System.EventHandler(this.start_btn_Click);
             // 
             // panelcard37
             // 
             this.panelcard37.Enabled = false;
             this.panelcard37.Image = ((System.Drawing.Image)(resources.GetObject("panelcard37.Image")));
-            this.panelcard37.Location = new System.Drawing.Point(74, 61);
+            this.panelcard37.Location = new System.Drawing.Point(77, 53);
             this.panelcard37.Name = "panelcard37";
             this.panelcard37.Size = new System.Drawing.Size(70, 50);
             this.panelcard37.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -504,7 +506,7 @@
             // 
             this.panelcard36.Enabled = false;
             this.panelcard36.Image = ((System.Drawing.Image)(resources.GetObject("panelcard36.Image")));
-            this.panelcard36.Location = new System.Drawing.Point(74, 86);
+            this.panelcard36.Location = new System.Drawing.Point(77, 78);
             this.panelcard36.Name = "panelcard36";
             this.panelcard36.Size = new System.Drawing.Size(70, 50);
             this.panelcard36.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -515,7 +517,7 @@
             // 
             this.panelcard35.Enabled = false;
             this.panelcard35.Image = ((System.Drawing.Image)(resources.GetObject("panelcard35.Image")));
-            this.panelcard35.Location = new System.Drawing.Point(74, 111);
+            this.panelcard35.Location = new System.Drawing.Point(77, 103);
             this.panelcard35.Name = "panelcard35";
             this.panelcard35.Size = new System.Drawing.Size(70, 50);
             this.panelcard35.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -526,7 +528,7 @@
             // 
             this.panelcard34.Enabled = false;
             this.panelcard34.Image = ((System.Drawing.Image)(resources.GetObject("panelcard34.Image")));
-            this.panelcard34.Location = new System.Drawing.Point(74, 136);
+            this.panelcard34.Location = new System.Drawing.Point(77, 128);
             this.panelcard34.Name = "panelcard34";
             this.panelcard34.Size = new System.Drawing.Size(70, 50);
             this.panelcard34.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -537,7 +539,7 @@
             // 
             this.panelcard33.Enabled = false;
             this.panelcard33.Image = ((System.Drawing.Image)(resources.GetObject("panelcard33.Image")));
-            this.panelcard33.Location = new System.Drawing.Point(74, 161);
+            this.panelcard33.Location = new System.Drawing.Point(77, 153);
             this.panelcard33.Name = "panelcard33";
             this.panelcard33.Size = new System.Drawing.Size(70, 50);
             this.panelcard33.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -548,7 +550,7 @@
             // 
             this.panelcard32.Enabled = false;
             this.panelcard32.Image = ((System.Drawing.Image)(resources.GetObject("panelcard32.Image")));
-            this.panelcard32.Location = new System.Drawing.Point(74, 186);
+            this.panelcard32.Location = new System.Drawing.Point(77, 178);
             this.panelcard32.Name = "panelcard32";
             this.panelcard32.Size = new System.Drawing.Size(70, 50);
             this.panelcard32.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -559,7 +561,7 @@
             // 
             this.panelcard31.Enabled = false;
             this.panelcard31.Image = ((System.Drawing.Image)(resources.GetObject("panelcard31.Image")));
-            this.panelcard31.Location = new System.Drawing.Point(74, 211);
+            this.panelcard31.Location = new System.Drawing.Point(77, 203);
             this.panelcard31.Name = "panelcard31";
             this.panelcard31.Size = new System.Drawing.Size(70, 50);
             this.panelcard31.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -585,6 +587,28 @@
             this.panel3.Size = new System.Drawing.Size(147, 259);
             this.panel3.TabIndex = 53;
             // 
+            // panelcard39
+            // 
+            this.panelcard39.Enabled = false;
+            this.panelcard39.Image = ((System.Drawing.Image)(resources.GetObject("panelcard39.Image")));
+            this.panelcard39.Location = new System.Drawing.Point(77, 3);
+            this.panelcard39.Name = "panelcard39";
+            this.panelcard39.Size = new System.Drawing.Size(70, 50);
+            this.panelcard39.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard39.TabIndex = 56;
+            this.panelcard39.TabStop = false;
+            // 
+            // panelcard38
+            // 
+            this.panelcard38.Enabled = false;
+            this.panelcard38.Image = ((System.Drawing.Image)(resources.GetObject("panelcard38.Image")));
+            this.panelcard38.Location = new System.Drawing.Point(77, 28);
+            this.panelcard38.Name = "panelcard38";
+            this.panelcard38.Size = new System.Drawing.Size(70, 50);
+            this.panelcard38.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard38.TabIndex = 46;
+            this.panelcard38.TabStop = false;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.panelcard19);
@@ -604,6 +628,105 @@
             this.panel1.Size = new System.Drawing.Size(147, 259);
             this.panel1.TabIndex = 54;
             // 
+            // panelcard19
+            // 
+            this.panelcard19.Enabled = false;
+            this.panelcard19.Image = ((System.Drawing.Image)(resources.GetObject("panelcard19.Image")));
+            this.panelcard19.Location = new System.Drawing.Point(0, 3);
+            this.panelcard19.Name = "panelcard19";
+            this.panelcard19.Size = new System.Drawing.Size(70, 50);
+            this.panelcard19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard19.TabIndex = 57;
+            this.panelcard19.TabStop = false;
+            // 
+            // panelcard18
+            // 
+            this.panelcard18.Enabled = false;
+            this.panelcard18.Image = ((System.Drawing.Image)(resources.GetObject("panelcard18.Image")));
+            this.panelcard18.Location = new System.Drawing.Point(0, 28);
+            this.panelcard18.Name = "panelcard18";
+            this.panelcard18.Size = new System.Drawing.Size(70, 50);
+            this.panelcard18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard18.TabIndex = 56;
+            this.panelcard18.TabStop = false;
+            // 
+            // panelcard17
+            // 
+            this.panelcard17.Enabled = false;
+            this.panelcard17.Image = ((System.Drawing.Image)(resources.GetObject("panelcard17.Image")));
+            this.panelcard17.Location = new System.Drawing.Point(0, 53);
+            this.panelcard17.Name = "panelcard17";
+            this.panelcard17.Size = new System.Drawing.Size(70, 50);
+            this.panelcard17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard17.TabIndex = 46;
+            this.panelcard17.TabStop = false;
+            // 
+            // panelcard16
+            // 
+            this.panelcard16.Enabled = false;
+            this.panelcard16.Image = ((System.Drawing.Image)(resources.GetObject("panelcard16.Image")));
+            this.panelcard16.Location = new System.Drawing.Point(0, 78);
+            this.panelcard16.Name = "panelcard16";
+            this.panelcard16.Size = new System.Drawing.Size(70, 50);
+            this.panelcard16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard16.TabIndex = 47;
+            this.panelcard16.TabStop = false;
+            // 
+            // panelcard15
+            // 
+            this.panelcard15.Enabled = false;
+            this.panelcard15.Image = ((System.Drawing.Image)(resources.GetObject("panelcard15.Image")));
+            this.panelcard15.Location = new System.Drawing.Point(0, 103);
+            this.panelcard15.Name = "panelcard15";
+            this.panelcard15.Size = new System.Drawing.Size(70, 50);
+            this.panelcard15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard15.TabIndex = 48;
+            this.panelcard15.TabStop = false;
+            // 
+            // panelcard14
+            // 
+            this.panelcard14.Enabled = false;
+            this.panelcard14.Image = ((System.Drawing.Image)(resources.GetObject("panelcard14.Image")));
+            this.panelcard14.Location = new System.Drawing.Point(0, 128);
+            this.panelcard14.Name = "panelcard14";
+            this.panelcard14.Size = new System.Drawing.Size(70, 50);
+            this.panelcard14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard14.TabIndex = 49;
+            this.panelcard14.TabStop = false;
+            // 
+            // panelcard13
+            // 
+            this.panelcard13.Enabled = false;
+            this.panelcard13.Image = ((System.Drawing.Image)(resources.GetObject("panelcard13.Image")));
+            this.panelcard13.Location = new System.Drawing.Point(0, 153);
+            this.panelcard13.Name = "panelcard13";
+            this.panelcard13.Size = new System.Drawing.Size(70, 50);
+            this.panelcard13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard13.TabIndex = 50;
+            this.panelcard13.TabStop = false;
+            // 
+            // panelcard12
+            // 
+            this.panelcard12.Enabled = false;
+            this.panelcard12.Image = ((System.Drawing.Image)(resources.GetObject("panelcard12.Image")));
+            this.panelcard12.Location = new System.Drawing.Point(0, 178);
+            this.panelcard12.Name = "panelcard12";
+            this.panelcard12.Size = new System.Drawing.Size(70, 50);
+            this.panelcard12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard12.TabIndex = 51;
+            this.panelcard12.TabStop = false;
+            // 
+            // panelcard11
+            // 
+            this.panelcard11.Enabled = false;
+            this.panelcard11.Image = ((System.Drawing.Image)(resources.GetObject("panelcard11.Image")));
+            this.panelcard11.Location = new System.Drawing.Point(0, 203);
+            this.panelcard11.Name = "panelcard11";
+            this.panelcard11.Size = new System.Drawing.Size(70, 50);
+            this.panelcard11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.panelcard11.TabIndex = 52;
+            this.panelcard11.TabStop = false;
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.panelcard21);
@@ -622,127 +745,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(250, 146);
             this.panel2.TabIndex = 55;
-            // 
-            // panelcard17
-            // 
-            this.panelcard17.Enabled = false;
-            this.panelcard17.Image = ((System.Drawing.Image)(resources.GetObject("panelcard17.Image")));
-            this.panelcard17.Location = new System.Drawing.Point(0, 61);
-            this.panelcard17.Name = "panelcard17";
-            this.panelcard17.Size = new System.Drawing.Size(70, 50);
-            this.panelcard17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard17.TabIndex = 46;
-            this.panelcard17.TabStop = false;
-            // 
-            // panelcard16
-            // 
-            this.panelcard16.Enabled = false;
-            this.panelcard16.Image = ((System.Drawing.Image)(resources.GetObject("panelcard16.Image")));
-            this.panelcard16.Location = new System.Drawing.Point(0, 86);
-            this.panelcard16.Name = "panelcard16";
-            this.panelcard16.Size = new System.Drawing.Size(70, 50);
-            this.panelcard16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard16.TabIndex = 47;
-            this.panelcard16.TabStop = false;
-            // 
-            // panelcard15
-            // 
-            this.panelcard15.Enabled = false;
-            this.panelcard15.Image = ((System.Drawing.Image)(resources.GetObject("panelcard15.Image")));
-            this.panelcard15.Location = new System.Drawing.Point(0, 111);
-            this.panelcard15.Name = "panelcard15";
-            this.panelcard15.Size = new System.Drawing.Size(70, 50);
-            this.panelcard15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard15.TabIndex = 48;
-            this.panelcard15.TabStop = false;
-            // 
-            // panelcard14
-            // 
-            this.panelcard14.Enabled = false;
-            this.panelcard14.Image = ((System.Drawing.Image)(resources.GetObject("panelcard14.Image")));
-            this.panelcard14.Location = new System.Drawing.Point(0, 136);
-            this.panelcard14.Name = "panelcard14";
-            this.panelcard14.Size = new System.Drawing.Size(70, 50);
-            this.panelcard14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard14.TabIndex = 49;
-            this.panelcard14.TabStop = false;
-            // 
-            // panelcard13
-            // 
-            this.panelcard13.Enabled = false;
-            this.panelcard13.Image = ((System.Drawing.Image)(resources.GetObject("panelcard13.Image")));
-            this.panelcard13.Location = new System.Drawing.Point(0, 161);
-            this.panelcard13.Name = "panelcard13";
-            this.panelcard13.Size = new System.Drawing.Size(70, 50);
-            this.panelcard13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard13.TabIndex = 50;
-            this.panelcard13.TabStop = false;
-            // 
-            // panelcard12
-            // 
-            this.panelcard12.Enabled = false;
-            this.panelcard12.Image = ((System.Drawing.Image)(resources.GetObject("panelcard12.Image")));
-            this.panelcard12.Location = new System.Drawing.Point(0, 186);
-            this.panelcard12.Name = "panelcard12";
-            this.panelcard12.Size = new System.Drawing.Size(70, 50);
-            this.panelcard12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard12.TabIndex = 51;
-            this.panelcard12.TabStop = false;
-            // 
-            // panelcard11
-            // 
-            this.panelcard11.Enabled = false;
-            this.panelcard11.Image = ((System.Drawing.Image)(resources.GetObject("panelcard11.Image")));
-            this.panelcard11.Location = new System.Drawing.Point(0, 211);
-            this.panelcard11.Name = "panelcard11";
-            this.panelcard11.Size = new System.Drawing.Size(70, 50);
-            this.panelcard11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard11.TabIndex = 52;
-            this.panelcard11.TabStop = false;
-            // 
-            // panelcard38
-            // 
-            this.panelcard38.Enabled = false;
-            this.panelcard38.Image = ((System.Drawing.Image)(resources.GetObject("panelcard38.Image")));
-            this.panelcard38.Location = new System.Drawing.Point(74, 36);
-            this.panelcard38.Name = "panelcard38";
-            this.panelcard38.Size = new System.Drawing.Size(70, 50);
-            this.panelcard38.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard38.TabIndex = 46;
-            this.panelcard38.TabStop = false;
-            // 
-            // panelcard18
-            // 
-            this.panelcard18.Enabled = false;
-            this.panelcard18.Image = ((System.Drawing.Image)(resources.GetObject("panelcard18.Image")));
-            this.panelcard18.Location = new System.Drawing.Point(0, 36);
-            this.panelcard18.Name = "panelcard18";
-            this.panelcard18.Size = new System.Drawing.Size(70, 50);
-            this.panelcard18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard18.TabIndex = 56;
-            this.panelcard18.TabStop = false;
-            // 
-            // panelcard39
-            // 
-            this.panelcard39.Enabled = false;
-            this.panelcard39.Image = ((System.Drawing.Image)(resources.GetObject("panelcard39.Image")));
-            this.panelcard39.Location = new System.Drawing.Point(74, 11);
-            this.panelcard39.Name = "panelcard39";
-            this.panelcard39.Size = new System.Drawing.Size(70, 50);
-            this.panelcard39.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard39.TabIndex = 56;
-            this.panelcard39.TabStop = false;
-            // 
-            // panelcard19
-            // 
-            this.panelcard19.Enabled = false;
-            this.panelcard19.Image = ((System.Drawing.Image)(resources.GetObject("panelcard19.Image")));
-            this.panelcard19.Location = new System.Drawing.Point(0, 11);
-            this.panelcard19.Name = "panelcard19";
-            this.panelcard19.Size = new System.Drawing.Size(70, 50);
-            this.panelcard19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.panelcard19.TabIndex = 57;
-            this.panelcard19.TabStop = false;
             // 
             // FormGiaoDien
             // 
@@ -812,10 +814,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelcard31)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard39)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard38)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard19)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelcard18)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard17)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard15)).EndInit();
@@ -823,10 +827,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelcard13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard38)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard18)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard39)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.panelcard19)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

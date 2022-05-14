@@ -76,7 +76,10 @@ namespace Player
             while (thisPlayerID != nextPlayerID)
             {
                 // update other player panel
-                UpdatePanelPlayers(res, nextPlayerID, panelNumber);
+                Invoke(new Action(() =>
+                {
+                    UpdatePanelPlayers(res, nextPlayerID, panelNumber);
+                }));
 
                 // update next value
                 panelNumber++;
@@ -84,7 +87,10 @@ namespace Player
             }
 
             // udpate main player
-            UpdateMainPlayer(res);
+            Invoke(new Action(() =>
+            {
+               UpdateMainPlayer(res);
+            }));
         }
 
         private void UpdatePanelPlayers(ResponseForm res, int otherPlayerID, int panelNumber)
@@ -321,6 +327,32 @@ namespace Player
                 _player = new Player(playerName);
                 this.Show();
             }
+        }
+
+
+        //
+        //
+        /// Handle button
+        private void start_btn_Click(object sender, EventArgs e)
+        {
+            var res = _player.RequestStartGame();
+            SendRequest(res);
+        }
+
+        private void rerange_btn_Click(object sender, EventArgs e)
+        {
+            // rerange cards
+            var tempCards = PhomTool.OptimizePhom(_player.GetPlayerHand());
+            var tempHand = new List<Card>();
+
+            foreach (var cards in tempCards)
+                tempHand.AddRange(cards.ToList());
+
+            // set up cards on hand
+            _player.SetPlayerHand(tempHand.ToArray());
+
+            // update display
+            UpdateHandCards();
         }
     }
 }

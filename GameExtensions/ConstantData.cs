@@ -24,7 +24,7 @@ namespace GameExtensions
         // contain cards suit info
         public static readonly string[] cardSuit = new string[]
         {
-            "clubs", "diamonds", "heards", "spades"
+            "clubs", "diamonds", "hearts", "spades"
         };
 
     }

@@ -30,7 +30,7 @@ namespace Server
                 else
                 {
                     result[i] = deck.Take(9).ToArray();
-                    deck = deck.Skip(9).Take(deck.Length - 9).ToArray();
+                    deck = deck.Skip(9).Take(deck.Length - 9).ToList().Append(null).ToArray();
                 }
             }
 

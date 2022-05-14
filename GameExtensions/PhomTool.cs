@@ -18,6 +18,7 @@ namespace GameExtensions
             // líst contain phom and trash
             List<List<Card>> phom = new List<List<Card>>();
             var trash = deck.ToList();
+            trash.RemoveAll(a => a is null);
 
             // create value table
             Dictionary<int, List<Card>> valueTable = new Dictionary<int, List<Card>>();
