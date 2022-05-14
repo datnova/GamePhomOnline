@@ -45,10 +45,16 @@ namespace GameExtensions
             // add remain card in trash to phom if possible
             TryAddTrash(phom, trash);
 
-            // sort trash
-            trash = trash.OrderByDescending(a => a.value).ToList();
-
+            // add trash to return every card
             phom.Add(trash);
+
+            // sort cards
+            for (int i = 0; i < phom.Count(); i++)
+            {
+                if (phom[i] != null && phom[i].Count() != 0)
+                    phom[i] = phom[i].OrderByDescending(a => a.value).ToList();
+            }
+
             return phom.Select(x => x.ToArray()).ToArray();
         }
 

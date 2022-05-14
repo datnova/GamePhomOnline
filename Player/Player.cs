@@ -45,46 +45,59 @@ namespace Player
         /// Handle and update game from response 
         public bool HandleResponse(ResponseForm res)
         {
-            if (res.status == "success")
+            // if fail return false
+            if (res.status != "success") return false;
+
+            // get player hand or pull card
+            if (res.cardPull != null && res.cardPull.Length != 0)
             {
-                // get player hand or pull card
-                if (res.cardPull != null && res.cardPull.Length != 0)
+                // update player hand
+                if (_playerHand is null)
+                    _playerHand = res.cardPull;
+                // update draw card
+                else if (res.senderID == _playersInfo.id)
                 {
-                    // update draw card
-                    if (res.cardPull.Length == 1)
-                        _playerHand[res.senderID] = res.cardPull[0];
-                    // update player hand cards
-                    else
-                        _playerHand = res.cardPull;
-                }
-                // check id already assign
-                else if (_playersInfo.id == -1)
-                {
-                    foreach (var playerInfo in res.playerInfo)
+                    for (int i = 0; i < 10; i++)
                     {
-                        if (playerInfo is null) continue;
-                        if (playerInfo.name == _playersInfo.name)
-                        {
-                            _playersInfo = playerInfo;
-                            break;
-                        }
+                        if (_playerHand[i] != null) continue;
+                        _playerHand[i] = res.cardPull[0];
+                        break;
                     }
                 }
-
-                // update card holder
-                if (res.cardHolder != null)
-                    _cardHolder[_currentID] = res.cardHolder;
-
-                // update game info
-                _stateID = res.stateID;
-                _currentID = res.currentID;
-                _currentRound = res.currentRound;
-                _hostID = res.hostID;
-                _numberPlayer = res.numberPlayer;
-
-                return true;
             }
-            else return false;
+            // check id already assign
+            else if (_playersInfo.id == -1)
+            {
+                foreach (var playerInfo in res.playerInfo)
+                {
+                    if (playerInfo is null) continue;
+                    if (playerInfo.name == _playersInfo.name)
+                    {
+                        _playersInfo = playerInfo;
+                        break;
+                    }
+                }
+            }
+
+            // update card holder
+            if (res.cardHolder != null)
+                _cardHolder[_currentID] = res.cardHolder;
+
+            // set up default if reset game
+            if (_stateID == 0)
+            {
+                _cardHolder = new Card[4];
+                _playerHand = null;
+            }
+
+            // update game info
+            _stateID = res.stateID;
+            _currentID = res.currentID;
+            _currentRound = res.currentRound;
+            _hostID = res.hostID;
+            _numberPlayer = res.numberPlayer;
+
+            return true;
         }
 
 
@@ -145,7 +158,9 @@ namespace Player
         {
             if (_stateID != 2 || _currentID != _playersInfo.id) return null;
 
-            int cardIndex = Array.IndexOf(_playerHand, card);
+            int cardIndex = Array.FindIndex(_playerHand, a => 
+                a != null && a.pip == card.pip && a.suit == card.suit);
+
             if (cardIndex == -1) return null;
             else _playerHand[cardIndex] = null;
 
@@ -161,11 +176,20 @@ namespace Player
         {
             if (_stateID != 3 || _currentID != _playersInfo.id) return null;
 
-            var res = new RequestForm();
-            res.playerName = _playersInfo.name;
-            res.playerID = _playersInfo.id;
-            res.sendCard = (takeFromCardHolder) ? _cardHolder[_playersInfo.id] : null;
-            return res;
+            var req = new RequestForm();
+            req.playerName = _playersInfo.name;
+            req.stateID = _stateID;
+            req.playerID = _playersInfo.id;
+
+            // get card from card holder
+            var cardHolderIndex = (_playersInfo.id + 3) % 4; // (decrease 1)
+            while (cardHolderIndex != _playersInfo.id)
+            {
+                if (_cardHolder[cardHolderIndex] != null) break;
+                cardHolderIndex = (cardHolderIndex + 3) % 4;
+            }
+            req.sendCard = (takeFromCardHolder) ? _cardHolder[cardHolderIndex] : null;
+            return req;
         }
     
         public RequestForm RequestStartGame()
@@ -181,7 +205,7 @@ namespace Player
 
         public RequestForm RequestRestartGame()
         {
-            if (_stateID != 4) return null;
+            if (_currentRound != 5 || _playersInfo.id != _hostID) return null;
 
             var res = new RequestForm();
             res.playerName = _playersInfo.name;

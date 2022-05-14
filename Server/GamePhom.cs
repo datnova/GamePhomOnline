@@ -298,7 +298,8 @@ namespace Server
 
             // if card not in hand
             int indexCard = Array.FindIndex(_playersHand[playerRequest.playerID], 
-                a => a.pip == playerRequest.sendCard.pip && 
+                a => a != null &&
+                     a.pip == playerRequest.sendCard.pip && 
                      a.suit == playerRequest.sendCard.suit);
 
             if (indexCard == -1)
@@ -314,14 +315,17 @@ namespace Server
             _playersHand[playerRequest.playerID][indexCard] = null; 
             _cardHolder = playerRequest.sendCard;
 
+            // update next player
             while (true)
             {
                 _currentID = (_currentID + 1) % 4;
                 if (!(_playersInfo[_currentID] is null)) break;
             }
 
+            // set state id
             _stateID = 3;
 
+            // get basic info and send back
             res = GetGameInfo();
             res.senderID = playerRequest.playerID;
             res.cardHolder = _cardHolder;
@@ -354,17 +358,12 @@ namespace Server
                     return res;
                 }
 
-                // update value
+                // update stateID and round
                 _stateID = 2;
                 if (_currentID == _hostID)
                 {
                     _currentRound++;
                     if (_currentRound == 5) _stateID = 4;
-                }
-                while (_currentRound != 5)
-                {
-                    _currentID = (_currentID + 1) % 4;
-                    if (!(_playersInfo[_currentID] is null)) break;
                 }
 
                 _drawDeck[Array.IndexOf(_drawDeck, card)] = null;
@@ -379,7 +378,8 @@ namespace Server
 
             // take card from card holder
             // if card not in card holder
-            if (playerRequest.sendCard != _cardHolder)
+            if (playerRequest.sendCard.pip != _cardHolder.pip && 
+                playerRequest.sendCard.suit != _cardHolder.suit)
             {
                 res.status = "fail";
                 res.receiveID = playerRequest.playerID;
@@ -396,11 +396,6 @@ namespace Server
                 {
                     _currentRound++;
                     if (_currentRound == 5) _stateID = 4;
-                }
-                while (_currentRound != 5)
-                {
-                    _currentID = (_currentID + 1) % 4;
-                    if (!(_playersInfo[_currentID] is null)) break;
                 }
 
                 // take card from card holder

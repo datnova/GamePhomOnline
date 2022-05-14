@@ -79,10 +79,7 @@ namespace Player
             while (thisPlayerID != nextPlayerID)
             {
                 // update other player panel
-                Invoke(new Action(() =>
-                {
-                    DisplayPanelPlayers(res, nextPlayerID, panelNumber);
-                }));
+                Invoke(new Action(() => DisplayPanelPlayers(res, nextPlayerID, panelNumber)));
 
                 // update next value
                 panelNumber++;
@@ -90,10 +87,7 @@ namespace Player
             }
 
             // udpate main player
-            Invoke(new Action(() =>
-            {
-                DisplayMainPlayer(res);
-            }));
+            Invoke(new Action(() => DisplayMainPlayer(res)));
         }
 
         // display panel other player
@@ -123,7 +117,8 @@ namespace Player
 
                 // set card holder
                 var tempCardHolder = (PictureBox)tempPanel.Controls["cardholder" + panelNumber];
-                if (_player.GetCardHolder()[otherPlayerID] is null) tempCardHolder.Image = null;
+                if (_player.GetCardHolder()[otherPlayerID] is null) tempCardHolder.Hide();
+                else if (_player.GetGameInfo().stateID == 0) tempCardHolder.Hide();
                 else
                 {
                     string nameCard = _player.GetCardHolder()[otherPlayerID].ToString();
@@ -137,7 +132,7 @@ namespace Player
                 for (int i = 1; i < 10; i++)
                 {
                     var tempPanelCard = (PictureBox)tempPanel.Controls["panelcard" + panelNumber + i];
-                    if (!IsCardOnHand) tempPanelCard.Hide();
+                    if (!IsCardOnHand || _player.GetGameInfo().stateID == 0) tempPanelCard.Hide();
                     else tempPanelCard.Show();
                 }
             }));
@@ -150,11 +145,7 @@ namespace Player
             Invoke(new Action(() =>
             {
                 // display name + is host + color turn
-                main_name.Text = playerName;
-                main_name.Text += (res.hostID == _player.GetPlayerInfo().id) ? " (host)" : String.Empty;
-                main_name.BackColor =
-                    (res.currentID == _player.GetPlayerInfo().id) ?
-                    Color.Green : Color.Orange;
+                DisplayNameTag(res);
 
                 // display big deck
                 DisplayBigDeck();
@@ -162,12 +153,30 @@ namespace Player
                 // display main card holder
                 DisplayMainCardHolder();
 
+                // display card choose
+                DisplayCardChoose();
+
                 // display display button
                 DisplayButton();
 
                 // display display card on hand
                 DisplayHandCards();
+
+                // display game info table
+                DisplayGameInfo();
+
+                // display game score
+                DisplayGamePoint(res);
             }));
+        }
+
+        private void DisplayNameTag(ResponseForm res)
+        {
+            main_name.Text = playerName;
+            main_name.Text += (res.hostID == _player.GetPlayerInfo().id) ? " (host)" : String.Empty;
+            main_name.BackColor =
+                (res.currentID == _player.GetPlayerInfo().id) ?
+                Color.Green : Color.Orange;
         }
 
         private void DisplayBigDeck()
@@ -181,9 +190,11 @@ namespace Player
         private void DisplayMainCardHolder()
         {
             // set card holder
-            if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) mainholder.Image = null;
+            if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) mainholder.Hide();
+            else if (_player.GetGameInfo().stateID == 0) mainholder.Hide();
             else
             {
+                mainholder.Show();
                 string nameCard = _player.GetCardHolder()[_player.GetPlayerInfo().id].ToString();
                 mainholder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
             }
@@ -195,7 +206,7 @@ namespace Player
             var gameState = _player.GetGameInfo();
 
             // check rerange button
-            if (_player.GetPlayerHand() != null) rerange_btn.Show();
+            if (_player.GetPlayerHand() != null && _player.GetGameInfo().stateID != 0) rerange_btn.Show();
             else rerange_btn.Hide();
 
             // check start button
@@ -226,7 +237,7 @@ namespace Player
         private void DisplayHandCards()
         {
             // check are there cards in hand if not then hide
-            if (_player.GetPlayerHand() is null)
+            if (_player.GetPlayerHand() is null || _player.GetGameInfo().stateID == 0)
             {
                 for (int i = 0; i < 10; i++)
                 {
@@ -258,6 +269,44 @@ namespace Player
             }
         }
 
+        private void DisplayGameInfo()
+        {
+            if (_player.GetGameInfo().stateID == 0)
+            {
+                info_game_table.Hide();
+                return;
+            }
+
+            info_game_table.Show();
+            info_game_table.Text = $"state: {ConstantData.gameState[_player.GetGameInfo().stateID]}\r\n";
+            info_game_table.Text += $"current id: {_player.GetGameInfo().currentID}\r\n";
+            info_game_table.Text += $"current round: {_player.GetGameInfo().currentRound}\r\n";
+        }
+
+        private void DisplayGamePoint(ResponseForm res)
+        {
+            // only update at wait player
+            if (res.stateID != 0) return;
+
+            // get list player
+            var tempPlayer = res.playerInfo.Where(a => a != null);
+            tempPlayer = tempPlayer.OrderBy(a => a.point).ToArray();
+
+            // set value to point table
+            point_table.Clear(); 
+            foreach (var player in tempPlayer)
+            {
+                if (player is null) continue;
+                point_table.Text += $"{player.name}: {player.point}\r\n";
+            }
+        }
+
+        private void DisplayCardChoose()
+        {
+            if (_cardChoose is null ||
+                _player.GetGameInfo().stateID == 0) card_choose.Hide();
+            else card_choose.Show();
+        }
 
         //
         //
@@ -294,6 +343,15 @@ namespace Player
             }
         }
 
+        // send request to end game
+        private void HandleEndGame()
+        {
+            var req = _player.RequestRestartGame();
+            if (req is null) return;
+
+            SendRequest(req);
+        }
+
         // run game
         private void RunGame()
         {
@@ -316,6 +374,9 @@ namespace Player
                     MessageBox.Show(res.messages);
                     continue;
                 }
+
+                // check end game to reset
+                HandleEndGame();
 
                 // update display
                 UpdateDisplay(res, _player.GetPlayerInfo().id);
@@ -371,6 +432,33 @@ namespace Player
             Invoke(new Action(DisplayHandCards));
         }
 
+        private void play_btn_Click(object sender, EventArgs e)
+        {
+            var req = _player.RequestPlayCard(_cardChoose);
+            if (req is null)
+            {
+                MessageBox.Show("Error");
+                return;
+            }
+
+            _cardChoose = null;
+            card_choose.Image = null;
+            SendRequest(req);
+        }
+
+        // take card click
+        private void big_deck_Click(object sender, EventArgs e)
+        {
+            var req = _player.RequestTakeCard(takeFromCardHolder: false);
+            SendRequest(req);
+        }
+
+        private void take_btn_Click(object sender, EventArgs e)
+        {
+            var req = _player.RequestTakeCard(takeFromCardHolder: true);
+            SendRequest(req);
+        }
+
 
         //
         //
@@ -395,21 +483,7 @@ namespace Player
 
             // update display card choose
             card_choose.Image = mainCard.Image;
-            //card_choose.Show();
-        }
-
-        private void play_btn_Click(object sender, EventArgs e)
-        {
-            var req = _player.RequestPlayCard(_cardChoose);
-            if (req is null)
-            {
-                MessageBox.Show("Error");
-                return;
-            }
-
-            _cardChoose = null;
-            card_choose.Image = null;
-            SendRequest(req);
+            card_choose.Show();
         }
     }
 }
