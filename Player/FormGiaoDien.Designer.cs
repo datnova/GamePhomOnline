@@ -86,6 +86,7 @@
             this.panelcard12 = new System.Windows.Forms.PictureBox();
             this.panelcard11 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.card_choose = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.big_deck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -135,6 +136,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelcard12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelcard11)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.card_choose)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox4
@@ -165,6 +167,7 @@
             this.play_btn.TabIndex = 7;
             this.play_btn.Text = "Đánh bài";
             this.play_btn.UseVisualStyleBackColor = true;
+            this.play_btn.Click += new System.EventHandler(this.play_btn_Click);
             // 
             // rerange_btn
             // 
@@ -196,6 +199,7 @@
             this.big_deck.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.big_deck.TabIndex = 14;
             this.big_deck.TabStop = false;
+            this.big_deck.Visible = false;
             // 
             // pictureBox2
             // 
@@ -399,6 +403,7 @@
             this.main_card9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card9.TabIndex = 36;
             this.main_card9.TabStop = false;
+            this.main_card9.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card8
             // 
@@ -408,6 +413,7 @@
             this.main_card8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card8.TabIndex = 35;
             this.main_card8.TabStop = false;
+            this.main_card8.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card7
             // 
@@ -417,6 +423,7 @@
             this.main_card7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card7.TabIndex = 34;
             this.main_card7.TabStop = false;
+            this.main_card7.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card6
             // 
@@ -426,6 +433,7 @@
             this.main_card6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card6.TabIndex = 33;
             this.main_card6.TabStop = false;
+            this.main_card6.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card5
             // 
@@ -435,6 +443,7 @@
             this.main_card5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card5.TabIndex = 32;
             this.main_card5.TabStop = false;
+            this.main_card5.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card4
             // 
@@ -444,6 +453,7 @@
             this.main_card4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card4.TabIndex = 31;
             this.main_card4.TabStop = false;
+            this.main_card4.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card3
             // 
@@ -453,6 +463,7 @@
             this.main_card3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card3.TabIndex = 30;
             this.main_card3.TabStop = false;
+            this.main_card3.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card2
             // 
@@ -462,6 +473,7 @@
             this.main_card2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card2.TabIndex = 29;
             this.main_card2.TabStop = false;
+            this.main_card2.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card1
             // 
@@ -471,6 +483,7 @@
             this.main_card1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card1.TabIndex = 28;
             this.main_card1.TabStop = false;
+            this.main_card1.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // main_card10
             // 
@@ -480,6 +493,7 @@
             this.main_card10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card10.TabIndex = 37;
             this.main_card10.TabStop = false;
+            this.main_card10.Click += new System.EventHandler(this.SetCardChoose);
             // 
             // start_btn
             // 
@@ -570,6 +584,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.cardholder3);
             this.panel3.Controls.Add(this.panelcard39);
             this.panel3.Controls.Add(this.panelcard38);
             this.panel3.Controls.Add(this.panelcard37);
@@ -579,13 +594,13 @@
             this.panel3.Controls.Add(this.panelcard33);
             this.panel3.Controls.Add(this.panelcard32);
             this.panel3.Controls.Add(this.panelcard31);
-            this.panel3.Controls.Add(this.cardholder3);
             this.panel3.Controls.Add(this.pictureBox5);
             this.panel3.Controls.Add(this.name3);
             this.panel3.Location = new System.Drawing.Point(12, 88);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(147, 259);
             this.panel3.TabIndex = 53;
+            this.panel3.Visible = false;
             // 
             // panelcard39
             // 
@@ -611,11 +626,11 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.cardholder1);
             this.panel1.Controls.Add(this.panelcard19);
             this.panel1.Controls.Add(this.panelcard18);
             this.panel1.Controls.Add(this.panelcard17);
             this.panel1.Controls.Add(this.panelcard16);
-            this.panel1.Controls.Add(this.cardholder1);
             this.panel1.Controls.Add(this.panelcard15);
             this.panel1.Controls.Add(this.name1);
             this.panel1.Controls.Add(this.panelcard14);
@@ -627,6 +642,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(147, 259);
             this.panel1.TabIndex = 54;
+            this.panel1.Visible = false;
             // 
             // panelcard19
             // 
@@ -729,6 +745,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.cardholder2);
             this.panel2.Controls.Add(this.panelcard21);
             this.panel2.Controls.Add(this.panelcard22);
             this.panel2.Controls.Add(this.panelcard23);
@@ -740,17 +757,27 @@
             this.panel2.Controls.Add(this.panelcard29);
             this.panel2.Controls.Add(this.name2);
             this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.cardholder2);
             this.panel2.Location = new System.Drawing.Point(276, 12);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(250, 146);
             this.panel2.TabIndex = 55;
+            this.panel2.Visible = false;
+            // 
+            // card_choose
+            // 
+            this.card_choose.Location = new System.Drawing.Point(233, 329);
+            this.card_choose.Name = "card_choose";
+            this.card_choose.Size = new System.Drawing.Size(50, 70);
+            this.card_choose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.card_choose.TabIndex = 56;
+            this.card_choose.TabStop = false;
             // 
             // FormGiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(802, 412);
+            this.Controls.Add(this.card_choose);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.start_btn);
@@ -829,6 +856,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelcard11)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.card_choose)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -892,5 +920,6 @@
         private System.Windows.Forms.PictureBox panelcard18;
         private System.Windows.Forms.PictureBox panelcard39;
         private System.Windows.Forms.PictureBox panelcard19;
+        private System.Windows.Forms.PictureBox card_choose;
     }
 }

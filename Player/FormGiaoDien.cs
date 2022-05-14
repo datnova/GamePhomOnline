@@ -18,12 +18,15 @@ namespace Player
 {
     public partial class FormGiaoDien : Form
     {
-        private static Player _player = null;
-        private static TcpClient _client = null;
-        private static int _port = 55555;
         private static string _ipAdd = "127.0.0.1";
+        private static int _port = 55555;
+        private static TcpClient _client = null;
         private static byte[] _buffer = new byte[1024];
-        public  string playerName = String.Empty;
+
+        private static Player _player = null;
+        public string playerName = String.Empty;
+
+        private static Card _cardChoose = null;
 
         public FormGiaoDien()
         {
@@ -124,6 +127,7 @@ namespace Player
                 {
                     string nameCard = _player.GetCardHolder()[otherPlayerID].ToString();
                     tempCardHolder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
+                    tempCardHolder.Show();
                 }
 
                 // set card on hand
@@ -151,11 +155,11 @@ namespace Player
                     Color.Green : Color.Orange;
 
                 // set card holder
-                if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) cardholder3.Image = null;
+                if (_player.GetCardHolder()[_player.GetPlayerInfo().id] is null) mainholder.Image = null;
                 else
                 {
                     string nameCard = _player.GetCardHolder()[_player.GetPlayerInfo().id].ToString();
-                    cardholder3.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
+                    mainholder.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
                 }
 
                 // set display big deck
@@ -163,6 +167,7 @@ namespace Player
                 if (tempStateID == 2 || tempStateID == 3) big_deck.Show();
                 else big_deck.Hide();
             }));
+
 
             // update display button
             UpdateButton();
@@ -217,7 +222,7 @@ namespace Player
                 {
                     // get picture box element
                     var tempPictureBox = (PictureBox)Controls["main_card" + (i + 1)];
-                    tempPictureBox.Image = null;
+                    tempPictureBox.Hide();
                 }
 
                 return;
@@ -236,6 +241,7 @@ namespace Player
                 else
                 {
                     // display card
+                    tempPictureBox.Show();
                     string nameCard = playerHand[i].ToString();
                     tempPictureBox.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject(nameCard);
                 }
@@ -353,6 +359,47 @@ namespace Player
 
             // update display
             UpdateHandCards();
+        }
+
+
+        //
+        //
+        /// Handle choosing cards.
+        void SetCardChoose(object sender, EventArgs e)
+        {
+            var mainCard = (PictureBox)sender;
+            // if no card
+            if (mainCard.Image is null)
+            {
+                card_choose.Image = null;
+                return;
+            }
+
+            // get card index 
+            string cardIndexStr = mainCard.Name.Substring(mainCard.Name.Length - 1);
+            int cardIndex = int.Parse(cardIndexStr);
+            cardIndex = (cardIndex == 0) ? 9 : cardIndex - 1;
+
+            // set card choose
+            _cardChoose = _player.GetPlayerHand()[cardIndex];
+
+            // update display card choose
+            card_choose.Image = mainCard.Image;
+            //card_choose.Show();
+        }
+
+        private void play_btn_Click(object sender, EventArgs e)
+        {
+            var req = _player.RequestPlayCard(_cardChoose);
+            if (req is null)
+            {
+                MessageBox.Show("Error");
+                return;
+            }
+
+            _cardChoose = null;
+            card_choose.Image = null;
+            SendRequest(req);
         }
     }
 }

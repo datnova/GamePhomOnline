@@ -50,8 +50,10 @@ namespace Player
                 // get player hand or pull card
                 if (res.cardPull != null && res.cardPull.Length != 0)
                 {
+                    // update draw card
                     if (res.cardPull.Length == 1)
-                        _cardHolder[_currentID] = res.cardPull[0];
+                        _playerHand[res.senderID] = res.cardPull[0];
+                    // update player hand cards
                     else
                         _playerHand = res.cardPull;
                 }
@@ -68,6 +70,10 @@ namespace Player
                         }
                     }
                 }
+
+                // update card holder
+                if (res.cardHolder != null)
+                    _cardHolder[_currentID] = res.cardHolder;
 
                 // update game info
                 _stateID = res.stateID;
@@ -144,6 +150,7 @@ namespace Player
             else _playerHand[cardIndex] = null;
 
             var res = new RequestForm();
+            res.stateID = _stateID;
             res.playerName = _playersInfo.name;
             res.playerID = _playersInfo.id;
             res.sendCard = card;

@@ -297,10 +297,9 @@ namespace Server
             }
 
             // if card not in hand
-            int indexCard = Array.IndexOf(
-                _playersHand[playerRequest.playerID],
-                playerRequest.sendCard
-                );
+            int indexCard = Array.FindIndex(_playersHand[playerRequest.playerID], 
+                a => a.pip == playerRequest.sendCard.pip && 
+                     a.suit == playerRequest.sendCard.suit);
 
             if (indexCard == -1)
             {
@@ -501,18 +500,7 @@ namespace Server
         private ResponseForm HandleUTrang(RequestForm playerRequest)
         {
             // check is there u trang
-            if (playerRequest.phom is null ||
-                playerRequest.phom.Length < 3)
-            {
-                // create repoonse form
-                var res = new ResponseForm();
-
-                res.status = "fail";
-                res.receiveID = playerRequest.playerID;
-                res.messages = "Invalid u trang";
-
-                return res;
-            }
+            if (playerRequest.phom is null) return null;
 
             // create temp cards
             List<Card> tempCards = new List<Card>();

@@ -45,6 +45,9 @@ namespace GameExtensions
             // add remain card in trash to phom if possible
             TryAddTrash(phom, trash);
 
+            // sort trash
+            trash = trash.OrderByDescending(a => a.value).ToList();
+
             phom.Add(trash);
             return phom.Select(x => x.ToArray()).ToArray();
         }
@@ -106,26 +109,27 @@ namespace GameExtensions
             var suits = valueTable[value]
                          .Select(x => x.suit)
                          .Intersect(valueTable[value - 1].Select(x => x.suit))
-                         .Intersect(valueTable[value - 2].Select(x => x.suit));
+                         .Intersect(valueTable[value - 2].Select(x => x.suit))
+                         .ToList();
 
             // return if no phom
             if (suits.Count() == 0) return;
 
             // get phom doc from each suit
-            foreach (var suit in suits)
+            for (int i = 0; i < suits.Count(); i++)
             {
                 // add phom
-                phom.Add(trash.Where(x => (x.suit == suit) && (value - x.value) <= 2).ToList());
+                phom.Add(trash.Where(x => (x.suit == suits[i]) && (value - x.value) <= 2).ToList());
 
                 // remove from value table
-                for (int i = 0; i < 3; i++)
+                for (int suitindex = 0; suitindex < 3; suitindex++)
                 {
-                    valueTable[value - i].RemoveAll(x => x.suit == suit);
-                    if (valueTable[value - i].Count == 0) valueTable.Remove(value - i);
+                    valueTable[value - suitindex].RemoveAll(x => x.suit == suits[i]);
+                    if (valueTable[value - suitindex].Count == 0) valueTable.Remove(value - suitindex);
                 }
 
                 // remove from trash
-                trash.RemoveAll(x => (x.suit == suit) && ((value - x.value) <= 2));
+                trash.RemoveAll(x => (x.suit == suits[i]) && ((value - x.value) <= 2));
             }
         }
 
