@@ -51,18 +51,33 @@ namespace Player
             // get player hand or pull card
             if (res.cardPull != null && res.cardPull.Length != 0)
             {
-                // update player hand
+                // update player hand when devide cards
                 if (_playerHand is null)
                     _playerHand = res.cardPull;
                 // update draw card
                 else if (res.senderID == _playersInfo.id)
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (_playerHand[i] != null) continue;
-                        _playerHand[i] = res.cardPull[0];
-                        break;
-                    }
+                    // add card pull to hand
+                    int tempNullIndex = _playerHand.ToList().FindIndex(a => a is null);
+                    if (tempNullIndex == -1) _playerHand = _playerHand.ToList().Append(res.cardPull[0]).ToArray();
+                    else _playerHand[tempNullIndex] = res.cardPull[0];
+
+                    // erase card holder
+                    var tempHolderIndex = _cardHolder.ToList()
+                                                     .FindIndex(a => a != null &&
+                                                                     a.pip == res.cardPull[0].pip &&
+                                                                     a.suit == res.cardPull[0].suit);
+                    if (tempHolderIndex != -1) _cardHolder[tempHolderIndex] = null;
+                }
+                // if other player pull card from card holder
+                else
+                {
+                    // erase card holder
+                    var tempHolderIndex = _cardHolder.ToList()
+                                                     .FindIndex(a => a != null &&
+                                                                     a.pip == res.cardPull[0].pip &&
+                                                                     a.suit == res.cardPull[0].suit);
+                    if (tempHolderIndex != -1) _cardHolder[tempHolderIndex] = null;
                 }
             }
             // check id already assign
@@ -79,7 +94,7 @@ namespace Player
                 }
             }
 
-            // update card holder
+            // update card holder when play card
             if (res.cardHolder != null)
                 _cardHolder[_currentID] = res.cardHolder;
 

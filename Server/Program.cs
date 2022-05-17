@@ -50,6 +50,11 @@ namespace Server
             }
         }
 
+
+        //
+        //
+        /// Handle player request
+        
         private static void HandleResponse(TcpClient clientSocket)
         {
             // get stream from socket
@@ -87,7 +92,6 @@ namespace Server
                     if (res.status == "success") SendBackResponse(res);
                 }
 
-                Console.WriteLine("Player disconnected");
                 HandleDisconnectSocket(clientSocket);
             }
             catch (IOException ex)
@@ -144,7 +148,7 @@ namespace Server
 
         //
         //
-        /// handle socket connection
+        /// check socket connection
 
         private static bool CheckConnection(TcpClient client)
         {
@@ -200,6 +204,7 @@ namespace Server
             // remove socket
             _clientSockets[tempID].Close();
             _clientSockets[tempID] = null;
+            Console.WriteLine("Player disconnected");
 
             // remove player and send response to nother players
             if (_gamePhom.RemovePlayer(tempID))

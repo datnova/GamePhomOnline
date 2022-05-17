@@ -352,6 +352,14 @@ namespace Player
             SendRequest(req);
         }
 
+        private void HandleNoPlayerContinue()
+        {
+            var tempGameInfo = _player.GetGameInfo();
+            if ((tempGameInfo.stateID == 2 ||
+                tempGameInfo.stateID == 3) &&
+                tempGameInfo.numberPlayer == 1) this.Close();
+        }
+
         // run game
         private void RunGame()
         {
@@ -377,6 +385,9 @@ namespace Player
 
                 // check end game to reset
                 HandleEndGame();
+
+                // if there is one player continue to play then quit
+                HandleNoPlayerContinue();
 
                 // update display
                 UpdateDisplay(res, _player.GetPlayerInfo().id);
