@@ -9,6 +9,7 @@ namespace GameExtensions
     internal class ResponseForm
     {
         public string status { get; set; } = "success";
+        public int timesTamp { get; set; } = 0;
         public int stateID { get; set; } = -1;
         public int senderID { get; set; } = -1;
         public int currentID { get; set; } = -1;
@@ -28,6 +29,7 @@ namespace GameExtensions
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     writer.Write(status);
+                    writer.Write(timesTamp);
                     writer.Write(stateID);
                     writer.Write(senderID);
                     writer.Write(currentID);
@@ -94,6 +96,7 @@ namespace GameExtensions
                     var res = new ResponseForm();
 
                     res.status       = reader.ReadString();
+                    res.timesTamp    = reader.ReadInt32();
                     res.stateID      = reader.ReadInt32();
                     res.senderID     = reader.ReadInt32();
                     res.currentID    = reader.ReadInt32();

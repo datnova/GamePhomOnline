@@ -88,7 +88,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.card_choose = new System.Windows.Forms.PictureBox();
             this.info_game_table = new System.Windows.Forms.RichTextBox();
-            this.point_table = new System.Windows.Forms.RichTextBox();
+            this.money_table = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.big_deck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -785,20 +785,20 @@
             this.info_game_table.Text = "";
             this.info_game_table.Visible = false;
             // 
-            // point_table
+            // money_table
             // 
-            this.point_table.Location = new System.Drawing.Point(165, 171);
-            this.point_table.Name = "point_table";
-            this.point_table.Size = new System.Drawing.Size(175, 70);
-            this.point_table.TabIndex = 58;
-            this.point_table.Text = "";
+            this.money_table.Location = new System.Drawing.Point(165, 171);
+            this.money_table.Name = "money_table";
+            this.money_table.Size = new System.Drawing.Size(175, 70);
+            this.money_table.TabIndex = 58;
+            this.money_table.Text = "";
             // 
             // FormGiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(802, 412);
-            this.Controls.Add(this.point_table);
+            this.Controls.Add(this.money_table);
             this.Controls.Add(this.info_game_table);
             this.Controls.Add(this.card_choose);
             this.Controls.Add(this.panel2);
@@ -945,6 +945,6 @@
         private System.Windows.Forms.PictureBox panelcard19;
         private System.Windows.Forms.PictureBox card_choose;
         private System.Windows.Forms.RichTextBox info_game_table;
-        private System.Windows.Forms.RichTextBox point_table;
+        private System.Windows.Forms.RichTextBox money_table;
     }
 }

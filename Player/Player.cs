@@ -13,9 +13,9 @@ namespace Player
         //
         //
         /// init
-        public Player(string name)
+        public Player(string name, int money)
         {
-            _playersInfo = new PlayerInfo(-1, name, 0);
+            _playersInfo = new PlayerInfo(-1, name, money);
         }
 
 
@@ -165,6 +165,7 @@ namespace Player
             var req = new RequestForm();
             req.stateID = _stateID;
             req.playerName = _playersInfo.name;
+            req.money = _playersInfo.money;
             req.playerID = -1;
             return req;
         }

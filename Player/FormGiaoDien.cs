@@ -24,9 +24,10 @@ namespace Player
         private static byte[] _buffer = new byte[1024];
 
         private static Player _player = null;
-        public string playerName = String.Empty;
-
         private static Card _cardChoose = null;
+
+        public string playerName;
+        public int playerMoney;
 
         public FormGiaoDien()
         {
@@ -166,7 +167,7 @@ namespace Player
                 DisplayGameInfo();
 
                 // display game score
-                DisplayGamePoint(res);
+                DisplayGameMoney(res);
             }));
         }
 
@@ -283,21 +284,21 @@ namespace Player
             info_game_table.Text += $"current round: {_player.GetGameInfo().currentRound}\r\n";
         }
 
-        private void DisplayGamePoint(ResponseForm res)
+        private void DisplayGameMoney(ResponseForm res)
         {
             // only update at wait player
             if (res.stateID != 0) return;
 
             // get list player
             var tempPlayer = res.playerInfo.Where(a => a != null);
-            tempPlayer = tempPlayer.OrderBy(a => a.point).ToArray();
+            tempPlayer = tempPlayer.OrderByDescending(a => a.money).ToArray();
 
             // set value to point table
-            point_table.Clear(); 
+            money_table.Clear(); 
             foreach (var player in tempPlayer)
             {
                 if (player is null) continue;
-                point_table.Text += $"{player.name}: {player.point}\r\n";
+                money_table.Text += $"{player.name}: {player.money}\r\n";
             }
         }
 
@@ -412,7 +413,7 @@ namespace Player
             if (String.IsNullOrEmpty(playerName)) this.Close();
             else
             {
-                _player = new Player(playerName);
+                _player = new Player(playerName, playerMoney);
                 this.Show();
             }
         }

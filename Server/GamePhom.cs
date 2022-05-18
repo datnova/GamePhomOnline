@@ -41,7 +41,7 @@ namespace Server
         //// Player set up and remove
 
         // return player id if success or -1 if fail
-        public int AddPlayer(string playerName)
+        public int AddPlayer(string playerName, int money)
         {
             if (_hostID < 0) _hostID = 0;
             _numberPlayer++;
@@ -52,7 +52,7 @@ namespace Server
             {
                 if (_playersInfo[tempID] is null)
                 {
-                    _playersInfo[tempID] = new PlayerInfo(tempID, playerName, 0);
+                    _playersInfo[tempID] = new PlayerInfo(tempID, playerName, money);
                     return tempID; // return add success
                 }
                 tempID++;
@@ -139,6 +139,7 @@ namespace Server
             // recceive ID: -1, for broadcast
             var res = new ResponseForm();
             res.status = "success";
+            res.timesTamp = (int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             res.stateID = _stateID;
             res.currentID = _currentID;
             res.currentRound = _currentRound;
@@ -241,7 +242,7 @@ namespace Server
             if (playerRequest.playerID == -1)
             {
                 // if add player unsuccess
-                int newID = AddPlayer(playerRequest.playerName);
+                int newID = AddPlayer(playerRequest.playerName, playerRequest.money);
                 if (newID == -1)
                 {
                     var res = new ResponseForm();
@@ -497,23 +498,45 @@ namespace Server
             // if not u trang case
             if (!utrang)
             {
-                for (int i = 0; i < _playersHand.Length; i++)
+                // cuoc is 15% sum positive money
+                var cuoc = (int)(_playersInfo.Where(a => a != null)
+                                             .Select(a => Math.Max(a.money, 0))
+                                             .Average() * 15 / 100);
+
+                // ranking by score
+                var playerScore = _playersHand.Select((a, i) => (_playersInfo[i] is null) ? null :
+                                                  new { score = Scoring(a), index = i })
+                                              .Where(a => a != null)
+                                              .OrderBy(a => a.score)
+                                              .ToArray();
+
+                // cuoc * (1 + playerScore.Length) * playerScore.Length / (2 * playerScore.Length)
+                int avgCuoc = cuoc * (1 + playerScore.Length) / 2;
+
+                // calculate money
+                for (int i = 0; i < playerScore.Length; i++)
                 {
-                    if (_playersInfo[i] is null) continue;
-                    _playersInfo[i].point += Scoring(_playersHand[i]);
+                    _playersInfo[playerScore[i].index].money +=  avgCuoc - (cuoc * (i + 1));
                 }
             }
             // if u trang case
             else
             {
-                for (int i = 0; i < _playersHand.Length; i++)
-                {
-                    // if there is no player or player u trang then skip
-                    if (_playersInfo[i] is null) continue;
-                    if (playerRequest.playerID == i) continue;
+                // cuoc is 15% sum positive money
+                var cuoc = (int)(_playersInfo.Where(a => a != null)
+                                             .Select(a => Math.Max(a.money, 0))
+                                             .Average() * 15 / 100);
 
-                    // add point to all player
-                    _playersInfo[i].point += 12;
+                for (int i = 0; i < _playersInfo.Length; i++)
+                {
+                    if (_playersInfo[i] is null) continue;
+
+                    // add 5 time all cuoc in table
+                    if (playerRequest.playerID == i)
+                        _playersInfo[i].money += cuoc * _numberPlayer * 5;
+
+                    // give cuoc
+                    _playersInfo[i].money -= cuoc * 5;
                 }
             }
 

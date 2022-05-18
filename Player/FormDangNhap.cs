@@ -27,10 +27,19 @@ namespace Player
 
         private void buttonLogIn_Click(object sender, EventArgs e)
         {
-            if (tbName.Text != String.Empty)
+            if (tbName.Text != String.Empty && tbName.Text != String.Empty)
             {
                 _formGiaoDien.playerName = tbName.Text;
+                _formGiaoDien.playerMoney = int.Parse(tbMoney.Text);
                 this.Close();
+            }
+        }
+
+        private void tbMoney_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
             }
         }
     }

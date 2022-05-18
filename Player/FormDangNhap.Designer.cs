@@ -32,11 +32,14 @@
             this.buttonLogIn = new System.Windows.Forms.Button();
             this.tbName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbMoney = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(51, 77);
+            this.buttonExit.Location = new System.Drawing.Point(60, 111);
             this.buttonExit.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(88, 30);
@@ -47,7 +50,7 @@
             // 
             // buttonLogIn
             // 
-            this.buttonLogIn.Location = new System.Drawing.Point(206, 77);
+            this.buttonLogIn.Location = new System.Drawing.Point(212, 111);
             this.buttonLogIn.Margin = new System.Windows.Forms.Padding(4);
             this.buttonLogIn.Name = "buttonLogIn";
             this.buttonLogIn.Size = new System.Drawing.Size(88, 30);
@@ -58,7 +61,7 @@
             // 
             // tbName
             // 
-            this.tbName.Location = new System.Drawing.Point(108, 29);
+            this.tbName.Location = new System.Drawing.Point(112, 27);
             this.tbName.Margin = new System.Windows.Forms.Padding(4);
             this.tbName.MaxLength = 6;
             this.tbName.Name = "tbName";
@@ -68,18 +71,51 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 33);
+            this.label1.Location = new System.Drawing.Point(23, 30);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 17);
             this.label1.TabIndex = 6;
             this.label1.Text = "User Name :";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(49, 71);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 17);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Money :";
+            // 
+            // tbMoney
+            // 
+            this.tbMoney.Location = new System.Drawing.Point(112, 68);
+            this.tbMoney.Margin = new System.Windows.Forms.Padding(4);
+            this.tbMoney.MaxLength = 9;
+            this.tbMoney.Name = "tbMoney";
+            this.tbMoney.Size = new System.Drawing.Size(135, 25);
+            this.tbMoney.TabIndex = 11;
+            this.tbMoney.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbMoney_KeyPress);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(255, 71);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(83, 17);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "(nghìn đồng)";
+            // 
             // FormDangNhap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 136);
+            this.ClientSize = new System.Drawing.Size(360, 169);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tbMoney);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonLogIn);
             this.Controls.Add(this.tbName);
@@ -101,5 +137,8 @@
         private System.Windows.Forms.Button buttonLogIn;
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbMoney;
+        private System.Windows.Forms.Label label3;
     }
 }

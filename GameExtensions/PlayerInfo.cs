@@ -8,16 +8,16 @@ namespace GameExtensions
     [Serializable]
     internal class PlayerInfo
     {
-        public PlayerInfo(int id, string name, int point)
+        public PlayerInfo(int id, string name, int money)
         {
             this.id = id;
             this.name = name;
-            this.point = point;
+            this.money = money;
         }
 
         public int id { get; set; }
         public string name { get; set; }
-        public int point { get; set; }
+        public int money { get; set; }
 
         public byte[] Serialize()
         {
@@ -27,7 +27,7 @@ namespace GameExtensions
                 {
                     writer.Write(id);
                     writer.Write(name);
-                    writer.Write(point);
+                    writer.Write(money);
                 }
                 return stream.ToArray();
             }
@@ -44,7 +44,7 @@ namespace GameExtensions
                 {
                     playerInfo.id = reader.ReadInt32();
                     playerInfo.name = reader.ReadString();
-                    playerInfo.point = reader.ReadInt32();
+                    playerInfo.money = reader.ReadInt32();
                 }
             }
             return playerInfo;

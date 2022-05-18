@@ -8,12 +8,14 @@ namespace GameExtensions
     [Serializable]
     internal class RequestForm
     {
-        public int stateID { get; set; } = 0;
-        public int playerID { get; set; } = -1;
-        public string playerName { get; set; } = String.Empty;
-        public Card sendCard { get; set; } = null;
-        public Card[][] phom { get; set; } = null;
-        public Card[] trash { get; set; } = null;
+        public int stateID         { get; set; } = 0;
+        public int playerID        { get; set; } = -1;
+        public string playerName   { get; set; } = String.Empty;
+        public int money           { get; set; } = 0;
+        public string chatMessages { get; set; } = String.Empty;
+        public Card sendCard       { get; set; } = null;
+        public Card[][] phom       { get; set; } = null;
+        public Card[] trash        { get; set; } = null;
 
         public byte[] Serialize()
         {
@@ -24,6 +26,8 @@ namespace GameExtensions
                     writer.Write(stateID);
                     writer.Write(playerID);
                     writer.Write(playerName);
+                    writer.Write(money);
+                    writer.Write(chatMessages);
 
                     // add send card
                     if (sendCard is null) writer.Write(0);
@@ -80,9 +84,11 @@ namespace GameExtensions
                 {
                     var req = new RequestForm();
 
-                    req.stateID = reader.ReadInt32();
-                    req.playerID = reader.ReadInt32();
-                    req.playerName = reader.ReadString();
+                    req.stateID      = reader.ReadInt32();
+                    req.playerID     = reader.ReadInt32();
+                    req.playerName   = reader.ReadString();
+                    req.money        = reader.ReadInt32();
+                    req.chatMessages = reader.ReadString();
 
                     // read card holder
                     req.sendCard = Card.Desserialize(reader.ReadBytes(reader.ReadInt32()));
