@@ -89,6 +89,9 @@
             this.card_choose = new System.Windows.Forms.PictureBox();
             this.info_game_table = new System.Windows.Forms.RichTextBox();
             this.money_table = new System.Windows.Forms.RichTextBox();
+            this.chat_box = new System.Windows.Forms.RichTextBox();
+            this.input_chat = new System.Windows.Forms.RichTextBox();
+            this.btn_sendchat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.big_deck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -793,11 +796,42 @@
             this.money_table.TabIndex = 58;
             this.money_table.Text = "";
             // 
+            // chat_box
+            // 
+            this.chat_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chat_box.Location = new System.Drawing.Point(796, 12);
+            this.chat_box.Name = "chat_box";
+            this.chat_box.Size = new System.Drawing.Size(215, 279);
+            this.chat_box.TabIndex = 59;
+            this.chat_box.Text = "";
+            // 
+            // input_chat
+            // 
+            this.input_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.input_chat.Location = new System.Drawing.Point(796, 297);
+            this.input_chat.Name = "input_chat";
+            this.input_chat.Size = new System.Drawing.Size(215, 73);
+            this.input_chat.TabIndex = 60;
+            this.input_chat.Text = "";
+            // 
+            // btn_sendchat
+            // 
+            this.btn_sendchat.Location = new System.Drawing.Point(796, 376);
+            this.btn_sendchat.Name = "btn_sendchat";
+            this.btn_sendchat.Size = new System.Drawing.Size(215, 23);
+            this.btn_sendchat.TabIndex = 61;
+            this.btn_sendchat.Text = "send";
+            this.btn_sendchat.UseVisualStyleBackColor = true;
+            this.btn_sendchat.Click += new System.EventHandler(this.btn_sendchat_Click);
+            // 
             // FormGiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(802, 412);
+            this.ClientSize = new System.Drawing.Size(1023, 412);
+            this.Controls.Add(this.btn_sendchat);
+            this.Controls.Add(this.input_chat);
+            this.Controls.Add(this.chat_box);
             this.Controls.Add(this.money_table);
             this.Controls.Add(this.info_game_table);
             this.Controls.Add(this.card_choose);
@@ -946,5 +980,8 @@
         private System.Windows.Forms.PictureBox card_choose;
         private System.Windows.Forms.RichTextBox info_game_table;
         private System.Windows.Forms.RichTextBox money_table;
+        private System.Windows.Forms.RichTextBox chat_box;
+        private System.Windows.Forms.RichTextBox input_chat;
+        private System.Windows.Forms.Button btn_sendchat;
     }
 }

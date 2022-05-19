@@ -93,7 +93,7 @@ namespace Server
             if (playerID == _hostID || playerID == _currentID)
             {
                 // loop to next available player
-                for (int i = (playerID + 1) % 4; i != playerID; i = (i + 1) % 4)
+                for (int i = (playerID + 1) % 4; ; i = (i + 1) % 4)
                 {
                     // if player not available go to next player
                     if (_playersInfo[i] is null) continue;
@@ -103,6 +103,11 @@ namespace Server
 
                     // shift current player turn to next player (might be bug)
                     if (playerID == _currentID) _currentID = i;
+
+                    // change state if in draw card
+                    _stateID = (_stateID == 2) ? 3 : _stateID;
+
+                    break;
                 }
             }
 
@@ -166,6 +171,10 @@ namespace Server
         // receive data and update game
         public ResponseForm HandleGame(RequestForm playerRequest)
         {
+            // handle chat
+            if (playerRequest.chatMessages != string.Empty && playerRequest.playerID != -1)
+                return HandleChat(playerRequest);
+
             // assign player 
             if (playerRequest.playerID == -1 && _stateID == 0)
                 return HandleWaitForPlayer(playerRequest);
@@ -256,9 +265,6 @@ namespace Server
                 {
                     var res = GetGameInfo();
                     res.senderID = newID;
-                    res.status = "success";
-                    res.messages = "Waiting for another player";
-
                     return res;
                 }
             }
@@ -292,9 +298,6 @@ namespace Server
 
             res = GetGameInfo();
             res.senderID = playerRequest.playerID;
-            res.status = "success";
-            res.messages = "Sending cards to player's hands";
-
             return res;
         }
 
@@ -551,9 +554,6 @@ namespace Server
 
             // add status and return
             res = GetGameInfo();
-            res.status = "success";
-            res.messages = "Send point to players";
-
             return res;
         }
 
@@ -601,6 +601,20 @@ namespace Server
                 res[i].cardPull = _playersHand[i];
             }
 
+            return res;
+        }
+
+
+        //
+        //
+        /// handle chat messages
+        
+        private ResponseForm HandleChat(RequestForm playerRequest)
+        {
+            // broadcast message to all player
+            var res = new ResponseForm();
+            res = GetGameInfo();
+            res.messages = playerRequest.chatMessages;
             return res;
         }
     }

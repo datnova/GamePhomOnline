@@ -48,6 +48,9 @@ namespace Player
             // if fail return false
             if (res.status != "success") return false;
 
+            // return if there is chat messages
+            if (res.messages != String.Empty) return true;
+
             // get player hand or pull card
             if (res.cardPull != null && res.cardPull.Length != 0)
             {
@@ -228,6 +231,17 @@ namespace Player
             res.playerName = _playersInfo.name;
             res.stateID = _stateID;
             res.playerID = _playersInfo.id;
+            return res;
+        }
+
+        public RequestForm RequestSendChat(string chatMessages)
+        {
+            if (_playersInfo.id == -1 || chatMessages == String.Empty) return null;
+
+            var res = new RequestForm();
+            res.playerName = _playersInfo.name;
+            res.playerID = _playersInfo.id;
+            res.chatMessages = chatMessages;
             return res;
         }
     }

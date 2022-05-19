@@ -353,6 +353,7 @@ namespace Player
             SendRequest(req);
         }
 
+        // reset game if no player is play
         private void HandleNoPlayerContinue()
         {
             var tempGameInfo = _player.GetGameInfo();
@@ -384,6 +385,9 @@ namespace Player
                     continue;
                 }
 
+                // display message
+                if (DisplayChatMessages(res.messages)) continue;
+
                 // check end game to reset
                 HandleEndGame();
 
@@ -399,6 +403,7 @@ namespace Player
         //
         //
         /// Handle assign form
+        
         private void RunAsignForm()
         {
             // run form dang nhap to get name
@@ -422,6 +427,7 @@ namespace Player
         //
         //
         /// Handle button
+        
         private void start_btn_Click(object sender, EventArgs e)
         {
             var res = _player.RequestStartGame();
@@ -475,6 +481,7 @@ namespace Player
         //
         //
         /// Handle choosing cards.
+        
         void SetCardChoose(object sender, EventArgs e)
         {
             var mainCard = (PictureBox)sender;
@@ -496,6 +503,39 @@ namespace Player
             // update display card choose
             card_choose.Image = mainCard.Image;
             card_choose.Show();
+        }
+
+
+        //
+        //
+        /// hanle chat
+
+        private void btn_sendchat_Click(object sender, EventArgs e)
+        {
+            // make request
+            RequestForm req = _player.RequestSendChat(input_chat.Text);
+            input_chat.Clear();
+
+            // send request
+            if (req is null) return;
+            SendRequest(req);
+        }
+
+        private bool DisplayChatMessages(string messages)
+        {
+            // if no messages
+            if (messages == String.Empty) return false;
+
+            // display messages
+            Invoke(new Action(() => {
+                chat_box.Text += _player.GetPlayerInfo().name.PadRight(7) + ": " + 
+                                 messages + Environment.NewLine;
+
+                // auto scroll to end
+                chat_box.ScrollToCaret();
+            }));
+
+            return true;
         }
     }
 }
