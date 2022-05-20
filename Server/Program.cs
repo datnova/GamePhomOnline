@@ -65,15 +65,32 @@ namespace Server
                 // loop to check is connected
                 while (CheckConnection(clientSocket))
                 {
-                    // if no data in stream to read check back connnection
-                    if (!stream.DataAvailable) continue;
+                    RequestForm req = null;
 
-                    // read data from stream
-                    var receivebuffer = new byte[1024];
-                    stream.Read(receivebuffer, 0, receivebuffer.Length);
+                    // if data in stream to read check back connnection
+                    if (!stream.DataAvailable)
+                    {
+                        // get player id from this socket
+                        var playerID = Array.IndexOf(_clientSockets, clientSocket);
+                        if (playerID == -1) continue;
 
-                    // deserialize to get request
-                    var req = RequestForm.Desserialize(receivebuffer);
+                        // if this player turn then check is it time end turn
+                        if (playerID == _gamePhom.GetGameInfo().currentID) 
+                            req = _gamePhom.FalseEndTurn(5);
+
+                        // if not end turn then continue
+                        if (req is null) continue;
+                    }
+                    // there are datas then read in stream
+                    else
+                    {
+                        // read data from stream
+                        var receivebuffer = new byte[1024];
+                        stream.Read(receivebuffer, 0, receivebuffer.Length);
+
+                        // deserialize to get request
+                        req = RequestForm.Desserialize(receivebuffer);
+                    }
 
                     // handle request and return reponse
                     var res = _gamePhom.HandleGame(req);

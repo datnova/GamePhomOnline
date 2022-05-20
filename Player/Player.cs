@@ -39,6 +39,8 @@ namespace Player
         private int _hostID = -1;            // current host id
         private int _numberPlayer = 0;       // number of player
 
+        // times tamp
+        private int _timeStartTurn = 0;     // time start turn
 
         //
         //
@@ -51,7 +53,7 @@ namespace Player
             // return if there is chat messages
             if (res.messages != String.Empty) return true;
 
-            // get player hand or pull card
+            // get player hand or pull card (state 1 or 3)
             if (res.cardPull != null && res.cardPull.Length != 0)
             {
                 // update player hand when devide cards
@@ -83,7 +85,7 @@ namespace Player
                     if (tempHolderIndex != -1) _cardHolder[tempHolderIndex] = null;
                 }
             }
-            // check id already assign
+            // check id already assign (state 0)
             else if (_playersInfo.id == -1)
             {
                 foreach (var playerInfo in res.playerInfo)
@@ -97,12 +99,21 @@ namespace Player
                 }
             }
 
-            // update card holder when play card
+            // update card holder and on hand when play card (state 2)
             if (res.cardHolder != null)
+            {
+                // update card holder
                 _cardHolder[_currentID] = res.cardHolder;
 
-            // set up default if reset game
-            if (_stateID == 0)
+                // update on hand
+                var cardIndex = _playerHand.ToList().FindIndex(a => a != null &&
+                                                                    a.pip == res.cardHolder.pip &&
+                                                                    a.suit == res.cardHolder.suit);
+                if (cardIndex != -1) _playerHand[cardIndex] = null;
+            }
+
+            // set up default if reset game (after state 4)
+            if (_stateID != 0 && res.stateID == 0)
             {
                 _cardHolder = new Card[4];
                 _playerHand = null;
@@ -160,6 +171,27 @@ namespace Player
 
         //
         //
+        /// handle time turn
+        
+        private void UpdateTimeTurn(ResponseForm res, int maxTime)
+        {
+            // set up time if in play or draw state
+            if (res.stateID != 2 || res.stateID != 3)
+            {
+                _timeStartTurn = 0;
+                return;
+            }
+
+            // set up time turn
+            var timeCount = DateTime.Now
+                                    .Subtract(new DateTime(1970, 1, 1))
+                                    .TotalSeconds - _timeStartTurn;
+            _timeStartTurn = (timeCount <= 0) ? 0 : _timeStartTurn;
+        }
+
+
+        //
+        //
         /// create request
         public RequestForm RequestAddPlayer()
         {
@@ -178,11 +210,10 @@ namespace Player
             // check value
             if (card is null || _stateID != 2 || _currentID != _playersInfo.id) return null;
 
+            // check is card on hand
             int cardIndex = Array.FindIndex(_playerHand, a => 
                 a != null && a.pip == card.pip && a.suit == card.suit);
-
             if (cardIndex == -1) return null;
-            else _playerHand[cardIndex] = null;
 
             var res = new RequestForm();
             res.stateID = _stateID;

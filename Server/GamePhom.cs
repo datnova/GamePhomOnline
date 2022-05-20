@@ -35,6 +35,9 @@ namespace Server
         private int _hostID = -1;            // current host id
         private int _numberPlayer = 0;       // number of player
 
+        // time turn
+        private int _timeTurn = 0;           // player's time end turn
+
 
         //
         //
@@ -85,6 +88,7 @@ namespace Server
                 _currentRound = -1;
                 _hostID = -1;
                 _numberPlayer = 0;
+                _timeTurn = 0;
 
                 return true;
             }
@@ -110,6 +114,10 @@ namespace Server
                     break;
                 }
             }
+
+            // update time turn
+            if (_stateID == 2 || _stateID == 3) 
+                _timeTurn = (int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
             return true;
         }
@@ -229,6 +237,7 @@ namespace Server
                     }
             }
         }
+
 
         // wait for player handle
         private ResponseForm HandleWaitForPlayer(RequestForm playerRequest)
@@ -352,69 +361,24 @@ namespace Server
             res = GetGameInfo();
             res.senderID = playerRequest.playerID;
             res.cardHolder = _cardHolder;
-            res.messages = "update card holder";
+
+            // set up game turn
+            _timeTurn = res.timesTamp;
 
             return res;
         }
+
 
         // handle take card
         private ResponseForm HandleTakeCard(RequestForm playerRequest)
         {
             // check u trang
             var res = HandleUTrang(playerRequest);
-            if (res is null) res = new ResponseForm();
-            else return res;
+            if (res != null) return res;
 
-            // take card from card deck
-            if (playerRequest.sendCard is null)
-            {
-                // take card from draw deck
-                var card = _drawDeck.FirstOrDefault(s => !(s is null));
-
-                // return error if no card left from draw deck
-                if (card is null)
-                {
-                    res.status = "fail";
-                    res.messages = "Draw deck has no card left";
-                    res.receiveID = playerRequest.playerID;
-
-                    return res;
-                }
-
-                // update stateID and round
-                _stateID = 2;
-                if (_currentID == _hostID)
-                {
-                    _currentRound++;
-                    if (_currentRound == 5) _stateID = 4;
-                }
-
-                // update card deck and cards on hand
-                _drawDeck[Array.IndexOf(_drawDeck, card)] = null;
-                if (_playersHand[_currentID].All(a => a != null))
-                    _playersHand[_currentID] = _playersHand[_currentID].ToList().Append(card).ToArray();
-                else
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (_playersHand[_currentID][i] != null) continue;
-                        _playersHand[_currentID][i] = card;
-                        break;
-                    }
-                }
-
-                res = GetGameInfo();
-                res.senderID = playerRequest.playerID;
-                res.cardPull = new Card[] { card };
-                res.messages = "Sending card from deck";
-
-                return res;
-            }
-
-            // take card from card holder
-            // if card not in card holder
-            if (playerRequest.sendCard.pip != _cardHolder.pip && 
-                playerRequest.sendCard.suit != _cardHolder.suit)
+            if (playerRequest.sendCard != null && 
+                (playerRequest.sendCard.pip != _cardHolder.pip ||
+                 playerRequest.sendCard.suit != _cardHolder.suit))
             {
                 res.status = "fail";
                 res.receiveID = playerRequest.playerID;
@@ -422,41 +386,102 @@ namespace Server
 
                 return res;
             }
-            // if card in card holder
-            else 
+
+            // take card from card deck
+            if (playerRequest.sendCard is null) return HanleDrawFromDeck(playerRequest);
+            // take card from card holder
+            else return HanleDrawFromHolder(playerRequest);
+        }
+
+        // draw card from card deck
+        private ResponseForm HanleDrawFromDeck(RequestForm playerRequest)
+        {
+            var res = new ResponseForm();
+
+            // take card from draw deck
+            var card = _drawDeck.FirstOrDefault(s => !(s is null));
+
+            // return error if no card left from draw deck
+            if (card is null)
             {
-                // update value
-                _stateID = 2;
-                if (_currentID == _hostID)
-                {
-                    _currentRound++;
-                    if (_currentRound == 5) _stateID = 4;
-                }
-
-                // take card from card holder and update card deck
-                var card = _cardHolder;
-                _cardHolder = null;
-
-                if (_playersHand[_currentID].All(a => a != null))
-                    _playersHand[_currentID] = _playersHand[_currentID].ToList().Append(card).ToArray();
-                else
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (_playersHand[_currentID][i] != null) continue;
-                        _playersHand[_currentID][i] = card;
-                        break;
-                    }
-                }
-
-                res = GetGameInfo();
-                res.senderID = playerRequest.playerID;
-                res.cardPull = new Card[] { card };
-                res.messages = "Sending card from card holder";
+                res.status = "fail";
+                res.messages = "Draw deck has no card left";
+                res.receiveID = playerRequest.playerID;
 
                 return res;
             }
+
+            // update stateID and round
+            _stateID = 2;
+            if (_currentID == _hostID)
+            {
+                _currentRound++;
+                if (_currentRound == 5) _stateID = 4;
+            }
+
+            // update card deck and cards on hand
+            _drawDeck[Array.IndexOf(_drawDeck, card)] = null;
+            if (_playersHand[_currentID].All(a => a != null))
+                _playersHand[_currentID] = _playersHand[_currentID].ToList().Append(card).ToArray();
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (_playersHand[_currentID][i] != null) continue;
+                    _playersHand[_currentID][i] = card;
+                    break;
+                }
+            }
+
+            res = GetGameInfo();
+            res.senderID = playerRequest.playerID;
+            res.cardPull = new Card[] { card };
+
+            _timeTurn = res.timesTamp;
+
+            return res;
         }
+
+        // draw card from card deck
+        private ResponseForm HanleDrawFromHolder(RequestForm playerRequest)
+        {
+            var res = new ResponseForm();
+
+            // update value
+            _stateID = 2;
+            if (_currentID == _hostID)
+            {
+                // increase round if back to host turn
+                _currentRound++;
+                // reset if all 4 round
+                if (_currentRound == 5) _stateID = 4;
+            }
+
+            // take card from card holder and update card deck
+            var card = _cardHolder;
+            _cardHolder = null;
+
+            if (_playersHand[_currentID].All(a => a != null))
+                _playersHand[_currentID] = _playersHand[_currentID].ToList().Append(card).ToArray();
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (_playersHand[_currentID][i] != null) continue;
+                    _playersHand[_currentID][i] = card;
+                    break;
+                }
+            }
+
+            res = GetGameInfo();
+            res.senderID = playerRequest.playerID;
+            res.cardPull = new Card[] { card };
+
+            _timeTurn = res.timesTamp;
+
+            return res;
+        }
+
 
         // reset game to new state or new round
         private ResponseForm HandleResetGame(RequestForm playerRequest, bool utrang = false)
@@ -593,11 +618,14 @@ namespace Server
             if (_stateID != 1) return null;
 
             _stateID = 2;
+            _timeTurn = GetGameInfo().timesTamp;
+
             var res = new ResponseForm[4];
             for (int i = 0; i < 4; i++)
             {
                 if (_playersInfo[i] is null) continue;
                 res[i] = GetGameInfo(i);
+                res[i].timesTamp = _timeTurn;
                 res[i].cardPull = _playersHand[i];
             }
 
@@ -614,8 +642,46 @@ namespace Server
             // broadcast message to all player
             var res = new ResponseForm();
             res = GetGameInfo();
+            res.senderID = playerRequest.playerID;
             res.messages = playerRequest.chatMessages;
             return res;
+        }
+
+
+        //
+        //
+        /// false request to end turn
+        
+        public RequestForm FalseEndTurn(int maxTime)
+        {
+            if (_stateID != 2 && _stateID != 3) return null;
+
+            var timeNow = (int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            var temp = timeNow - _timeTurn;
+            if (timeNow - _timeTurn < maxTime) return null;
+            else if (_stateID == 2)
+            {
+                // play first card on server
+                var res = new RequestForm();
+                res.stateID = _stateID;
+                res.playerName = _playersInfo[_currentID].name;
+                res.playerID = _currentID;
+                res.sendCard = _playersHand[_currentID][0];
+
+                return res;
+            }
+            else if (_stateID == 3)
+            {
+                // draw card
+                var req = new RequestForm();
+                req.stateID = _stateID;
+                req.playerName = _playersInfo[_currentID].name;
+                req.playerID = _currentID;
+                req.sendCard = _cardHolder;
+
+                return req;
+            }
+            return null;
         }
     }
 }

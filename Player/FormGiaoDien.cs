@@ -386,7 +386,7 @@ namespace Player
                 }
 
                 // display message
-                if (DisplayChatMessages(res.messages)) continue;
+                if (DisplayChatMessages(res.playerInfo[res.senderID].name, res.messages)) continue;
 
                 // check end game to reset
                 HandleEndGame();
@@ -521,15 +521,15 @@ namespace Player
             SendRequest(req);
         }
 
-        private bool DisplayChatMessages(string messages)
+        private bool DisplayChatMessages(string name, string messages)
         {
             // if no messages
             if (messages == String.Empty) return false;
 
             // display messages
             Invoke(new Action(() => {
-                chat_box.Text += _player.GetPlayerInfo().name.PadRight(7) + ": " + 
-                                 messages + Environment.NewLine;
+                // display to chat box
+                chat_box.Text += name.PadRight(7) + ": " + messages + Environment.NewLine;
 
                 // auto scroll to end
                 chat_box.ScrollToCaret();
