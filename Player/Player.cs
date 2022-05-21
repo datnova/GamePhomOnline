@@ -40,7 +40,7 @@ namespace Player
         private int _numberPlayer = 0;       // number of player
 
         // times tamp
-        private int _timeStartTurn = 0;     // time start turn
+        private int _timeTurn = 0;     // time start turn
 
         //
         //
@@ -52,6 +52,9 @@ namespace Player
 
             // return if there is chat messages
             if (res.messages != String.Empty) return true;
+
+            // update time turn
+            UpdateTimeTurn(res, 30);
 
             // get player hand or pull card (state 1 or 3)
             if (res.cardPull != null && res.cardPull.Length != 0)
@@ -153,6 +156,11 @@ namespace Player
             return _cardHolder;
         }
 
+        public int GetTimeTurn()
+        {
+            return _timeTurn;
+        }
+
 
         //
         //
@@ -176,18 +184,17 @@ namespace Player
         private void UpdateTimeTurn(ResponseForm res, int maxTime)
         {
             // set up time if in play or draw state
-            if (res.stateID != 2 || res.stateID != 3)
+            if (res.stateID != 2 && res.stateID != 3)
             {
-                _timeStartTurn = 0;
+                _timeTurn = 0;
                 return;
             }
 
-            // set up time turn
-            var timeCount = DateTime.Now
-                                    .Subtract(new DateTime(1970, 1, 1))
-                                    .TotalSeconds - _timeStartTurn;
-            _timeStartTurn = (timeCount <= 0) ? 0 : _timeStartTurn;
+            // update time turn when change
+            if (res.stateID == 2 || res.stateID == 3 && _stateID != res.stateID)
+                _timeTurn = res.timesTamp;
         }
+
 
 
         //

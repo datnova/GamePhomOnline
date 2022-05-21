@@ -92,7 +92,7 @@
             this.chat_box = new System.Windows.Forms.RichTextBox();
             this.input_chat = new System.Windows.Forms.RichTextBox();
             this.btn_sendchat = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.time_lable = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.big_deck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -825,23 +825,23 @@
             this.btn_sendchat.UseVisualStyleBackColor = true;
             this.btn_sendchat.Click += new System.EventHandler(this.btn_sendchat_Click);
             // 
-            // label1
+            // time_lable
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(685, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 21);
-            this.label1.TabIndex = 62;
-            this.label1.Text = "00";
+            this.time_lable.AutoSize = true;
+            this.time_lable.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.time_lable.ForeColor = System.Drawing.Color.Red;
+            this.time_lable.Location = new System.Drawing.Point(685, 9);
+            this.time_lable.Name = "time_lable";
+            this.time_lable.Size = new System.Drawing.Size(28, 21);
+            this.time_lable.TabIndex = 62;
+            this.time_lable.Text = "00";
             // 
             // FormGiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1023, 412);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.time_lable);
             this.Controls.Add(this.btn_sendchat);
             this.Controls.Add(this.input_chat);
             this.Controls.Add(this.chat_box);
@@ -996,6 +996,6 @@
         private System.Windows.Forms.RichTextBox chat_box;
         private System.Windows.Forms.RichTextBox input_chat;
         private System.Windows.Forms.Button btn_sendchat;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label time_lable;
     }
 }

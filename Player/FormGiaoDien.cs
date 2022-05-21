@@ -309,6 +309,18 @@ namespace Player
             else card_choose.Show();
         }
 
+        private void DisplayTimeTurn(int maxTime)
+        {
+            // hide if no use
+            if (_player.GetTimeTurn() == 0) { time_lable.Hide(); return; }
+
+            // display time remain
+            time_lable.Show();
+            var timeNow = (int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            time_lable.Text = Math.Max(maxTime - timeNow + _player.GetTimeTurn(), 0).ToString();
+        }
+
+
         //
         //
         /// handle socket and run game
@@ -367,6 +379,9 @@ namespace Player
         {
             while (_client.Connected)
             {
+                // display time turn
+                DisplayTimeTurn(30);
+
                 // check is there data
                 if (!_client.GetStream().DataAvailable) continue;
 
@@ -386,7 +401,7 @@ namespace Player
                 }
 
                 // display message
-                if (DisplayChatMessages(res.playerInfo[res.senderID].name, res.messages)) continue;
+                if (DisplayChatMessages(res, res.messages)) continue;
 
                 // check end game to reset
                 HandleEndGame();
@@ -521,14 +536,15 @@ namespace Player
             SendRequest(req);
         }
 
-        private bool DisplayChatMessages(string name, string messages)
+        private bool DisplayChatMessages(ResponseForm res, string messages)
         {
             // if no messages
-            if (messages == String.Empty) return false;
+            if (messages == String.Empty || res.senderID == -1) return false;
 
             // display messages
             Invoke(new Action(() => {
                 // display to chat box
+                var name = res.playerInfo[res.senderID].name;
                 chat_box.Text += name.PadRight(7) + ": " + messages + Environment.NewLine;
 
                 // auto scroll to end

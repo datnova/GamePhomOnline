@@ -67,7 +67,7 @@ namespace Server
                 {
                     RequestForm req = null;
 
-                    // if data in stream to read check back connnection
+                    // if no data in stream to read check back connnection
                     if (!stream.DataAvailable)
                     {
                         // get player id from this socket
@@ -76,7 +76,7 @@ namespace Server
 
                         // if this player turn then check is it time end turn
                         if (playerID == _gamePhom.GetGameInfo().currentID) 
-                            req = _gamePhom.FalseEndTurn(5);
+                            req = _gamePhom.FalseEndTurn(30);
 
                         // if not end turn then continue
                         if (req is null) continue;

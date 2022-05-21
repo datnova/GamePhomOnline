@@ -625,6 +625,7 @@ namespace Server
             {
                 if (_playersInfo[i] is null) continue;
                 res[i] = GetGameInfo(i);
+                res[i].senderID = i;
                 res[i].timesTamp = _timeTurn;
                 res[i].cardPull = _playersHand[i];
             }
@@ -657,7 +658,6 @@ namespace Server
             if (_stateID != 2 && _stateID != 3) return null;
 
             var timeNow = (int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            var temp = timeNow - _timeTurn;
             if (timeNow - _timeTurn < maxTime) return null;
             else if (_stateID == 2)
             {

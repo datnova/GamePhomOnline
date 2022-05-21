@@ -32,7 +32,7 @@ namespace GameExtensions
                 valueTable[card.value].Add(card);
             }
 
-            // loop thought value table
+            // loop thought value table to optimize
             for (int value = cardPip.Length - 1; value >= 0; value--)
             {
                 GetPhomNgang(valueTable, phom, trash, value);
@@ -69,28 +69,23 @@ namespace GameExtensions
         {
             if (cards.Length <= 2) return false;
 
+            // init value
             List<int> valueTable = new List<int>();
-            string tempSuit = null;
+            string tempSuit = (cards[0] != null) ? cards[0].suit : null;
+            if (tempSuit is null) return false;
 
             // check same suit and add to valueTable
             foreach (var card in cards)
             {
-                if (tempSuit is null)
-                {
-                    tempSuit = card.suit;
-                }
-                else if (tempSuit != card.suit)
-                {
-                    return false;
-                }
-                valueTable .Add(card.value);
+                if (tempSuit != card.suit) return false;
+                valueTable.Add(card.value);
             }
 
-            valueTable .Sort((a, b) => b.CompareTo(a)); // descending sort
+            valueTable.Sort((a, b) => b.CompareTo(a)); // descending sort
             // check is it follow order
-            for (int i = 0; i < valueTable .Count - 1; i++)
+            for (int i = 0; i < valueTable.Count - 1; i++)
             {
-                if (valueTable [i] - valueTable [i + 1] != 1)
+                if (valueTable[i] - valueTable[i + 1] != 1)
                     return false;
             }
             return true;
