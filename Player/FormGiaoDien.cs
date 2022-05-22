@@ -553,5 +553,15 @@ namespace Player
 
             return true;
         }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelcard39_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

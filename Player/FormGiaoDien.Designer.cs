@@ -149,20 +149,22 @@
             // 
             this.pictureBox4.ErrorImage = null;
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(488, 405);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox4.Location = new System.Drawing.Point(366, 329);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(95, 87);
+            this.pictureBox4.Size = new System.Drawing.Size(71, 71);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox4.TabIndex = 12;
             this.pictureBox4.TabStop = false;
+            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
             // 
             // take_btn
             // 
-            this.take_btn.Location = new System.Drawing.Point(820, 431);
-            this.take_btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.take_btn.BackgroundImage = global::Player.Properties.Resources.bg_button_under;
+            this.take_btn.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.take_btn.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.take_btn.Location = new System.Drawing.Point(615, 350);
             this.take_btn.Name = "take_btn";
-            this.take_btn.Size = new System.Drawing.Size(112, 62);
+            this.take_btn.Size = new System.Drawing.Size(84, 50);
             this.take_btn.TabIndex = 8;
             this.take_btn.Text = "Rút bài";
             this.take_btn.UseVisualStyleBackColor = true;
@@ -170,10 +172,11 @@
             // 
             // play_btn
             // 
-            this.play_btn.Location = new System.Drawing.Point(940, 431);
-            this.play_btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.play_btn.BackgroundImage = global::Player.Properties.Resources.bg_button_under;
+            this.play_btn.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.play_btn.Location = new System.Drawing.Point(705, 350);
             this.play_btn.Name = "play_btn";
-            this.play_btn.Size = new System.Drawing.Size(109, 62);
+            this.play_btn.Size = new System.Drawing.Size(82, 50);
             this.play_btn.TabIndex = 7;
             this.play_btn.Text = "Đánh bài";
             this.play_btn.UseVisualStyleBackColor = true;
@@ -181,10 +184,12 @@
             // 
             // rerange_btn
             // 
-            this.rerange_btn.Location = new System.Drawing.Point(693, 431);
-            this.rerange_btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rerange_btn.BackgroundImage = global::Player.Properties.Resources.bg_button_under;
+            this.rerange_btn.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rerange_btn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.rerange_btn.Location = new System.Drawing.Point(520, 350);
             this.rerange_btn.Name = "rerange_btn";
-            this.rerange_btn.Size = new System.Drawing.Size(119, 62);
+            this.rerange_btn.Size = new System.Drawing.Size(89, 50);
             this.rerange_btn.TabIndex = 6;
             this.rerange_btn.Text = "Xếp bài";
             this.rerange_btn.UseVisualStyleBackColor = true;
@@ -194,21 +199,20 @@
             // 
             this.main_name.BackColor = System.Drawing.SystemColors.Window;
             this.main_name.ForeColor = System.Drawing.SystemColors.Window;
-            this.main_name.Location = new System.Drawing.Point(385, 431);
-            this.main_name.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_name.Location = new System.Drawing.Point(289, 350);
             this.main_name.Name = "main_name";
             this.main_name.ReadOnly = true;
-            this.main_name.Size = new System.Drawing.Size(93, 22);
+            this.main_name.Size = new System.Drawing.Size(71, 20);
             this.main_name.TabIndex = 5;
             // 
             // big_deck
             // 
-            this.big_deck.Image = ((System.Drawing.Image)(resources.GetObject("big_deck.Image")));
-            this.big_deck.InitialImage = ((System.Drawing.Image)(resources.GetObject("big_deck.InitialImage")));
-            this.big_deck.Location = new System.Drawing.Point(468, 209);
-            this.big_deck.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.big_deck.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("big_deck.BackgroundImage")));
+            this.big_deck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.big_deck.InitialImage = null;
+            this.big_deck.Location = new System.Drawing.Point(351, 170);
             this.big_deck.Name = "big_deck";
-            this.big_deck.Size = new System.Drawing.Size(133, 87);
+            this.big_deck.Size = new System.Drawing.Size(100, 71);
             this.big_deck.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.big_deck.TabIndex = 14;
             this.big_deck.TabStop = false;
@@ -219,10 +223,9 @@
             // 
             this.pictureBox2.ErrorImage = null;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(103, 0);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Location = new System.Drawing.Point(77, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(95, 87);
+            this.pictureBox2.Size = new System.Drawing.Size(71, 71);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 6;
             this.pictureBox2.TabStop = false;
@@ -230,19 +233,17 @@
             // name2
             // 
             this.name2.ForeColor = System.Drawing.SystemColors.Window;
-            this.name2.Location = new System.Drawing.Point(0, 32);
-            this.name2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.name2.Location = new System.Drawing.Point(0, 26);
             this.name2.Name = "name2";
-            this.name2.Size = new System.Drawing.Size(93, 22);
+            this.name2.Size = new System.Drawing.Size(71, 20);
             this.name2.TabIndex = 5;
             // 
             // pictureBox5
             // 
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(0, 82);
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox5.Location = new System.Drawing.Point(0, 67);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(95, 87);
+            this.pictureBox5.Size = new System.Drawing.Size(71, 71);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox5.TabIndex = 11;
             this.pictureBox5.TabStop = false;
@@ -251,189 +252,190 @@
             // 
             this.name3.BackColor = System.Drawing.SystemColors.Window;
             this.name3.ForeColor = System.Drawing.SystemColors.Window;
-            this.name3.Location = new System.Drawing.Point(0, 50);
-            this.name3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.name3.Location = new System.Drawing.Point(0, 41);
             this.name3.Name = "name3";
             this.name3.ReadOnly = true;
-            this.name3.Size = new System.Drawing.Size(93, 22);
+            this.name3.Size = new System.Drawing.Size(71, 20);
             this.name3.TabIndex = 5;
             // 
             // name1
             // 
             this.name1.BackColor = System.Drawing.SystemColors.Window;
             this.name1.ForeColor = System.Drawing.SystemColors.Window;
-            this.name1.Location = new System.Drawing.Point(101, 94);
-            this.name1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.name1.Location = new System.Drawing.Point(76, 76);
             this.name1.Name = "name1";
             this.name1.ReadOnly = true;
-            this.name1.Size = new System.Drawing.Size(93, 22);
+            this.name1.Size = new System.Drawing.Size(71, 20);
             this.name1.TabIndex = 4;
             // 
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(101, 126);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Location = new System.Drawing.Point(76, 102);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(95, 87);
+            this.pictureBox3.Size = new System.Drawing.Size(71, 71);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox3.TabIndex = 11;
             this.pictureBox3.TabStop = false;
             // 
             // panelcard21
             // 
+            this.panelcard21.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard21.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard21.Enabled = false;
-            this.panelcard21.Image = ((System.Drawing.Image)(resources.GetObject("panelcard21.Image")));
-            this.panelcard21.Location = new System.Drawing.Point(0, 90);
-            this.panelcard21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard21.Location = new System.Drawing.Point(0, 73);
             this.panelcard21.Name = "panelcard21";
-            this.panelcard21.Size = new System.Drawing.Size(67, 86);
+            this.panelcard21.Size = new System.Drawing.Size(50, 70);
             this.panelcard21.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard21.TabIndex = 15;
             this.panelcard21.TabStop = false;
             // 
             // panelcard22
             // 
+            this.panelcard22.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard22.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard22.Enabled = false;
-            this.panelcard22.Image = ((System.Drawing.Image)(resources.GetObject("panelcard22.Image")));
-            this.panelcard22.Location = new System.Drawing.Point(33, 90);
-            this.panelcard22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard22.Location = new System.Drawing.Point(25, 73);
             this.panelcard22.Name = "panelcard22";
-            this.panelcard22.Size = new System.Drawing.Size(67, 86);
+            this.panelcard22.Size = new System.Drawing.Size(50, 70);
             this.panelcard22.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard22.TabIndex = 16;
             this.panelcard22.TabStop = false;
             // 
             // panelcard23
             // 
+            this.panelcard23.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard23.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard23.Enabled = false;
-            this.panelcard23.Image = ((System.Drawing.Image)(resources.GetObject("panelcard23.Image")));
-            this.panelcard23.Location = new System.Drawing.Point(67, 90);
-            this.panelcard23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard23.Location = new System.Drawing.Point(50, 73);
             this.panelcard23.Name = "panelcard23";
-            this.panelcard23.Size = new System.Drawing.Size(67, 86);
+            this.panelcard23.Size = new System.Drawing.Size(50, 70);
             this.panelcard23.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard23.TabIndex = 17;
             this.panelcard23.TabStop = false;
             // 
             // panelcard24
             // 
+            this.panelcard24.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard24.Enabled = false;
-            this.panelcard24.Image = ((System.Drawing.Image)(resources.GetObject("panelcard24.Image")));
-            this.panelcard24.Location = new System.Drawing.Point(100, 90);
-            this.panelcard24.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard24.Location = new System.Drawing.Point(75, 73);
             this.panelcard24.Name = "panelcard24";
-            this.panelcard24.Size = new System.Drawing.Size(67, 86);
+            this.panelcard24.Size = new System.Drawing.Size(50, 70);
             this.panelcard24.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard24.TabIndex = 18;
             this.panelcard24.TabStop = false;
             // 
             // panelcard25
             // 
+            this.panelcard25.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard25.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard25.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard25.Enabled = false;
-            this.panelcard25.Image = ((System.Drawing.Image)(resources.GetObject("panelcard25.Image")));
-            this.panelcard25.Location = new System.Drawing.Point(133, 90);
-            this.panelcard25.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard25.Location = new System.Drawing.Point(100, 73);
             this.panelcard25.Name = "panelcard25";
-            this.panelcard25.Size = new System.Drawing.Size(67, 86);
+            this.panelcard25.Size = new System.Drawing.Size(50, 70);
             this.panelcard25.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard25.TabIndex = 19;
             this.panelcard25.TabStop = false;
             // 
             // panelcard29
             // 
+            this.panelcard29.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard29.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard29.Enabled = false;
-            this.panelcard29.Image = ((System.Drawing.Image)(resources.GetObject("panelcard29.Image")));
-            this.panelcard29.Location = new System.Drawing.Point(267, 90);
-            this.panelcard29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard29.Location = new System.Drawing.Point(200, 73);
             this.panelcard29.Name = "panelcard29";
-            this.panelcard29.Size = new System.Drawing.Size(67, 86);
+            this.panelcard29.Size = new System.Drawing.Size(50, 70);
             this.panelcard29.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard29.TabIndex = 23;
             this.panelcard29.TabStop = false;
             // 
             // panelcard28
             // 
+            this.panelcard28.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard28.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard28.Enabled = false;
-            this.panelcard28.Image = ((System.Drawing.Image)(resources.GetObject("panelcard28.Image")));
-            this.panelcard28.Location = new System.Drawing.Point(233, 90);
-            this.panelcard28.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard28.Location = new System.Drawing.Point(175, 73);
             this.panelcard28.Name = "panelcard28";
-            this.panelcard28.Size = new System.Drawing.Size(67, 86);
+            this.panelcard28.Size = new System.Drawing.Size(50, 70);
             this.panelcard28.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard28.TabIndex = 22;
             this.panelcard28.TabStop = false;
             // 
             // panelcard27
             // 
+            this.panelcard27.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard27.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard27.Enabled = false;
-            this.panelcard27.Image = ((System.Drawing.Image)(resources.GetObject("panelcard27.Image")));
-            this.panelcard27.Location = new System.Drawing.Point(200, 90);
-            this.panelcard27.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard27.Location = new System.Drawing.Point(150, 73);
             this.panelcard27.Name = "panelcard27";
-            this.panelcard27.Size = new System.Drawing.Size(67, 86);
+            this.panelcard27.Size = new System.Drawing.Size(50, 70);
             this.panelcard27.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard27.TabIndex = 21;
             this.panelcard27.TabStop = false;
             // 
             // panelcard26
             // 
+            this.panelcard26.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard26.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard26.Enabled = false;
-            this.panelcard26.Image = ((System.Drawing.Image)(resources.GetObject("panelcard26.Image")));
-            this.panelcard26.Location = new System.Drawing.Point(167, 90);
-            this.panelcard26.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard26.Location = new System.Drawing.Point(125, 73);
             this.panelcard26.Name = "panelcard26";
-            this.panelcard26.Size = new System.Drawing.Size(67, 86);
+            this.panelcard26.Size = new System.Drawing.Size(50, 70);
             this.panelcard26.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard26.TabIndex = 20;
             this.panelcard26.TabStop = false;
             // 
             // cardholder2
             // 
-            this.cardholder2.Location = new System.Drawing.Point(205, 0);
-            this.cardholder2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cardholder2.Location = new System.Drawing.Point(154, 0);
             this.cardholder2.Name = "cardholder2";
-            this.cardholder2.Size = new System.Drawing.Size(67, 86);
+            this.cardholder2.Size = new System.Drawing.Size(50, 70);
             this.cardholder2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.cardholder2.TabIndex = 24;
             this.cardholder2.TabStop = false;
             // 
             // mainholder
             // 
-            this.mainholder.Location = new System.Drawing.Point(619, 405);
-            this.mainholder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mainholder.Location = new System.Drawing.Point(464, 329);
             this.mainholder.Name = "mainholder";
-            this.mainholder.Size = new System.Drawing.Size(67, 86);
+            this.mainholder.Size = new System.Drawing.Size(50, 70);
             this.mainholder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.mainholder.TabIndex = 25;
             this.mainholder.TabStop = false;
             // 
             // cardholder1
             // 
-            this.cardholder1.Location = new System.Drawing.Point(129, 0);
-            this.cardholder1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cardholder1.Location = new System.Drawing.Point(97, 0);
             this.cardholder1.Name = "cardholder1";
-            this.cardholder1.Size = new System.Drawing.Size(67, 86);
+            this.cardholder1.Size = new System.Drawing.Size(50, 70);
             this.cardholder1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.cardholder1.TabIndex = 26;
             this.cardholder1.TabStop = false;
             // 
             // cardholder3
             // 
-            this.cardholder3.Location = new System.Drawing.Point(0, 177);
-            this.cardholder3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cardholder3.Location = new System.Drawing.Point(0, 144);
             this.cardholder3.Name = "cardholder3";
-            this.cardholder3.Size = new System.Drawing.Size(67, 86);
+            this.cardholder3.Size = new System.Drawing.Size(50, 70);
             this.cardholder3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.cardholder3.TabIndex = 27;
             this.cardholder3.TabStop = false;
             // 
             // main_card9
             // 
-            this.main_card9.Location = new System.Drawing.Point(619, 311);
-            this.main_card9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card9.Location = new System.Drawing.Point(464, 253);
             this.main_card9.Name = "main_card9";
-            this.main_card9.Size = new System.Drawing.Size(67, 86);
+            this.main_card9.Size = new System.Drawing.Size(50, 70);
             this.main_card9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card9.TabIndex = 36;
             this.main_card9.TabStop = false;
@@ -441,10 +443,9 @@
             // 
             // main_card8
             // 
-            this.main_card8.Location = new System.Drawing.Point(585, 311);
-            this.main_card8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card8.Location = new System.Drawing.Point(439, 253);
             this.main_card8.Name = "main_card8";
-            this.main_card8.Size = new System.Drawing.Size(67, 86);
+            this.main_card8.Size = new System.Drawing.Size(50, 70);
             this.main_card8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card8.TabIndex = 35;
             this.main_card8.TabStop = false;
@@ -452,10 +453,9 @@
             // 
             // main_card7
             // 
-            this.main_card7.Location = new System.Drawing.Point(552, 311);
-            this.main_card7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card7.Location = new System.Drawing.Point(414, 253);
             this.main_card7.Name = "main_card7";
-            this.main_card7.Size = new System.Drawing.Size(67, 86);
+            this.main_card7.Size = new System.Drawing.Size(50, 70);
             this.main_card7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card7.TabIndex = 34;
             this.main_card7.TabStop = false;
@@ -463,10 +463,9 @@
             // 
             // main_card6
             // 
-            this.main_card6.Location = new System.Drawing.Point(519, 311);
-            this.main_card6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card6.Location = new System.Drawing.Point(389, 253);
             this.main_card6.Name = "main_card6";
-            this.main_card6.Size = new System.Drawing.Size(67, 86);
+            this.main_card6.Size = new System.Drawing.Size(50, 70);
             this.main_card6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card6.TabIndex = 33;
             this.main_card6.TabStop = false;
@@ -474,10 +473,9 @@
             // 
             // main_card5
             // 
-            this.main_card5.Location = new System.Drawing.Point(485, 311);
-            this.main_card5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card5.Location = new System.Drawing.Point(364, 253);
             this.main_card5.Name = "main_card5";
-            this.main_card5.Size = new System.Drawing.Size(67, 86);
+            this.main_card5.Size = new System.Drawing.Size(50, 70);
             this.main_card5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card5.TabIndex = 32;
             this.main_card5.TabStop = false;
@@ -485,10 +483,9 @@
             // 
             // main_card4
             // 
-            this.main_card4.Location = new System.Drawing.Point(452, 311);
-            this.main_card4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card4.Location = new System.Drawing.Point(339, 253);
             this.main_card4.Name = "main_card4";
-            this.main_card4.Size = new System.Drawing.Size(67, 86);
+            this.main_card4.Size = new System.Drawing.Size(50, 70);
             this.main_card4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card4.TabIndex = 31;
             this.main_card4.TabStop = false;
@@ -496,10 +493,9 @@
             // 
             // main_card3
             // 
-            this.main_card3.Location = new System.Drawing.Point(419, 311);
-            this.main_card3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card3.Location = new System.Drawing.Point(314, 253);
             this.main_card3.Name = "main_card3";
-            this.main_card3.Size = new System.Drawing.Size(67, 86);
+            this.main_card3.Size = new System.Drawing.Size(50, 70);
             this.main_card3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card3.TabIndex = 30;
             this.main_card3.TabStop = false;
@@ -507,10 +503,9 @@
             // 
             // main_card2
             // 
-            this.main_card2.Location = new System.Drawing.Point(385, 311);
-            this.main_card2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card2.Location = new System.Drawing.Point(289, 253);
             this.main_card2.Name = "main_card2";
-            this.main_card2.Size = new System.Drawing.Size(67, 86);
+            this.main_card2.Size = new System.Drawing.Size(50, 70);
             this.main_card2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card2.TabIndex = 29;
             this.main_card2.TabStop = false;
@@ -518,10 +513,9 @@
             // 
             // main_card1
             // 
-            this.main_card1.Location = new System.Drawing.Point(352, 311);
-            this.main_card1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card1.Location = new System.Drawing.Point(264, 253);
             this.main_card1.Name = "main_card1";
-            this.main_card1.Size = new System.Drawing.Size(67, 86);
+            this.main_card1.Size = new System.Drawing.Size(50, 70);
             this.main_card1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card1.TabIndex = 28;
             this.main_card1.TabStop = false;
@@ -529,10 +523,9 @@
             // 
             // main_card10
             // 
-            this.main_card10.Location = new System.Drawing.Point(652, 311);
-            this.main_card10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.main_card10.Location = new System.Drawing.Point(489, 253);
             this.main_card10.Name = "main_card10";
-            this.main_card10.Size = new System.Drawing.Size(67, 86);
+            this.main_card10.Size = new System.Drawing.Size(50, 70);
             this.main_card10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.main_card10.TabIndex = 37;
             this.main_card10.TabStop = false;
@@ -540,10 +533,11 @@
             // 
             // start_btn
             // 
-            this.start_btn.Location = new System.Drawing.Point(16, 15);
-            this.start_btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.start_btn.BackgroundImage = global::Player.Properties.Resources.bg_button_top;
+            this.start_btn.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.start_btn.Location = new System.Drawing.Point(12, 12);
             this.start_btn.Name = "start_btn";
-            this.start_btn.Size = new System.Drawing.Size(119, 62);
+            this.start_btn.Size = new System.Drawing.Size(89, 50);
             this.start_btn.TabIndex = 38;
             this.start_btn.Text = "Start";
             this.start_btn.UseVisualStyleBackColor = true;
@@ -551,360 +545,379 @@
             // 
             // panelcard37
             // 
+            this.panelcard37.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard37.Enabled = false;
-            this.panelcard37.Image = ((System.Drawing.Image)(resources.GetObject("panelcard37.Image")));
-            this.panelcard37.Location = new System.Drawing.Point(103, 65);
-            this.panelcard37.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard37.Location = new System.Drawing.Point(77, 53);
             this.panelcard37.Name = "panelcard37";
-            this.panelcard37.Size = new System.Drawing.Size(93, 62);
+            this.panelcard37.Size = new System.Drawing.Size(70, 50);
             this.panelcard37.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard37.TabIndex = 39;
             this.panelcard37.TabStop = false;
             // 
             // panelcard36
             // 
+            this.panelcard36.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard36.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard36.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard36.Enabled = false;
-            this.panelcard36.Image = ((System.Drawing.Image)(resources.GetObject("panelcard36.Image")));
-            this.panelcard36.Location = new System.Drawing.Point(103, 96);
-            this.panelcard36.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard36.Location = new System.Drawing.Point(77, 78);
             this.panelcard36.Name = "panelcard36";
-            this.panelcard36.Size = new System.Drawing.Size(93, 62);
+            this.panelcard36.Size = new System.Drawing.Size(70, 50);
             this.panelcard36.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard36.TabIndex = 40;
             this.panelcard36.TabStop = false;
             // 
             // panelcard35
             // 
+            this.panelcard35.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard35.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard35.Enabled = false;
-            this.panelcard35.Image = ((System.Drawing.Image)(resources.GetObject("panelcard35.Image")));
-            this.panelcard35.Location = new System.Drawing.Point(103, 127);
-            this.panelcard35.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard35.Location = new System.Drawing.Point(77, 103);
             this.panelcard35.Name = "panelcard35";
-            this.panelcard35.Size = new System.Drawing.Size(93, 62);
+            this.panelcard35.Size = new System.Drawing.Size(70, 50);
             this.panelcard35.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard35.TabIndex = 41;
             this.panelcard35.TabStop = false;
             // 
             // panelcard34
             // 
+            this.panelcard34.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard34.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard34.Enabled = false;
-            this.panelcard34.Image = ((System.Drawing.Image)(resources.GetObject("panelcard34.Image")));
-            this.panelcard34.Location = new System.Drawing.Point(103, 158);
-            this.panelcard34.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard34.Location = new System.Drawing.Point(77, 128);
             this.panelcard34.Name = "panelcard34";
-            this.panelcard34.Size = new System.Drawing.Size(93, 62);
+            this.panelcard34.Size = new System.Drawing.Size(70, 50);
             this.panelcard34.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard34.TabIndex = 42;
             this.panelcard34.TabStop = false;
             // 
             // panelcard33
             // 
+            this.panelcard33.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard33.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard33.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard33.Enabled = false;
-            this.panelcard33.Image = ((System.Drawing.Image)(resources.GetObject("panelcard33.Image")));
-            this.panelcard33.Location = new System.Drawing.Point(103, 188);
-            this.panelcard33.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard33.Location = new System.Drawing.Point(77, 153);
             this.panelcard33.Name = "panelcard33";
-            this.panelcard33.Size = new System.Drawing.Size(93, 62);
+            this.panelcard33.Size = new System.Drawing.Size(70, 50);
             this.panelcard33.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard33.TabIndex = 43;
             this.panelcard33.TabStop = false;
             // 
             // panelcard32
             // 
+            this.panelcard32.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard32.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard32.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard32.Enabled = false;
-            this.panelcard32.Image = ((System.Drawing.Image)(resources.GetObject("panelcard32.Image")));
-            this.panelcard32.Location = new System.Drawing.Point(103, 219);
-            this.panelcard32.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard32.Location = new System.Drawing.Point(77, 178);
             this.panelcard32.Name = "panelcard32";
-            this.panelcard32.Size = new System.Drawing.Size(93, 62);
+            this.panelcard32.Size = new System.Drawing.Size(70, 50);
             this.panelcard32.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard32.TabIndex = 44;
             this.panelcard32.TabStop = false;
             // 
             // panelcard31
             // 
+            this.panelcard31.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard31.Enabled = false;
-            this.panelcard31.Image = ((System.Drawing.Image)(resources.GetObject("panelcard31.Image")));
-            this.panelcard31.Location = new System.Drawing.Point(103, 250);
-            this.panelcard31.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard31.Location = new System.Drawing.Point(77, 203);
             this.panelcard31.Name = "panelcard31";
-            this.panelcard31.Size = new System.Drawing.Size(93, 62);
+            this.panelcard31.Size = new System.Drawing.Size(70, 50);
             this.panelcard31.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard31.TabIndex = 45;
             this.panelcard31.TabStop = false;
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.panelcard31);
+            this.panel3.Controls.Add(this.panelcard32);
+            this.panel3.Controls.Add(this.panelcard33);
+            this.panel3.Controls.Add(this.panelcard34);
+            this.panel3.Controls.Add(this.panelcard35);
+            this.panel3.Controls.Add(this.panelcard36);
+            this.panel3.Controls.Add(this.panelcard37);
+            this.panel3.Controls.Add(this.panelcard38);
             this.panel3.Controls.Add(this.cardholder3);
             this.panel3.Controls.Add(this.panelcard39);
-            this.panel3.Controls.Add(this.panelcard38);
-            this.panel3.Controls.Add(this.panelcard37);
-            this.panel3.Controls.Add(this.panelcard36);
-            this.panel3.Controls.Add(this.panelcard35);
-            this.panel3.Controls.Add(this.panelcard34);
-            this.panel3.Controls.Add(this.panelcard33);
-            this.panel3.Controls.Add(this.panelcard32);
-            this.panel3.Controls.Add(this.panelcard31);
             this.panel3.Controls.Add(this.pictureBox5);
             this.panel3.Controls.Add(this.name3);
-            this.panel3.Location = new System.Drawing.Point(16, 108);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel3.Location = new System.Drawing.Point(12, 88);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(196, 319);
+            this.panel3.Size = new System.Drawing.Size(147, 259);
             this.panel3.TabIndex = 53;
             this.panel3.Visible = false;
             // 
             // panelcard39
             // 
+            this.panelcard39.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelcard39.BackgroundImage")));
+            this.panelcard39.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard39.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard39.Enabled = false;
-            this.panelcard39.Image = ((System.Drawing.Image)(resources.GetObject("panelcard39.Image")));
-            this.panelcard39.Location = new System.Drawing.Point(103, 4);
-            this.panelcard39.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard39.Location = new System.Drawing.Point(77, 3);
             this.panelcard39.Name = "panelcard39";
-            this.panelcard39.Size = new System.Drawing.Size(93, 62);
+            this.panelcard39.Size = new System.Drawing.Size(70, 50);
             this.panelcard39.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard39.TabIndex = 56;
             this.panelcard39.TabStop = false;
+            this.panelcard39.Click += new System.EventHandler(this.panelcard39_Click);
             // 
             // panelcard38
             // 
+            this.panelcard38.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard38.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard38.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard38.Enabled = false;
-            this.panelcard38.Image = ((System.Drawing.Image)(resources.GetObject("panelcard38.Image")));
-            this.panelcard38.Location = new System.Drawing.Point(103, 34);
-            this.panelcard38.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard38.Location = new System.Drawing.Point(77, 28);
             this.panelcard38.Name = "panelcard38";
-            this.panelcard38.Size = new System.Drawing.Size(93, 62);
+            this.panelcard38.Size = new System.Drawing.Size(70, 50);
             this.panelcard38.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard38.TabIndex = 46;
             this.panelcard38.TabStop = false;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.panelcard11);
+            this.panel1.Controls.Add(this.panelcard12);
+            this.panel1.Controls.Add(this.panelcard13);
+            this.panel1.Controls.Add(this.panelcard14);
+            this.panel1.Controls.Add(this.panelcard15);
+            this.panel1.Controls.Add(this.panelcard16);
+            this.panel1.Controls.Add(this.panelcard17);
+            this.panel1.Controls.Add(this.panelcard18);
             this.panel1.Controls.Add(this.cardholder1);
             this.panel1.Controls.Add(this.panelcard19);
-            this.panel1.Controls.Add(this.panelcard18);
-            this.panel1.Controls.Add(this.panelcard17);
-            this.panel1.Controls.Add(this.panelcard16);
-            this.panel1.Controls.Add(this.panelcard15);
             this.panel1.Controls.Add(this.name1);
-            this.panel1.Controls.Add(this.panelcard14);
             this.panel1.Controls.Add(this.pictureBox3);
-            this.panel1.Controls.Add(this.panelcard13);
-            this.panel1.Controls.Add(this.panelcard12);
-            this.panel1.Controls.Add(this.panelcard11);
-            this.panel1.Location = new System.Drawing.Point(857, 108);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Location = new System.Drawing.Point(643, 88);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(196, 319);
+            this.panel1.Size = new System.Drawing.Size(147, 259);
             this.panel1.TabIndex = 54;
             this.panel1.Visible = false;
             // 
             // panelcard19
             // 
+            this.panelcard19.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard19.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard19.Enabled = false;
-            this.panelcard19.Image = ((System.Drawing.Image)(resources.GetObject("panelcard19.Image")));
-            this.panelcard19.Location = new System.Drawing.Point(0, 4);
-            this.panelcard19.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard19.Location = new System.Drawing.Point(0, 3);
             this.panelcard19.Name = "panelcard19";
-            this.panelcard19.Size = new System.Drawing.Size(93, 62);
+            this.panelcard19.Size = new System.Drawing.Size(70, 50);
             this.panelcard19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard19.TabIndex = 57;
             this.panelcard19.TabStop = false;
             // 
             // panelcard18
             // 
+            this.panelcard18.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard18.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard18.Enabled = false;
-            this.panelcard18.Image = ((System.Drawing.Image)(resources.GetObject("panelcard18.Image")));
-            this.panelcard18.Location = new System.Drawing.Point(0, 34);
-            this.panelcard18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard18.Location = new System.Drawing.Point(0, 28);
             this.panelcard18.Name = "panelcard18";
-            this.panelcard18.Size = new System.Drawing.Size(93, 62);
+            this.panelcard18.Size = new System.Drawing.Size(70, 50);
             this.panelcard18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard18.TabIndex = 56;
             this.panelcard18.TabStop = false;
             // 
             // panelcard17
             // 
+            this.panelcard17.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard17.Enabled = false;
-            this.panelcard17.Image = ((System.Drawing.Image)(resources.GetObject("panelcard17.Image")));
-            this.panelcard17.Location = new System.Drawing.Point(0, 65);
-            this.panelcard17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard17.Location = new System.Drawing.Point(0, 53);
             this.panelcard17.Name = "panelcard17";
-            this.panelcard17.Size = new System.Drawing.Size(93, 62);
+            this.panelcard17.Size = new System.Drawing.Size(70, 50);
             this.panelcard17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard17.TabIndex = 46;
             this.panelcard17.TabStop = false;
             // 
             // panelcard16
             // 
+            this.panelcard16.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard16.Enabled = false;
-            this.panelcard16.Image = ((System.Drawing.Image)(resources.GetObject("panelcard16.Image")));
-            this.panelcard16.Location = new System.Drawing.Point(0, 96);
-            this.panelcard16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard16.Location = new System.Drawing.Point(0, 78);
             this.panelcard16.Name = "panelcard16";
-            this.panelcard16.Size = new System.Drawing.Size(93, 62);
+            this.panelcard16.Size = new System.Drawing.Size(70, 50);
             this.panelcard16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard16.TabIndex = 47;
             this.panelcard16.TabStop = false;
             // 
             // panelcard15
             // 
+            this.panelcard15.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard15.Enabled = false;
-            this.panelcard15.Image = ((System.Drawing.Image)(resources.GetObject("panelcard15.Image")));
-            this.panelcard15.Location = new System.Drawing.Point(0, 127);
-            this.panelcard15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard15.Location = new System.Drawing.Point(0, 103);
             this.panelcard15.Name = "panelcard15";
-            this.panelcard15.Size = new System.Drawing.Size(93, 62);
+            this.panelcard15.Size = new System.Drawing.Size(70, 50);
             this.panelcard15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard15.TabIndex = 48;
             this.panelcard15.TabStop = false;
             // 
             // panelcard14
             // 
+            this.panelcard14.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard14.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard14.Enabled = false;
-            this.panelcard14.Image = ((System.Drawing.Image)(resources.GetObject("panelcard14.Image")));
-            this.panelcard14.Location = new System.Drawing.Point(0, 158);
-            this.panelcard14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard14.Location = new System.Drawing.Point(0, 128);
             this.panelcard14.Name = "panelcard14";
-            this.panelcard14.Size = new System.Drawing.Size(93, 62);
+            this.panelcard14.Size = new System.Drawing.Size(70, 50);
             this.panelcard14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard14.TabIndex = 49;
             this.panelcard14.TabStop = false;
             // 
             // panelcard13
             // 
+            this.panelcard13.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard13.Enabled = false;
-            this.panelcard13.Image = ((System.Drawing.Image)(resources.GetObject("panelcard13.Image")));
-            this.panelcard13.Location = new System.Drawing.Point(0, 188);
-            this.panelcard13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard13.Location = new System.Drawing.Point(0, 153);
             this.panelcard13.Name = "panelcard13";
-            this.panelcard13.Size = new System.Drawing.Size(93, 62);
+            this.panelcard13.Size = new System.Drawing.Size(70, 50);
             this.panelcard13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard13.TabIndex = 50;
             this.panelcard13.TabStop = false;
             // 
             // panelcard12
             // 
+            this.panelcard12.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard12.Enabled = false;
-            this.panelcard12.Image = ((System.Drawing.Image)(resources.GetObject("panelcard12.Image")));
-            this.panelcard12.Location = new System.Drawing.Point(0, 219);
-            this.panelcard12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard12.Location = new System.Drawing.Point(0, 178);
             this.panelcard12.Name = "panelcard12";
-            this.panelcard12.Size = new System.Drawing.Size(93, 62);
+            this.panelcard12.Size = new System.Drawing.Size(70, 50);
             this.panelcard12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard12.TabIndex = 51;
             this.panelcard12.TabStop = false;
             // 
             // panelcard11
             // 
+            this.panelcard11.BackgroundImage = global::Player.Properties.Resources.bg_card_1;
+            this.panelcard11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelcard11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelcard11.Enabled = false;
-            this.panelcard11.Image = ((System.Drawing.Image)(resources.GetObject("panelcard11.Image")));
-            this.panelcard11.Location = new System.Drawing.Point(0, 250);
-            this.panelcard11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcard11.Location = new System.Drawing.Point(0, 203);
             this.panelcard11.Name = "panelcard11";
-            this.panelcard11.Size = new System.Drawing.Size(93, 62);
+            this.panelcard11.Size = new System.Drawing.Size(70, 50);
             this.panelcard11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.panelcard11.TabIndex = 52;
             this.panelcard11.TabStop = false;
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.panelcard29);
+            this.panel2.Controls.Add(this.panelcard28);
+            this.panel2.Controls.Add(this.panelcard27);
+            this.panel2.Controls.Add(this.panelcard26);
+            this.panel2.Controls.Add(this.panelcard25);
+            this.panel2.Controls.Add(this.panelcard24);
+            this.panel2.Controls.Add(this.panelcard23);
+            this.panel2.Controls.Add(this.panelcard22);
             this.panel2.Controls.Add(this.cardholder2);
             this.panel2.Controls.Add(this.panelcard21);
-            this.panel2.Controls.Add(this.panelcard22);
-            this.panel2.Controls.Add(this.panelcard23);
-            this.panel2.Controls.Add(this.panelcard24);
-            this.panel2.Controls.Add(this.panelcard25);
-            this.panel2.Controls.Add(this.panelcard26);
-            this.panel2.Controls.Add(this.panelcard27);
-            this.panel2.Controls.Add(this.panelcard28);
-            this.panel2.Controls.Add(this.panelcard29);
             this.panel2.Controls.Add(this.name2);
             this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Location = new System.Drawing.Point(368, 15);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Location = new System.Drawing.Point(276, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(333, 180);
+            this.panel2.Size = new System.Drawing.Size(250, 146);
             this.panel2.TabIndex = 55;
             this.panel2.Visible = false;
             // 
             // card_choose
             // 
-            this.card_choose.Location = new System.Drawing.Point(311, 405);
-            this.card_choose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.card_choose.Location = new System.Drawing.Point(233, 329);
             this.card_choose.Name = "card_choose";
-            this.card_choose.Size = new System.Drawing.Size(67, 86);
+            this.card_choose.Size = new System.Drawing.Size(50, 70);
             this.card_choose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.card_choose.TabIndex = 56;
             this.card_choose.TabStop = false;
             // 
             // info_game_table
             // 
-            this.info_game_table.Location = new System.Drawing.Point(616, 210);
-            this.info_game_table.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.info_game_table.BackColor = System.Drawing.Color.Thistle;
+            this.info_game_table.Location = new System.Drawing.Point(462, 171);
             this.info_game_table.Name = "info_game_table";
-            this.info_game_table.Size = new System.Drawing.Size(232, 85);
+            this.info_game_table.Size = new System.Drawing.Size(175, 70);
             this.info_game_table.TabIndex = 57;
             this.info_game_table.Text = "";
             this.info_game_table.Visible = false;
             // 
             // money_table
             // 
-            this.money_table.Location = new System.Drawing.Point(220, 210);
-            this.money_table.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.money_table.BackColor = System.Drawing.Color.Thistle;
+            this.money_table.Location = new System.Drawing.Point(165, 171);
             this.money_table.Name = "money_table";
-            this.money_table.Size = new System.Drawing.Size(232, 85);
+            this.money_table.Size = new System.Drawing.Size(175, 70);
             this.money_table.TabIndex = 58;
             this.money_table.Text = "";
             // 
             // chat_box
             // 
+            this.chat_box.BackColor = System.Drawing.Color.Thistle;
             this.chat_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chat_box.Location = new System.Drawing.Point(1061, 15);
-            this.chat_box.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chat_box.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.chat_box.Location = new System.Drawing.Point(796, 12);
             this.chat_box.Name = "chat_box";
-            this.chat_box.Size = new System.Drawing.Size(285, 342);
+            this.chat_box.Size = new System.Drawing.Size(215, 279);
             this.chat_box.TabIndex = 59;
             this.chat_box.Text = "";
             // 
             // input_chat
             // 
+            this.input_chat.BackColor = System.Drawing.Color.Thistle;
             this.input_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.input_chat.Location = new System.Drawing.Point(1061, 366);
-            this.input_chat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.input_chat.Location = new System.Drawing.Point(796, 297);
             this.input_chat.Name = "input_chat";
-            this.input_chat.Size = new System.Drawing.Size(285, 89);
+            this.input_chat.Size = new System.Drawing.Size(215, 73);
             this.input_chat.TabIndex = 60;
             this.input_chat.Text = "";
             // 
             // btn_sendchat
             // 
-            this.btn_sendchat.Location = new System.Drawing.Point(1061, 463);
-            this.btn_sendchat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_sendchat.BackgroundImage = global::Player.Properties.Resources.bg_button_top;
+            this.btn_sendchat.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_sendchat.Location = new System.Drawing.Point(796, 376);
             this.btn_sendchat.Name = "btn_sendchat";
-            this.btn_sendchat.Size = new System.Drawing.Size(287, 28);
+            this.btn_sendchat.Size = new System.Drawing.Size(215, 23);
             this.btn_sendchat.TabIndex = 61;
-            this.btn_sendchat.Text = "send";
+            this.btn_sendchat.Text = "Send";
             this.btn_sendchat.UseVisualStyleBackColor = true;
             this.btn_sendchat.Click += new System.EventHandler(this.btn_sendchat_Click);
             // 
             // time_lable
             // 
             this.time_lable.AutoSize = true;
+            this.time_lable.BackColor = System.Drawing.Color.Thistle;
             this.time_lable.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.time_lable.ForeColor = System.Drawing.Color.Red;
-            this.time_lable.Location = new System.Drawing.Point(913, 11);
-            this.time_lable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.time_lable.Location = new System.Drawing.Point(685, 9);
             this.time_lable.Name = "time_lable";
-            this.time_lable.Size = new System.Drawing.Size(34, 28);
+            this.time_lable.Size = new System.Drawing.Size(28, 21);
             this.time_lable.TabIndex = 62;
             this.time_lable.Text = "00";
             // 
             // FormGiaoDien
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1364, 507);
+            this.BackgroundImage = global::Player.Properties.Resources.bg;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(1023, 412);
             this.Controls.Add(this.time_lable);
             this.Controls.Add(this.btn_sendchat);
             this.Controls.Add(this.input_chat);
@@ -934,7 +947,6 @@
             this.Controls.Add(this.big_deck);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "FormGiaoDien";
             this.Text = "FormGiaoDien";

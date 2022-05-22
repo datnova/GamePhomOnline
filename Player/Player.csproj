@@ -160,6 +160,12 @@
     <Content Include="CardsImg\queen_of_hearts2.png" />
     <Content Include="CardsImg\queen_of_spades.png" />
     <Content Include="CardsImg\queen_of_spades2.png" />
+    <None Include="Resources\1fbb0fb06b27bdfe24d702ecde6cb7031.jpg" />
+    <None Include="Resources\1fbb0fb06b27bdfe24d702ecde6cb703.jpg" />
+    <None Include="Resources\281198325_2387446898069649_8083359588428562172_n.jpg" />
+    <None Include="Resources\czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcm0yOTYtbmluZy0zMy5qcGc.jpg" />
+    <None Include="Resources\tải xuống.jpg" />
+    <None Include="Resources\images %281%29.jpg" />
     <None Include="Resources\download.jpg" />
   </ItemGroup>
   <Import Project="..\GameExtensions\GameExtensions.projitems" Label="Shared" />
