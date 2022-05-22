@@ -207,8 +207,8 @@ namespace Player
             var gameState = _player.GetGameInfo();
 
             // check rerange button
-            if (_player.GetPlayerHand() != null && _player.GetGameInfo().stateID != 0) rerange_btn.Show();
-            else rerange_btn.Hide();
+            if (_player.GetPlayerHand() != null && _player.GetGameInfo().stateID != 0) ReRangeBtn.Show();
+            else ReRangeBtn.Hide();
 
             // check start button
             if (gameState.numberPlayer >= 2 &&
@@ -218,19 +218,19 @@ namespace Player
 
             // check play button
             if (gameState.stateID == 2 &&
-                gameState.currentID == _player.GetPlayerInfo().id) play_btn.Show();
-            else play_btn.Hide();
+                gameState.currentID == _player.GetPlayerInfo().id) PlayBtn.Show();
+            else PlayBtn.Hide();
 
             // check draw button
             if (gameState.stateID == 3 &&
                 gameState.currentID == _player.GetPlayerInfo().id)
             {
-                take_btn.Show();
+                TakeBtn.Show();
                 big_deck.Enabled = true;
             } 
             else
             {
-                take_btn.Hide();
+                TakeBtn.Hide();
                 big_deck.Enabled = false;
             }
         }
@@ -562,6 +562,42 @@ namespace Player
         private void panelcard39_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ReRangeBtn_Click(object sender, EventArgs e)
+        {
+            // rerange cards
+            var tempCards = PhomTool.OptimizePhom(_player.GetPlayerHand());
+            var tempHand = new List<Card>();
+
+            foreach (var cards in tempCards)
+                tempHand.AddRange(cards.ToList());
+
+            // set up cards on hand
+            _player.SetPlayerHand(tempHand.ToArray());
+
+            // display hand cards
+            Invoke(new Action(DisplayHandCards));
+        }
+
+        private void TakeBtn_Click(object sender, EventArgs e)
+        {
+            var req = _player.RequestTakeCard(takeFromCardHolder: true);
+            SendRequest(req);
+        }
+
+        private void PlayBtn_Click(object sender, EventArgs e)
+        {
+            var req = _player.RequestPlayCard(_cardChoose);
+            if (req is null)
+            {
+                MessageBox.Show("Error");
+                return;
+            }
+
+            _cardChoose = null;
+            card_choose.Image = null;
+            SendRequest(req);
         }
     }
 }
