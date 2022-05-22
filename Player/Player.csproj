@@ -160,6 +160,7 @@
     <Content Include="CardsImg\queen_of_hearts2.png" />
     <Content Include="CardsImg\queen_of_spades.png" />
     <Content Include="CardsImg\queen_of_spades2.png" />
+    <None Include="Resources\download.jpg" />
   </ItemGroup>
   <Import Project="..\GameExtensions\GameExtensions.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

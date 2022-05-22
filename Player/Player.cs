@@ -67,7 +67,12 @@ namespace Player
                 {
                     // add card pull to hand
                     int tempNullIndex = _playerHand.ToList().FindIndex(a => a is null);
-                    if (tempNullIndex == -1) _playerHand = _playerHand.ToList().Append(res.cardPull[0]).ToArray();
+                    if (tempNullIndex == -1)
+                    {
+                        var tempHand = _playerHand.ToList();
+                        tempHand.Add(res.cardPull[0]);
+                        _playerHand = tempHand.ToArray();
+                    }
                     else _playerHand[tempNullIndex] = res.cardPull[0];
 
                     // erase card holder
