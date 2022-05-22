@@ -164,7 +164,7 @@ namespace Player
                 DisplayHandCards();
 
                 // display game info table
-                DisplayGameInfo();
+                DisplayGameInfo(res);
 
                 // display game score
                 DisplayGameMoney(res);
@@ -270,7 +270,7 @@ namespace Player
             }
         }
 
-        private void DisplayGameInfo()
+        private void DisplayGameInfo(ResponseForm res)
         {
             if (_player.GetGameInfo().stateID == 0)
             {
@@ -279,9 +279,9 @@ namespace Player
             }
 
             info_game_table.Show();
-            info_game_table.Text = $"state: {ConstantData.gameState[_player.GetGameInfo().stateID]}\r\n";
-            info_game_table.Text += $"current id: {_player.GetGameInfo().currentID}\r\n";
-            info_game_table.Text += $"current round: {_player.GetGameInfo().currentRound}\r\n";
+            info_game_table.Text = $"state: {ConstantData.gameState[res.stateID]}\r\n";
+            info_game_table.Text += $"current player: {res.playerInfo[res.currentID].name}\r\n";
+            info_game_table.Text += $"current round: {res.currentRound}\r\n";
         }
 
         private void DisplayGameMoney(ResponseForm res)
