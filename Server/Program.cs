@@ -76,7 +76,7 @@ namespace Server
 
                         // if this player turn then check is it time end turn
                         if (playerID == _gamePhom.GetGameInfo().currentID) 
-                            req = _gamePhom.FalseEndTurn(30);
+                            req = _gamePhom.FalseEndTurn(15);
 
                         // if not end turn then continue
                         if (req is null) continue;
