@@ -380,7 +380,7 @@ namespace Player
             while (_client.Connected)
             {
                 // display time turn
-                DisplayTimeTurn(15);
+                Invoke(new Action(() => { DisplayTimeTurn(15); }));
 
                 // check is there data
                 if (!_client.GetStream().DataAvailable) continue;
