@@ -54,7 +54,7 @@ namespace Player
             if (res.messages != String.Empty) return true;
 
             // update time turn
-            UpdateTimeTurn(res, 15);
+            UpdateTimeTurn(res, 30);
 
             // get player hand or pull card (state 1 or 3)
             if (res.cardPull != null && res.cardPull.Length != 0)
